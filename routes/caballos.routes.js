@@ -1,8 +1,8 @@
 const router = require( 'express' ).Router();
 const { check } = require( 'express-validator' );
 
-const { validarCampos } = require( '../middlewares/validar-campos' );
 const { existeCaballo } = require( '../helpers/db-validators' );
+const { validarCampos } = require( '../middlewares/validar-campos' );
 
 const { obtenerCaballos, obtenerCaballoById, agregarCaballo, actualizarCaballo, eliminarCaballo } = require( '../controllers/caballos.controller' );
 

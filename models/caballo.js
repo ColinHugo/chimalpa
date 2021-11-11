@@ -114,6 +114,8 @@ const CaballoSchema = Schema( {
     foto: {
         type: String
     },
+}, {
+    versionKey: false
 } );
 
 module.exports = model( 'Caballo', CaballoSchema );
