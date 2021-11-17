@@ -16,12 +16,13 @@ router.get( '/:id', [
 ], obtenerUsuarioById );
 
 router.post( '/', [
-    check( 'nombre', 'El nombre es obligatorio' ).escape().notEmpty(),
-    check( 'correo', 'El correo es obligatorio' ).escape().notEmpty(),
-    check( 'correo', 'Ingrese un correo válido' ).escape().isEmail(),
+    check( 'nombre', 'El nombre es obligatorio' ).escape().trim().notEmpty(),
+    check( 'apellidos', 'Los apellidos son obligatorios' ).escape().trim().notEmpty(),
+    check( 'correo', 'El correo es obligatorio' ).escape().trim().notEmpty(),
+    check( 'correo', 'Ingrese un correo válido' ).escape().trim().isEmail(),
     check( 'correo' ).custom( emailExiste ),
-    check( 'password', 'El password es obligatorio' ).escape().notEmpty(),
-    check( 'password', 'El password debe tener al menos 5 caracteres' ).escape().isLength( { min: 5 } ),
+    check( 'password', 'El password es obligatorio' ).escape().trim().notEmpty(),
+    check( 'password', 'El password debe tener al menos 5 caracteres' ).escape().trim().isLength( { min: 5 } ),
     validarCampos
 ], agregarUsuario );
 

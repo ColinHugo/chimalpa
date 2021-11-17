@@ -23,7 +23,7 @@ const obtenerCaballos = async ( req, res ) => {
         
     } catch ( error ) {
 
-        console.log( 'Error al obtener a los caballos.', error );
+        console.error( 'Error al obtener a los caballos.', error );
 
         return res.json( {
             value: 0,
@@ -47,7 +47,7 @@ const obtenerCaballoById = async ( req, res ) => {
         
     } catch ( error ) {
 
-        console.log( `Error al obtener el caballo con id ${ id }` );
+        console.error( `Error al obtener el caballo con id ${ id }` );
 
         return res.json( {
             value: 0,
@@ -72,7 +72,7 @@ const agregarCaballo = async ( req, res ) => {
         
     } catch ( error ) {
 
-        console.log( 'Error al registrar al caballo.', error );
+        console.error( 'Error al registrar al caballo.', error );
 
         return res.json( {
             value: 0,
@@ -98,7 +98,7 @@ const actualizarCaballo = async ( req, res ) => {
         
     } catch ( error ) {
 
-        console.log( 'Error al actualizar el caballo.', error );
+        console.error( 'Error al actualizar el caballo.', error );
 
         return res.json( {
             value: 0,
@@ -122,7 +122,7 @@ const actualizarCaballo = async ( req, res ) => {
             
         } catch ( error ) {
     
-            console.log( 'Error al borrar el caballo.', error );
+            console.error( 'Error al borrar el caballo.', error );
     
             return res.json( {
                 value: 0,

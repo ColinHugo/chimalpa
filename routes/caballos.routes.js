@@ -15,10 +15,10 @@ router.get( '/:id', [
 ], obtenerCaballoById );
 
 router.post( '/', [
-    check( 'nombre', 'El nombre del caballo es obligatorio' ).notEmpty(),
-    check( 'raza', 'La raza del caballo es obligatoria' ).notEmpty(),
-    check( 'sexo', 'El sexo del caballo es obligatorio' ).notEmpty(),
-    check( 'color', 'El color del caballo es obligatorio' ).notEmpty(),
+    check( 'nombre', 'El nombre del caballo es obligatorio' ).escape().trim().notEmpty(),
+    check( 'raza', 'La raza del caballo es obligatoria' ).escape().trim().notEmpty(),
+    check( 'sexo', 'El sexo del caballo es obligatorio' ).escape().trim().notEmpty(),
+    check( 'color', 'El color del caballo es obligatorio' ).escape().trim().notEmpty(),
     validarCampos
 ], agregarCaballo );
 

@@ -8,6 +8,11 @@ const UsuarioSchema = Schema( {
         required: [ true, 'El nombre es obligatorio' ],
     },
 
+    apellidos: {
+        type: String,
+        required: [ true, 'Los apellidos son obligatorios' ],
+    },
+
     correo: {
         type: String,
         required: [ true, 'El correo es obligatorio' ],
@@ -44,7 +49,7 @@ UsuarioSchema.statics.encryptPassword = async ( password ) => {
     return await bcrypt.hash( password, salt );
 }
 
-UsuarioSchema.statics.comparePassword = async ( password ) => {
+UsuarioSchema.statics.comparePassword = async ( password, receivedPassword ) => {
     return await bcrypt.compare( password, receivedPassword );
 }
 

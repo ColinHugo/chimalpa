@@ -23,7 +23,7 @@ const obtenerUsuarios = async ( req, res ) => {
         
     } catch ( error ) {
 
-        console.log( 'Error al obtener a los usuarios.', error );
+        console.error( 'Error al obtener a los usuarios.', error );
 
         return res.json( {
             value: 0,
@@ -58,12 +58,13 @@ const obtenerUsuarioById = async ( req, res ) => {
 
 const agregarUsuario = async ( req, res ) => {
 
-    const { nombre, correo, password } = req.body;
+    const { nombre, apellidos, correo, password } = req.body;
 
     try {
 
         const usuario = new Usuario( {
             nombre,
+            apellidos,
             correo,
             password: await Usuario.encryptPassword( password )
         } );
@@ -73,12 +74,12 @@ const agregarUsuario = async ( req, res ) => {
         return res.json( {
             value: 1,
             msg: 'El usuario se ha registrado.',
-            caballo: usuario
+            usuario
         } );
         
     } catch ( error ) {
 
-        console.log( 'Error al registrar al usuario.', error );
+        console.error( 'Error al registrar al usuario.', error );
 
         return res.json( {
             value: 0,
@@ -104,7 +105,7 @@ const actualizarUsuario = async ( req, res ) => {
         
     } catch ( error ) {
 
-        console.log( 'Error al actualizar el usuario.', error );
+        console.error( 'Error al actualizar el usuario.', error );
 
         return res.json( {
             value: 0,
@@ -128,7 +129,7 @@ const actualizarUsuario = async ( req, res ) => {
             
         } catch ( error ) {
     
-            console.log( 'Error al borrar el usuario.', error );
+            console.error( 'Error al borrar el usuario.', error );
     
             return res.json( {
                 value: 0,
