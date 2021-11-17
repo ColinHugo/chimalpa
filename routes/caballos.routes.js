@@ -2,7 +2,7 @@ const router = require( 'express' ).Router();
 const { check } = require( 'express-validator' );
 
 const { existeCaballo } = require( '../helpers/db-validators' );
-const { validarCampos } = require( '../middlewares/validar-campos' );
+const { validarCampos, validarJWT } = require( '../middlewares' );
 
 const { obtenerCaballos, obtenerCaballoById, agregarCaballo, actualizarCaballo, eliminarCaballo } = require( '../controllers/caballos.controller' );
 
@@ -15,6 +15,7 @@ router.get( '/:id', [
 ], obtenerCaballoById );
 
 router.post( '/', [
+    validarJWT,
     check( 'nombre', 'El nombre del caballo es obligatorio' ).escape().trim().notEmpty(),
     check( 'raza', 'La raza del caballo es obligatoria' ).escape().trim().notEmpty(),
     check( 'sexo', 'El sexo del caballo es obligatorio' ).escape().trim().notEmpty(),
@@ -23,12 +24,14 @@ router.post( '/', [
 ], agregarCaballo );
 
 router.put( '/:id', [
+    validarJWT,
     check( 'id', 'No es un id válido' ).isMongoId(),
     check( 'id' ).custom( existeCaballo ),
     validarCampos
 ], actualizarCaballo );
 
 router.delete( '/:id', [
+    validarJWT,
     check( 'id', 'No es un id válido' ).isMongoId(),
     check( 'id' ).custom( existeCaballo ),
     validarCampos

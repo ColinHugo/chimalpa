@@ -8,6 +8,7 @@ const validarJWT = async ( req, res, next ) => {
 
     if( !token ){
         return res.json( {
+            value: 0,
             msg: 'No hay token en la petición',
         } );
     }
@@ -18,27 +19,23 @@ const validarJWT = async ( req, res, next ) => {
 
         const usuario = await Usuario.findById( uid );
 
-        if( !usuario ){
-            return res.status( 401 ).json( {
-                msg: 'Token no válido - usuario no existe en la bd',
-            } );
-        }
-        
-        if ( !usuario.estado ){
+        if( !usuario || !usuario.estado ){
             return res.json( {
-                msg: 'Token no válido - usuario con estado false',
+                value: 0,
+                msg: 'Token no válido',
             } );
         }
 
-        req.usuario = usuario;
+        req.body.usuario = usuario;
 
         next();
 
     } catch ( error ) {
 
-        console.error( error );
+        console.error( 'Error al validar el token', error );
 
-        res.json( {
+        return res.json( {
+            value: 0,
             msg: 'Token no válido'
         } );
     }

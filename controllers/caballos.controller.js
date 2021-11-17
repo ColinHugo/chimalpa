@@ -6,7 +6,8 @@ const obtenerCaballos = async ( req, res ) => {
 
     try {
 
-        const caballos = await Caballo.find( query );
+        const caballos = await Caballo.find( query )
+            .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
         if ( caballos.length === 0 ) {
 
@@ -38,7 +39,8 @@ const obtenerCaballoById = async ( req, res ) => {
 
     try {
 
-        const caballo = await Caballo.findById( id );
+        const caballo = await Caballo.findById( id )
+            .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
         return res.json( {
             value: 1,
@@ -88,7 +90,8 @@ const actualizarCaballo = async ( req, res ) => {
 
     try {
 
-        const caballo = await Caballo.findByIdAndUpdate( id, datos, { new: true } );
+        const caballo = await Caballo.findByIdAndUpdate( id, datos, { new: true } )
+            .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
         return res.json( {
             value: 1,
@@ -112,7 +115,8 @@ const actualizarCaballo = async ( req, res ) => {
     
         try {
     
-            const caballo = await Caballo.findByIdAndUpdate( id, { estado: false }, { new: true } );
+            const caballo = await Caballo.findByIdAndUpdate( id, { estado: false }, { new: true } )
+                .populate( 'usuario', [ 'nombre', 'apellidos' ] );
     
             return res.json( {
                 value: 1,

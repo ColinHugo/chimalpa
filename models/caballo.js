@@ -114,8 +114,15 @@ const CaballoSchema = Schema( {
     foto: {
         type: String
     },
+
+    usuario: {
+        type: Schema.Types.ObjectId,
+        ref: 'Usuario'
+    }
+
 }, {
-    versionKey: false
+    versionKey: false,
+    timestamps: true
 } );
 
 module.exports = model( 'Caballo', CaballoSchema );
