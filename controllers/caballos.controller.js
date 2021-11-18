@@ -1,5 +1,7 @@
 const { Caballo } = require( '../models' );
 
+const { generarControl } = require( '../helpers/generar-control' );
+
 const obtenerCaballos = async ( req, res ) => {
 
     const query = { estado: true };
@@ -49,27 +51,29 @@ const obtenerCaballoById = async ( req, res ) => {
         
     } catch ( error ) {
 
-        console.error( `Error al obtener el caballo con id ${ id }` );
+        console.error( `Error al obtener el caballo con id ${ id }.` );
 
         return res.json( {
             value: 0,
-            msg: `Error al obtener el caballo con id ${ id }`
+            msg: `Error al obtener el caballo con id ${ id }.`
         } );
     }
 }
 
-const agregarCaballo = async ( req, res ) => {
+const registrarCaballo = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
 
     try {
 
         const caballo = new Caballo( req.body );
 
-        await caballo.save();
+        await Promise.all( [ caballo.save(), generarControl( nombre, apellidos, 'registrado', caballo.nombre ) ] );
 
         return res.json( {
             value: 1,
             msg: 'El caballo se ha registrado.',
-            caballo
+            caballo,
         } );
         
     } catch ( error ) {
@@ -85,6 +89,8 @@ const agregarCaballo = async ( req, res ) => {
 
 const actualizarCaballo = async ( req, res ) => {
 
+    const { nombre, apellidos } = req.body.usuario;
+
     const { id } = req.params;
     const { ...datos } = req.body;
 
@@ -92,6 +98,8 @@ const actualizarCaballo = async ( req, res ) => {
 
         const caballo = await Caballo.findByIdAndUpdate( id, datos, { new: true } )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+
+        generarControl( nombre, apellidos, 'actualizado', caballo.nombre )
 
         return res.json( {
             value: 1,
@@ -107,37 +115,43 @@ const actualizarCaballo = async ( req, res ) => {
             value: 0,
             msg: 'Error al actualizar el caballo.'
         } );
-    }}
+    }
+}
 
-    const eliminarCaballo = async ( req, res ) => {
+const eliminarCaballo = async ( req, res ) => {
 
-        const { id } = req.params;
-    
-        try {
-    
-            const caballo = await Caballo.findByIdAndUpdate( id, { estado: false }, { new: true } )
-                .populate( 'usuario', [ 'nombre', 'apellidos' ] );
-    
-            return res.json( {
-                value: 1,
-                msg: 'El caballo se ha eliminado.',
-                caballo
-            } );
-            
-        } catch ( error ) {
-    
-            console.error( 'Error al borrar el caballo.', error );
-    
-            return res.json( {
-                value: 0,
-                msg: 'Error al borrar el caballo.'
-            } );
-        }}
+    const { id } = req.params;
+
+    const { nombre, apellidos } = req.body.usuario;
+
+    try {
+
+        const caballo = await Caballo.findByIdAndUpdate( id, { estado: false }, { new: true } )
+            .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+
+        generarControl( nombre, apellidos, 'eliminado', caballo.nombre )
+
+        return res.json( {
+            value: 1,
+            msg: 'El caballo se ha eliminado.',
+            caballo
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al borrar el caballo.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al borrar el caballo.'
+        } );
+    }
+}
 
 module.exports = {
     obtenerCaballos,
     obtenerCaballoById,
-    agregarCaballo,
+    registrarCaballo,
     actualizarCaballo,
     eliminarCaballo
 }

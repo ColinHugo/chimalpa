@@ -14,6 +14,7 @@ class Server{
         this.paths = {
             auth: '/auth',
             caballos: '/caballos',
+            control: '/control',
             usuarios: '/usuarios',
         }
 
@@ -37,6 +38,7 @@ class Server{
     routes(){
         this.app.use( this.paths.auth, require( '../routes/auth.routes' ) );
         this.app.use( this.paths.caballos, require( '../routes/caballos.routes' ) );
+        this.app.use( this.paths.control, require( '../routes/control.routes' ) );
         this.app.use( this.paths.usuarios, require( '../routes/usuarios.routes' ) );
     }
 

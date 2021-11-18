@@ -1,7 +1,7 @@
 const router = require( 'express' ).Router();
 const { check } = require( 'express-validator' );
 
-const { validarCampos } = require( '../middlewares/validar-campos' );
+const { validarCampos } = require( '../middlewares' );
 
 const { iniciarSesion } = require( '../controllers/auth.controller' );
 

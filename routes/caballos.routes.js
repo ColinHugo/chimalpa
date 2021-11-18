@@ -4,7 +4,8 @@ const { check } = require( 'express-validator' );
 const { existeCaballo } = require( '../helpers/db-validators' );
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
-const { obtenerCaballos, obtenerCaballoById, agregarCaballo, actualizarCaballo, eliminarCaballo } = require( '../controllers/caballos.controller' );
+const { obtenerCaballos, obtenerCaballoById, registrarCaballo, 
+        actualizarCaballo, eliminarCaballo } = require( '../controllers/caballos.controller' );
 
 router.get( '/', obtenerCaballos );
 
@@ -21,7 +22,7 @@ router.post( '/', [
     check( 'sexo', 'El sexo del caballo es obligatorio' ).escape().trim().notEmpty(),
     check( 'color', 'El color del caballo es obligatorio' ).escape().trim().notEmpty(),
     validarCampos
-], agregarCaballo );
+], registrarCaballo );
 
 router.put( '/:id', [
     validarJWT,
