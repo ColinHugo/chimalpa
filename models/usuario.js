@@ -29,9 +29,9 @@ const UsuarioSchema = Schema( {
     },
 
     rol: {
-        type: String,
-        default: 'PERSONAL',
-        enum: [ 'VETERINARIO', 'ADMINISTRADOR', 'PERSONAL' ]
+        type: Number,
+        default: 3,
+        enum: [ 1, 2, 3 ]
     },
 
     estado: {
