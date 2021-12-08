@@ -12,7 +12,6 @@ const obtenerCaballos = async ( req, res ) => {
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
         if ( caballos.length === 0 ) {
-
             return res.json( {
                 value: 0,
                 msg: 'No hay caballos registrados.'
@@ -68,7 +67,9 @@ const registrarCaballo = async ( req, res ) => {
 
         const caballo = new Caballo( req.body );
 
-        await Promise.all( [ caballo.save(), generarControl( nombre, apellidos, 'registrado', caballo.nombre ) ] );
+        await caballo.save();
+
+        generarControl( nombre, apellidos, 'registrado', caballo.nombre );
 
         return res.json( {
             value: 1,
@@ -91,15 +92,15 @@ const actualizarCaballo = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
 
-    const { id } = req.params;
+    const { idCaballo } = req.params;
     const { ...datos } = req.body;
 
     try {
 
-        const caballo = await Caballo.findByIdAndUpdate( id, datos, { new: true } )
+        const caballo = await Caballo.findByIdAndUpdate( idCaballo, datos, { new: true } )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
-        generarControl( nombre, apellidos, 'actualizado', caballo.nombre )
+        generarControl( nombre, apellidos, 'actualizado', caballo.nombre );
 
         return res.json( {
             value: 1,
@@ -120,16 +121,16 @@ const actualizarCaballo = async ( req, res ) => {
 
 const eliminarCaballo = async ( req, res ) => {
 
-    const { id } = req.params;
+    const { idCaballo } = req.params;
 
     const { nombre, apellidos } = req.body.usuario;
 
     try {
 
-        const caballo = await Caballo.findByIdAndUpdate( id, { estado: false }, { new: true } )
+        const caballo = await Caballo.findByIdAndUpdate( idCaballo, { estado: false }, { new: true } )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
-        generarControl( nombre, apellidos, 'eliminado', caballo.nombre )
+        generarControl( nombre, apellidos, 'eliminado', caballo.nombre );
 
         return res.json( {
             value: 1,

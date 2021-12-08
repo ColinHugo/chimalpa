@@ -9,9 +9,9 @@ const { obtenerCaballos, obtenerCaballoById, registrarCaballo,
 
 router.get( '/', obtenerCaballos );
 
-router.get( '/:id', [
-    check( 'id', 'No es un id válido' ).isMongoId(),
-    check( 'id' ).custom( existeCaballo ),
+router.get( '/:idCaballo', [
+    check( 'idCaballo', 'No es un id válido' ).isMongoId(),
+    check( 'idCaballo' ).custom( existeCaballo ),
     validarCampos
 ], obtenerCaballoById );
 
@@ -24,17 +24,17 @@ router.post( '/', [
     validarCampos
 ], registrarCaballo );
 
-router.put( '/:id', [
+router.put( '/:idCaballo', [
     validarJWT,
-    check( 'id', 'No es un id válido' ).isMongoId(),
-    check( 'id' ).custom( existeCaballo ),
+    check( 'idCaballo', 'No es un id válido' ).isMongoId(),
+    check( 'idCaballo' ).custom( existeCaballo ),
     validarCampos
 ], actualizarCaballo );
 
-router.delete( '/:id', [
+router.delete( '/:idCaballo', [
     validarJWT,
-    check( 'id', 'No es un id válido' ).isMongoId(),
-    check( 'id' ).custom( existeCaballo ),
+    check( 'idCaballo', 'No es un id válido' ).isMongoId(),
+    check( 'idCaballo' ).custom( existeCaballo ),
     validarCampos
 ], eliminarCaballo );
 

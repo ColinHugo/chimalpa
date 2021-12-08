@@ -83,4 +83,11 @@ const CaballoSchema = Schema( {
     timestamps: true
 } );
 
+CaballoSchema.methods.toJSON = function () {
+    
+    const { _id, ...caballo } = this.toObject();
+    caballo.idCaballo = _id;
+    return caballo;
+}
+
 module.exports = model( 'Caballo', CaballoSchema );

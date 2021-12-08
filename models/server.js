@@ -15,6 +15,7 @@ class Server{
             auth: '/auth',
             caballos: '/caballos',
             control: '/control',
+            dietas: '/dietas',
             usuarios: '/usuarios',
         }
 
@@ -40,6 +41,9 @@ class Server{
         this.app.use( this.paths.caballos, require( '../routes/caballos.routes' ) );
         this.app.use( this.paths.control, require( '../routes/control.routes' ) );
         this.app.use( this.paths.usuarios, require( '../routes/usuarios.routes' ) );
+
+        // Dietas
+        this.app.use( this.paths.dietas, require( '../routes/dietas.routes' ) );
     }
 
     listen(){
