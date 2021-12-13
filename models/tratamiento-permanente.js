@@ -1,7 +1,40 @@
 const { Schema, model } = require( 'mongoose' );
 
-const TratamientoPermanente = Schema( {
+const TratamientoPermanenteSchema = Schema( {
 
+    tratamiento: {
+        type: String,
+        required: [ true, 'El tratamiento es obligatorio.' ]
+    },
+
+    descripcion: {
+        type: String,
+        required: [ true, 'La descripción es obligatoria.' ]
+    },
+
+    frecuencia: {
+        type: String,
+        required: [ true, 'La frecuencia es obligatoria.' ]
+    },
+
+    video: {
+        type: String,
+    },
+
+    caballo: {
+        type: Schema.Types.ObjectId,
+        ref: 'Caballo'
+    },
+
+}, {
+    versionKey: false,
+    timestamps: true
 } );
 
-module.exports = model( 'TratamientoPermanente', TratamientoPermanente )
+TratamientoPermanenteSchema.methods.toJSON = function () {
+    const { _id, ...tratamiento } = this.toObject();
+    tratamiento.idTratamiento = _id;
+    return tratamiento;
+}
+
+module.exports = model( 'tratamiento_permanente', TratamientoPermanenteSchema );

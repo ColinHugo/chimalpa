@@ -1,4 +1,4 @@
-const { Caballo, Usuario, DietaCaballo, DietaYegua } = require( '../models' );
+const { Caballo, Usuario, DietaCaballo, DietaYegua, TratamientoPermanente } = require( '../models' );
 
 const existeCaballo = async ( idCaballo ) => {
 
@@ -24,6 +24,15 @@ const existeDietaYegua = async ( id ) => {
 
     if ( !dieta ) {
         throw new Error( `No existe dieta con el id: ${ id }` );
+    }
+}
+
+const existeTratamiento = async ( id ) => {
+
+    const tratamiento = await TratamientoPermanente.findById( id );
+
+    if ( !tratamiento ) {
+        throw new Error( `No existe tratamiento con el id: ${ id }.` );
     }
 }
 
@@ -53,4 +62,6 @@ module.exports = {
     // Dietas
     existeDietaCaballo,
     existeDietaYegua,
+
+    existeTratamiento
 }

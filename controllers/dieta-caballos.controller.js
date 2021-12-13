@@ -43,6 +43,13 @@ const obtenerDietaCaballoById = async ( req, res ) => {
             .populate( 'caballo', 'nombre' )
             .populate( 'usuario', [ 'nombre', 'apellidos'] );
 
+        if ( dieta.length === 0 ) {
+            return res.json( {
+                value: 0,
+                msg: 'No hay dieta para el caballo.'
+            } )
+        }
+
         return res.json( {
             value: 1,
             dieta
