@@ -11,9 +11,9 @@ const { obtenerDestetesCaballos, obtenerDesteteCaballoById,
 
 router.get( '/caballos', obtenerDestetesCaballos );
 
-router.get( '/caballos/:idDestete', [
-    check( 'idDestete', 'No es un id válido' ).isMongoId(),
-    check( 'idDestete' ).custom( existeDestete ),
+router.get( '/caballos/:idCaballo', [
+    check( 'idCaballo', 'No es un id válido' ).isMongoId(),
+    check( 'idCaballo' ).custom( existeCaballo ),
     validarCampos
 ], obtenerDesteteCaballoById );
 

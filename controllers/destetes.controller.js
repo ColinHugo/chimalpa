@@ -34,11 +34,11 @@ const obtenerDestetesCaballos = async ( req, res ) => {
 
 const obtenerDesteteCaballoById = async ( req, res ) => {
 
-    const { idDestete } = req.params;
+    const { idCaballo } = req.params;
 
     try {
 
-        const destete = await DesteteCaballo.findById( idDestete )
+        const destete = await DesteteCaballo.where( { caballo: idCaballo } )
             .populate( 'caballo', 'nombre' );
 
         if ( destete.length === 0 ) {
