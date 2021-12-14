@@ -103,7 +103,6 @@ const registrarDietaCaballo = async ( req, res ) => {
 const actualizarDietaCaballo = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
-
     const { idDietaCaballo } = req.params;
     const { ...datos } = req.body;
 

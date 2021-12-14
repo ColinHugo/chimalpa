@@ -16,6 +16,7 @@ class Server{
             caballos: '/caballos',
             control: '/control',
             dietas: '/dietas',
+            destetes: '/destetes',
             tratamientos: '/tratamientos',
             usuarios: '/usuarios',
         }
@@ -46,6 +47,9 @@ class Server{
 
         // Dietas
         this.app.use( this.paths.dietas, require( '../routes/dietas.routes' ) );
+
+        // Destetes
+        this.app.use( this.paths.destetes, require( '../routes/destetes.routes' ) );
     }
 
     listen(){
