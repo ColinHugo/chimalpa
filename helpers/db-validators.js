@@ -1,5 +1,5 @@
 const { Caballo, Usuario, DietaCaballo, DietaYegua, TratamientoPermanente, 
-        DesteteCaballo } = require( '../models' );
+        DesteteCaballo, MedicinaPreventiva } = require( '../models' );
 
 const existeCaballo = async ( idCaballo ) => {
 
@@ -44,7 +44,15 @@ const existeDestete = async ( id ) => {
     if ( !destete ) {
         throw new Error( `No existe destete con el id: ${ id }.` );
     }
+}
 
+const existeMedicinaPreventiva = async ( id ) => {
+
+    const medicinaPreventiva = await MedicinaPreventiva.findById( id );
+
+    if ( !medicinaPreventiva ) {
+        throw new Error( `No existe medicina preventiva con el id: ${ id }.` );
+    }
 }
 
 const existeUsuario = async ( id ) => {
@@ -75,5 +83,6 @@ module.exports = {
     existeDietaYegua,
 
     existeTratamiento,
-    existeDestete
+    existeDestete,
+    existeMedicinaPreventiva,
 }

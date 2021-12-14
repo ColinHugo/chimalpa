@@ -7,6 +7,7 @@ const DietaCaballo = require( './dieta-caballo' );
 const DietaYegua = require( './dieta-yegua' );
 
 const DesteteCaballo = require( './destete' );
+const MedicinaPreventiva = require( './medicina-preventiva' );
 
 module.exports = {
     Caballo,
@@ -17,5 +18,6 @@ module.exports = {
     DietaCaballo,
     DietaYegua,
 
-    DesteteCaballo
+    DesteteCaballo,
+    MedicinaPreventiva,
 }

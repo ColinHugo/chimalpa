@@ -84,7 +84,6 @@ const CaballoSchema = Schema( {
 } );
 
 CaballoSchema.methods.toJSON = function () {
-    
     const { _id, ...caballo } = this.toObject();
     caballo.idCaballo = _id;
     return caballo;

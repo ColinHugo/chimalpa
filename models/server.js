@@ -17,6 +17,7 @@ class Server{
             control: '/control',
             dietas: '/dietas',
             destetes: '/destetes',
+            medicinasPreventivas: '/medicinas-preventivas',
             tratamientos: '/tratamientos',
             usuarios: '/usuarios',
         }
@@ -50,6 +51,9 @@ class Server{
 
         // Destetes
         this.app.use( this.paths.destetes, require( '../routes/destetes.routes' ) );
+
+        // Medicinas
+        this.app.use( this.paths.medicinasPreventivas, require( '../routes/medicina-preventiva.routes' ) );
     }
 
     listen(){
