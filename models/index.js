@@ -1,7 +1,8 @@
 const Caballo = require( './caballo' );
 const Control = require( './control' );
-const TratamientoPermanente = require( './tratamiento-permanente' );
 const Usuario = require( './usuario' );
+
+const TratamientoPermanente = require( './tratamiento-permanente' );
 
 const DietaCaballo = require( './dieta-caballo' );
 const DietaYegua = require( './dieta-yegua' );
@@ -10,6 +11,7 @@ const DesteteCaballo = require( './destete' );
 const MedicinaPreventiva = require( './medicina-preventiva' );
 
 const RecorteCasco = require( './recorte-casco' );
+const Odontologia = require( './odontologia' );
 
 module.exports = {
     Caballo,
@@ -23,5 +25,6 @@ module.exports = {
     DesteteCaballo,
     MedicinaPreventiva,
 
-    RecorteCasco
+    RecorteCasco,
+    Odontologia
 }

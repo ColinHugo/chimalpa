@@ -1,5 +1,5 @@
 const { Caballo, Usuario, DietaCaballo, DietaYegua, TratamientoPermanente, 
-        DesteteCaballo, MedicinaPreventiva, RecorteCasco } = require( '../models' );
+        DesteteCaballo, MedicinaPreventiva, RecorteCasco, Odontologia } = require( '../models' );
 
 const existeCaballo = async ( idCaballo ) => {
 
@@ -64,6 +64,16 @@ const existeRecorteCasco = async ( id ) => {
     }
 }
 
+const existeOdontologia = async ( id ) => {
+
+    const odontologia = await Odontologia.findById( id );
+
+    if ( !odontologia ) {
+        throw new Error( `No existe registro odontológico con el id: ${ id }` )
+    }
+
+}
+
 const existeUsuario = async ( id ) => {
 
     const existeUsuario = await Usuario.findById( id );
@@ -94,5 +104,6 @@ module.exports = {
     existeTratamiento,
     existeDestete,
     existeMedicinaPreventiva,
-    existeRecorteCasco
+    existeRecorteCasco,
+    existeOdontologia,
 }

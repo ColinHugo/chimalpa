@@ -18,6 +18,7 @@ class Server{
             dietas: '/dietas',
             destetes: '/destetes',
             medicinasPreventivas: '/medicinas-preventivas',
+            odontologia: '/odontologia',
             recortesCascos: '/recortes-cascos',
             tratamientos: '/tratamientos',
             usuarios: '/usuarios',
@@ -47,10 +48,10 @@ class Server{
         this.app.use( this.paths.tratamientos, require( '../routes/tratamientos.routes' ) );
         this.app.use( this.paths.usuarios, require( '../routes/usuarios.routes' ) );
 
-        // Dietas
+        // Dietas de todos los animales
         this.app.use( this.paths.dietas, require( '../routes/dietas.routes' ) );
 
-        // Destetes
+        // Destetes de todos los animales
         this.app.use( this.paths.destetes, require( '../routes/destetes.routes' ) );
 
         // Medicinas
@@ -58,6 +59,9 @@ class Server{
 
         // Recortes cascos
         this.app.use( this.paths.recortesCascos, require( '../routes/recortes-cascos.routes' ) );
+
+        // Odontologia
+        this.app.use( this.paths.odontologia, require( '../routes/odontologia.routes' ) );
     }
 
     listen(){
