@@ -18,6 +18,7 @@ class Server{
             dietas: '/dietas',
             destetes: '/destetes',
             medicinasPreventivas: '/medicinas-preventivas',
+            recortesCascos: '/recortes-cascos',
             tratamientos: '/tratamientos',
             usuarios: '/usuarios',
         }
@@ -54,6 +55,9 @@ class Server{
 
         // Medicinas
         this.app.use( this.paths.medicinasPreventivas, require( '../routes/medicina-preventiva.routes' ) );
+
+        // Recortes cascos
+        this.app.use( this.paths.recortesCascos, require( '../routes/recortes-cascos.routes' ) );
     }
 
     listen(){
