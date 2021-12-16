@@ -17,6 +17,7 @@ class Server{
             control: '/control',
             dietas: '/dietas',
             destetes: '/destetes',
+            historiaClinica: '/historia-clinica',
             medicinasPreventivas: '/medicinas-preventivas',
             odontologia: '/odontologia',
             recortesCascos: '/recortes-cascos',
@@ -62,6 +63,9 @@ class Server{
 
         // Odontologia
         this.app.use( this.paths.odontologia, require( '../routes/odontologia.routes' ) );
+
+        // Historia Clinica
+        this.app.use( this.paths.historiaClinica, require( '../routes/historia-clinica.routes' ) );
     }
 
     listen(){
