@@ -5,7 +5,7 @@ const { existeCaballo, existeHistoriaClinicaCaballo } = require( '../helpers/db-
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
 const { obtenerHistoriaClinicaCaballos, obtenerHistoriaClinicaCaballoById,
-    registrarHistoriaClinicaCaballo, actualizarHistoriaClinicaCaballo } = require( '../controllers/historia-clinica' );
+    registrarHistoriaClinicaCaballo, actualizarHistoriaClinicaCaballo } = require( '../controllers/historia-clinica.controller' );
 
 // * * * * * * * * * * C A B A L L O S * * * * * * * * * *
 

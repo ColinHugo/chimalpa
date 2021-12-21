@@ -1,5 +1,6 @@
 const { Caballo, Usuario, DietaCaballo, DietaYegua, TratamientoPermanente, 
-        DesteteCaballo, MedicinaPreventiva, RecorteCasco, Odontologia, HistoriaClinica } = require( '../models' );
+        DesteteCaballo, MedicinaPreventiva, RecorteCasco, Odontologia, HistoriaClinica, 
+        HistorialReproductivo } = require( '../models' );
 
 const existeCaballo = async ( idCaballo ) => {
 
@@ -82,6 +83,15 @@ const existeHistoriaClinicaCaballo = async ( id ) => {
     }
 }
 
+const existeHistorialReproductivoCaballo = async ( id ) => {
+
+    const historialReproductivoCaballo = await HistorialReproductivo.findById( id );
+
+    if ( !historialReproductivoCaballo ) {
+        throw new Error( `No existe registro de historial reproductivo de caballo con el id: ${ id }` )
+    }
+}
+
 const existeUsuario = async ( id ) => {
 
     const existeUsuario = await Usuario.findById( id );
@@ -114,5 +124,6 @@ module.exports = {
     existeMedicinaPreventiva,
     existeRecorteCasco,
     existeOdontologia,
-    existeHistoriaClinicaCaballo
+    existeHistoriaClinicaCaballo,
+    existeHistorialReproductivoCaballo
 }

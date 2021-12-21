@@ -18,6 +18,7 @@ class Server{
             dietas: '/dietas',
             destetes: '/destetes',
             historiaClinica: '/historia-clinica',
+            historialReproductivo: '/historial-reproductivo',
             medicinasPreventivas: '/medicinas-preventivas',
             odontologia: '/odontologia',
             recortesCascos: '/recortes-cascos',
@@ -66,6 +67,9 @@ class Server{
 
         // Historia Clinica
         this.app.use( this.paths.historiaClinica, require( '../routes/historia-clinica.routes' ) );
+
+        // Historial Reproductivo
+        this.app.use( this.paths.historialReproductivo, require( '../routes/historial-reproductivo.routes' ) );
     }
 
     listen(){

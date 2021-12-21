@@ -13,6 +13,7 @@ const MedicinaPreventiva = require( './medicina-preventiva' );
 const RecorteCasco = require( './recorte-casco' );
 const Odontologia = require( './odontologia' );
 const HistoriaClinica = require( './historia-clinica' );
+const HistorialReproductivo = require( './historial-reproductivo' );
 
 module.exports = {
     Caballo,
@@ -29,4 +30,5 @@ module.exports = {
     RecorteCasco,
     Odontologia,
     HistoriaClinica,
+    HistorialReproductivo,
 }
