@@ -1,6 +1,6 @@
 const { Caballo, Usuario, DietaCaballo, DietaYegua, TratamientoPermanente, 
         DesteteCaballo, MedicinaPreventiva, RecorteCasco, Odontologia, HistoriaClinica, 
-        HistorialReproductivo } = require( '../models' );
+        HistorialReproductivo, PruebasLaboratorio } = require( '../models' );
 
 const existeCaballo = async ( idCaballo ) => {
 
@@ -92,6 +92,15 @@ const existeHistorialReproductivoCaballo = async ( id ) => {
     }
 }
 
+const existePruebaLaboratorioCaballo = async ( id ) => {
+
+    const pruebaLaboratorioCaballo = await PruebasLaboratorio.findById( id );
+
+    if ( !pruebaLaboratorioCaballo ) {
+        throw new Error( `No existe registro de la prueba de laboratorio con el id: ${ id }` )
+    }
+}
+
 const existeUsuario = async ( id ) => {
 
     const existeUsuario = await Usuario.findById( id );
@@ -125,5 +134,6 @@ module.exports = {
     existeRecorteCasco,
     existeOdontologia,
     existeHistoriaClinicaCaballo,
-    existeHistorialReproductivoCaballo
+    existeHistorialReproductivoCaballo,
+    existePruebaLaboratorioCaballo,
 }

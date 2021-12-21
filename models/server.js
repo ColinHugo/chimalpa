@@ -21,6 +21,7 @@ class Server{
             historialReproductivo: '/historial-reproductivo',
             medicinasPreventivas: '/medicinas-preventivas',
             odontologia: '/odontologia',
+            pruebasLaboratorio: '/pruebas-laboratorio',
             recortesCascos: '/recortes-cascos',
             tratamientos: '/tratamientos',
             usuarios: '/usuarios',
@@ -70,6 +71,9 @@ class Server{
 
         // Historial Reproductivo
         this.app.use( this.paths.historialReproductivo, require( '../routes/historial-reproductivo.routes' ) );
+
+        // Pruebas Laboratorio
+        this.app.use( this.paths.pruebasLaboratorio, require( '../routes/prueba-laboratorio.routes' ) );
     }
 
     listen(){
