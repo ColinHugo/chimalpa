@@ -1,3 +1,4 @@
+const Borrego = require( './borrego' );
 const Caballo = require( './caballo' );
 const Control = require( './control' );
 const Usuario = require( './usuario' );
@@ -17,6 +18,7 @@ const HistorialReproductivo = require( './historial-reproductivo' );
 const PruebasLaboratorio = require( './prueba-laboratorio' );
 
 module.exports = {
+    Borrego,
     Caballo,
     Control,
     TratamientoPermanente,

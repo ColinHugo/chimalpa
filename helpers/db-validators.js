@@ -1,6 +1,8 @@
-const { Caballo, Usuario, DietaCaballo, DietaYegua, TratamientoPermanente, 
+const { Borrego, Caballo, Usuario, DietaCaballo, DietaYegua, TratamientoPermanente, 
         DesteteCaballo, MedicinaPreventiva, RecorteCasco, Odontologia, HistoriaClinica, 
         HistorialReproductivo, PruebasLaboratorio } = require( '../models' );
+
+// Estos métodos se encargan de checar las existencias de los caballos y sus movimientos
 
 const existeCaballo = async ( idCaballo ) => {
 
@@ -101,6 +103,17 @@ const existePruebaLaboratorioCaballo = async ( id ) => {
     }
 }
 
+// Estos métodos se encargan de checar las existencias de los borregos y sus movimientos
+
+const existeBorrego = async ( idBorrego ) => {
+
+    const existeBorrego = await Borrego.findById( idBorrego );
+
+    if ( !existeBorrego ) {
+        throw new Error( `No existe borrego con el id: ${ idBorrego }.` );
+    }
+}
+
 const existeUsuario = async ( id ) => {
 
     const existeUsuario = await Usuario.findById( id );
@@ -120,20 +133,22 @@ const emailExiste = async( correo = '' ) => {
 }
 
 module.exports = {
-    existeCaballo,
-    existeUsuario,
-    emailExiste,
 
-    // Dietas
+    existeBorrego,
+
+    // Caballos
+    existeCaballo,
+    existeDestete,
     existeDietaCaballo,
     existeDietaYegua,
-
-    existeTratamiento,
-    existeDestete,
-    existeMedicinaPreventiva,
-    existeRecorteCasco,
-    existeOdontologia,
     existeHistoriaClinicaCaballo,
     existeHistorialReproductivoCaballo,
+    existeMedicinaPreventiva,
+    existeOdontologia,
     existePruebaLaboratorioCaballo,
+    existeRecorteCasco,
+    existeTratamiento,
+
+    existeUsuario,
+    emailExiste,
 }
