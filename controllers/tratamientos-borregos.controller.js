@@ -1,17 +1,13 @@
-const { Borrego, Caballo, TratamientoPermanenteBorrego, TratamientoPermanente } = require( '../models' );
+const { Borrego, TratamientoPermanenteBorrego } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
-// ****************************************************
-// - End points para los tratamientos de los caballos -
-// ****************************************************
-
-const obtenerTratamientosCaballos = async ( req, res ) => {
+const obtenerTratamientosBorregos = async ( req, res ) => {
 
     try {
 
-        const tratamientos = await TratamientoPermanente.find()
-            .populate( 'caballo', 'nombre' );
+        const tratamientos = await TratamientoPermanenteBorrego.find()
+            .populate( 'borrego', 'numeroBorrego' );
 
         if ( tratamientos.length === 0 ) {
             return res.json( {
@@ -36,14 +32,14 @@ const obtenerTratamientosCaballos = async ( req, res ) => {
     }
 }
 
-const obtenerTratamientoCaballoById = async ( req, res ) => {
+const obtenerTratamientoBorregoById = async ( req, res ) => {
 
-    const { idCaballo } = req.params;
+    const { idBorrego } = req.params;
 
     try {
 
-        const tratamiento = await TratamientoPermanente.where( { caballo: idCaballo } )
-            .populate( 'caballo', 'nombre' );
+        const tratamiento = await TratamientoPermanenteBorrego.where( { borrego: idBorrego } )
+            .populate( 'borrego', 'numeroBorrego' );
 
         if ( tratamiento.length === 0 ) {
             return res.json( {
@@ -59,32 +55,32 @@ const obtenerTratamientoCaballoById = async ( req, res ) => {
         
     } catch ( error ) {
 
-        console.error( 'Error al obtener el tratamiento del caballo.', error );
+        console.error( 'Error al obtener el tratamiento del borrego.', error );
 
         return res.json( {
             value: 0,
-            msg: 'Error al obtener el tratamiento del caballo.'
+            msg: 'Error al obtener el tratamiento del borrego.'
         } );
     }
 
 }
 
-const registrarTratamientoCaballo = async ( req, res ) => {
+const registrarTratamientoBorrego = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
-    const { idCaballo } = req.params;
+    const { idBorrego } = req.params;
 
     try {
 
-        const caballo = await Caballo.findById( idCaballo );
+        const borrego = await Borrego.findById( idBorrego );
 
-        req.body.caballo = caballo;
+        req.body.borrego = borrego;
 
-        const tratamiento = new TratamientoPermanente( req.body );
+        const tratamiento = new TratamientoPermanenteBorrego( req.body );
 
         await tratamiento.save();
 
-        generarControl( nombre, apellidos, 'registrado un tratamiento permanente', caballo.nombre );
+        generarControl( nombre, apellidos, 'registrado un tratamiento permanente al borrego', borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
@@ -103,7 +99,7 @@ const registrarTratamientoCaballo = async ( req, res ) => {
     }
 }
 
-const actualizarTratamientoCaballo = async ( req, res ) => {
+const actualizarTratamientoBorrego = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
 
@@ -112,11 +108,11 @@ const actualizarTratamientoCaballo = async ( req, res ) => {
 
     try {
 
-        const tratamiento = await TratamientoPermanente.findByIdAndUpdate( idTratamiento, datos, { new: true } );
+        const tratamiento = await TratamientoPermanenteBorrego.findByIdAndUpdate( idTratamiento, datos, { new: true } );
 
-        const caballo = await Caballo.findById( tratamiento.caballo );
+        const borrego = await Borrego.findById( tratamiento.borrego );
 
-        generarControl( nombre, apellidos, 'actualizado un tratamiento permanente', caballo.nombre );
+        generarControl( nombre, apellidos, 'actualizado un tratamiento permanente al borrego', borrego.numeroBorrego );
         
         return res.json( {
             value: 1,
@@ -135,11 +131,10 @@ const actualizarTratamientoCaballo = async ( req, res ) => {
     }
 }
 
-
-
 module.exports = {
-    obtenerTratamientosCaballos,
-    obtenerTratamientoCaballoById,
-    registrarTratamientoCaballo,
-    actualizarTratamientoCaballo,
+    
+    obtenerTratamientosBorregos,
+    obtenerTratamientoBorregoById,
+    registrarTratamientoBorrego,
+    actualizarTratamientoBorrego
 }

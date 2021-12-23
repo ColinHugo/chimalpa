@@ -5,11 +5,11 @@ const { validarCampos, validarJWT } = require( '../middlewares' );
 
 const { existeBorrego, existeCaballo, existeTratamiento, existeTratamientoBorrego } = require( '../helpers/db-validators' );
 
-const { obtenerTratamientosCaballos, obtenerTratamientoCaballoById,
-        registrarTratamientoCaballo, actualizarTratamientoCaballo,
+const { obtenerTratamientosBorregos, obtenerTratamientoBorregoById,
+        registrarTratamientoBorrego, actualizarTratamientoBorrego } = require( '../controllers/tratamientos-borregos.controller' );
 
-        obtenerTratamientosBorregos, obtenerTratamientoBorregoById,
-        registrarTratamientoBorrego, actualizarTratamientoBorrego } = require( '../controllers/tratamientos.controller' );
+const { obtenerTratamientosCaballos, obtenerTratamientoCaballoById,
+        registrarTratamientoCaballo, actualizarTratamientoCaballo } = require( '../controllers/tratamientos.controller' );
 
 // ****************************************************
 // - End points para los tratamientos de los caballos -
