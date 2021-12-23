@@ -1,6 +1,6 @@
 const { Borrego, TratamientoPermanenteBorrego, Caballo, Usuario, DietaCaballo, DietaYegua, TratamientoPermanente, 
         DesteteCaballo, MedicinaPreventiva, RecorteCasco, Odontologia, HistoriaClinica, 
-        HistorialReproductivo, PruebasLaboratorio } = require( '../models' );
+        HistorialReproductivo, PruebasLaboratorio, DietaBorrego } = require( '../models' );
 
 // Estos métodos se encargan de checar las existencias de los caballos y sus movimientos
 
@@ -126,6 +126,15 @@ const existeTratamientoBorrego = async ( id ) => {
     }
 }
 
+const existeDietaBorrego = async ( id ) => {
+
+    const dieta = await DietaBorrego.findById( id );
+
+    if ( !dieta ) {
+        throw new Error( `No existe dieta con el id: ${ id }` );
+    }
+}
+
 const existeUsuario = async ( id ) => {
 
     const existeUsuario = await Usuario.findById( id );
@@ -146,10 +155,12 @@ const emailExiste = async( correo = '' ) => {
 
 module.exports = {
 
+    // Validadores para borregos
     existeBorrego,
     existeTratamientoBorrego,
+    existeDietaBorrego,
 
-    // Caballos
+    // Validadores para caballos
     existeCaballo,
     existeDestete,
     existeDietaCaballo,

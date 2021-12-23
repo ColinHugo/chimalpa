@@ -6,6 +6,7 @@ const Usuario = require( './usuario' );
 const TratamientoPermanente = require( './tratamiento-permanente' );
 const TratamientoPermanenteBorrego = require( './tratamiento-permanente-borrego' );
 
+const DietaBorrego = require( './dieta-borrego' );
 const DietaCaballo = require( './dieta-caballo' );
 const DietaYegua = require( './dieta-yegua' );
 
@@ -26,6 +27,7 @@ module.exports = {
     TratamientoPermanenteBorrego,
     Usuario,
 
+    DietaBorrego,
     DietaCaballo,
     DietaYegua,
 

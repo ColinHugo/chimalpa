@@ -2,26 +2,67 @@ const router = require( 'express' ).Router();
 
 const { check } = require( 'express-validator' );
 
+const { existeCaballo, existeDietaCaballo, existeDietaYegua, 
+        existeBorrego, existeDietaBorrego } = require( '../helpers/db-validators' );
+
+const { obtenerDietaBorregos, obtenerDietaBorregoById,
+        registrarDietaBorrego, actualizarDietaBorrego } = require( '../controllers/dieta-borregos.controller' );
+
 const { obtenerDietaCaballos, obtenerDietaCaballoById, 
         registrarDietaCaballo, actualizarDietaCaballo } = require( '../controllers/dieta-caballos.controller' );
 
 const { obtenerDietaYeguas, obtenerDietaYeguaById,
         registrarDietaYegua, actualizarDietaYegua } = require( '../controllers/dieta-yeguas.controller' );
 
-const { existeCaballo, existeDietaCaballo, existeDietaYegua } = require( '../helpers/db-validators' );
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
+// ****************************************************
+// -    End points para las dietas de los borregos    -
+// ****************************************************
+// * * * * * * * * * * B O R R E G O S * * * * * * * * * *
+
+router.get( '/borregos', obtenerDietaBorregos );
+
+router.get( '/borregos/:idBorrego', [
+    check( 'idBorrego', 'No es un id válido' ).isMongoId(),
+    check( 'idBorrego' ).custom( existeBorrego ),
+    validarCampos
+], obtenerDietaBorregoById );
+
+router.post( '/borregos/:idBorrego', [
+    validarJWT,
+    check( 'idBorrego', 'No es un id válido' ).isMongoId(),
+    check( 'idBorrego' ).custom( existeBorrego ),
+    check( 'avena_cantidad_manana', 'La cantidad de la avena por la mañana es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'avena_cantidad_tarde', 'La cantidad de la avena por la tarde es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'alfalfa_cantidad_manana', 'La cantidad de la alfalfa por la mañana es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'alfalfa_cantidad_tarde', 'La cantidad de la alfalfa por la tarde es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'grano_cantidad_manana', 'La cantidad del grano por la mañana es obligatorio.' ).escape().trim().notEmpty(),
+    check( 'grano_cantidad_tarde', 'La cantidad del grano por la tarde es obligatorio.' ).escape().trim().notEmpty(),
+    validarCampos
+], registrarDietaBorrego );
+
+router.put( '/borregos/:idDietaBorrego', [
+    validarJWT,
+    check( 'idDietaBorrego', 'No es un id válido' ).isMongoId(),
+    check( 'idDietaBorrego' ).custom( existeDietaBorrego ),
+    validarCampos
+], actualizarDietaBorrego );
+
+// ****************************************************
+// -    End points para las dietas de los caballos    -
+// ****************************************************
 // * * * * * * * * * * C A B A L L O S * * * * * * * * * *
 
-router.get( '/caballos', obtenerDietaCaballos );
+router.get( '/borregos', obtenerDietaCaballos );
 
-router.get( '/caballos/:idCaballo', [
+router.get( '/borregos/:idBorrego', [
     check( 'idCaballo', 'No es un id válido' ).isMongoId(),
     check( 'idCaballo' ).custom( existeCaballo ),
     validarCampos
 ], obtenerDietaCaballoById );
 
-router.post( '/caballos/:idCaballo', [
+router.post( '/borregos/:idBorrego', [
     validarJWT,
     check( 'idCaballo', 'No es un id válido' ).isMongoId(),
     check( 'idCaballo' ).custom( existeCaballo ),
@@ -41,6 +82,9 @@ router.put( '/caballos/:idDietaCaballo', [
     validarCampos
 ], actualizarDietaCaballo );
 
+// ****************************************************
+// -     End points para las dietas de las yeguas     -
+// ****************************************************
 // * * * * * * * * * * Y E G U A S * * * * * * * * * *
 
 router.get( '/yeguas', obtenerDietaYeguas );
