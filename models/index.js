@@ -4,6 +4,7 @@ const Control = require( './control' );
 const Usuario = require( './usuario' );
 
 const TratamientoPermanente = require( './tratamiento-permanente' );
+const TratamientoPermanenteBorrego = require( './tratamiento-permanente-borrego' );
 
 const DietaCaballo = require( './dieta-caballo' );
 const DietaYegua = require( './dieta-yegua' );
@@ -22,6 +23,7 @@ module.exports = {
     Caballo,
     Control,
     TratamientoPermanente,
+    TratamientoPermanenteBorrego,
     Usuario,
 
     DietaCaballo,

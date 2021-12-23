@@ -1,4 +1,4 @@
-const { Borrego, Caballo, Usuario, DietaCaballo, DietaYegua, TratamientoPermanente, 
+const { Borrego, TratamientoPermanenteBorrego, Caballo, Usuario, DietaCaballo, DietaYegua, TratamientoPermanente, 
         DesteteCaballo, MedicinaPreventiva, RecorteCasco, Odontologia, HistoriaClinica, 
         HistorialReproductivo, PruebasLaboratorio } = require( '../models' );
 
@@ -104,13 +104,25 @@ const existePruebaLaboratorioCaballo = async ( id ) => {
 }
 
 // Estos métodos se encargan de checar las existencias de los borregos y sus movimientos
+// ****************************************************
+// -                B O R R E G O S                   -
+// ****************************************************
 
 const existeBorrego = async ( idBorrego ) => {
 
     const existeBorrego = await Borrego.findById( idBorrego );
 
-    if ( !existeBorrego ) {
+    if ( !existeBorrego || !existeBorrego.estado ) {
         throw new Error( `No existe borrego con el id: ${ idBorrego }.` );
+    }
+}
+
+const existeTratamientoBorrego = async ( id ) => {
+
+    const tratamiento = await TratamientoPermanenteBorrego.findById( id );
+
+    if ( !tratamiento ) {
+        throw new Error( `No existe tratamiento con el id: ${ id }.` );
     }
 }
 
@@ -135,6 +147,7 @@ const emailExiste = async( correo = '' ) => {
 module.exports = {
 
     existeBorrego,
+    existeTratamientoBorrego,
 
     // Caballos
     existeCaballo,
