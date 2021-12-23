@@ -1,4 +1,5 @@
-const { Borrego, TratamientoPermanenteBorrego, Caballo, Usuario, DietaCaballo, DietaYegua, TratamientoPermanente, 
+const { Borrego, TratamientoPermanenteBorrego, TrasquilacionBorrego, 
+        Caballo, Usuario, DietaCaballo, DietaYegua, TratamientoPermanente, 
         DesteteCaballo, MedicinaPreventiva, RecorteCasco, Odontologia, HistoriaClinica, 
         HistorialReproductivo, PruebasLaboratorio, DietaBorrego } = require( '../models' );
 
@@ -135,6 +136,15 @@ const existeDietaBorrego = async ( id ) => {
     }
 }
 
+const existeTrasquilacionBorrego = async ( id ) => {
+
+    const trasquilacion = await TrasquilacionBorrego.findById( id );
+
+    if ( !trasquilacion ) {
+        throw new Error( `No existe trasquilacion con el id: ${ id }.` );
+    }
+}
+
 const existeUsuario = async ( id ) => {
 
     const existeUsuario = await Usuario.findById( id );
@@ -159,6 +169,7 @@ module.exports = {
     existeBorrego,
     existeTratamientoBorrego,
     existeDietaBorrego,
+    existeTrasquilacionBorrego,
 
     // Validadores para caballos
     existeCaballo,

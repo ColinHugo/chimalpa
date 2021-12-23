@@ -24,6 +24,7 @@ class Server{
             odontologia: '/odontologia',
             pruebasLaboratorio: '/pruebas-laboratorio',
             recortesCascos: '/recortes-cascos',
+            trasquilacion: '/trasquilacion',
             tratamientos: '/tratamientos',
             usuarios: '/usuarios',
         }
@@ -76,6 +77,9 @@ class Server{
 
         // Pruebas Laboratorio
         this.app.use( this.paths.pruebasLaboratorio, require( '../routes/prueba-laboratorio.routes' ) );
+
+        // Trasquilacion
+        this.app.use( this.paths.trasquilacion, require( '../routes/trasquilacion.routes' ) );
     }
 
     listen(){

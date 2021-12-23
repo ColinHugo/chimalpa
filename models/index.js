@@ -6,6 +6,8 @@ const Usuario = require( './usuario' );
 const TratamientoPermanente = require( './tratamiento-permanente' );
 const TratamientoPermanenteBorrego = require( './tratamiento-permanente-borrego' );
 
+const TrasquilacionBorrego = require( './trasquilacion-borrego' );
+
 const DietaBorrego = require( './dieta-borrego' );
 const DietaCaballo = require( './dieta-caballo' );
 const DietaYegua = require( './dieta-yegua' );
@@ -22,10 +24,12 @@ const PruebasLaboratorio = require( './prueba-laboratorio' );
 module.exports = {
     Borrego,
     Caballo,
+    Usuario,
     Control,
     TratamientoPermanente,
     TratamientoPermanenteBorrego,
-    Usuario,
+
+    TrasquilacionBorrego,
 
     DietaBorrego,
     DietaCaballo,
