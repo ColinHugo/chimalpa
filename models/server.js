@@ -24,6 +24,7 @@ class Server{
             odontologia: '/odontologia',
             pruebasLaboratorio: '/pruebas-laboratorio',
             recortesCascos: '/recortes-cascos',
+            recortesPesunas: '/recortes-pesunas',
             trasquilacion: '/trasquilacion',
             tratamientos: '/tratamientos',
             usuarios: '/usuarios',
@@ -63,8 +64,9 @@ class Server{
         // Medicinas
         this.app.use( this.paths.medicinasPreventivas, require( '../routes/medicina-preventiva.routes' ) );
 
-        // Recortes cascos
+        // Recortes cascos y pesuñas
         this.app.use( this.paths.recortesCascos, require( '../routes/recortes-cascos.routes' ) );
+        this.app.use( this.paths.recortesPesunas, require( '../routes/recortes-pesunas-borregos.routes' ) );
 
         // Odontologia
         this.app.use( this.paths.odontologia, require( '../routes/odontologia.routes' ) );
