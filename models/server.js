@@ -20,7 +20,7 @@ class Server{
             destetes: '/destetes',
             historiaClinica: '/historia-clinica',
             historialReproductivo: '/historial-reproductivo',
-            medicinasPreventivas: '/medicinas-preventivas',
+            medicinas: '/medicinas',
             odontologia: '/odontologia',
             pruebasLaboratorio: '/pruebas-laboratorio',
             recortesCascos: '/recortes-cascos',
@@ -62,7 +62,7 @@ class Server{
         this.app.use( this.paths.destetes, require( '../routes/destetes.routes' ) );
 
         // Medicinas
-        this.app.use( this.paths.medicinasPreventivas, require( '../routes/medicina-preventiva.routes' ) );
+        this.app.use( this.paths.medicinas, require( '../routes/medicinas.routes' ) );
 
         // Recortes cascos y pesuñas
         this.app.use( this.paths.recortesCascos, require( '../routes/recortes-cascos.routes' ) );

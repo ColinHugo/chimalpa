@@ -3,6 +3,7 @@ const DietaBorrego = require( './dieta-borrego' );
 const RecortePesunaBorrego = require( './recorte-pesuna-borrego' );
 const TrasquilacionBorrego = require( './trasquilacion-borrego' );
 const TratamientoPermanenteBorrego = require( './tratamiento-permanente-borrego' );
+const MedicinaBorrego = require( './medicina-borrego' );
 
 
 const Caballo = require( './caballo' );
@@ -26,6 +27,7 @@ module.exports = {
     DietaBorrego,
     RecortePesunaBorrego,
     TratamientoPermanenteBorrego,
+    MedicinaBorrego,
 
     Caballo,
     TratamientoPermanente,
