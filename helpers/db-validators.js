@@ -1,7 +1,7 @@
 const { Borrego, TratamientoPermanenteBorrego, TrasquilacionBorrego, RecortePesunaBorrego,
         Caballo, Usuario, DietaCaballo, DietaYegua, TratamientoPermanente, 
         DesteteCaballo, MedicinaPreventiva, RecorteCasco, Odontologia, HistoriaClinica, 
-        HistorialReproductivo, PruebasLaboratorio, DietaBorrego, MedicinaBorrego } = require( '../models' );
+        HistorialReproductivo, PruebasLaboratorio, DietaBorrego, MedicinaBorrego, HistoriaClinicaBorrego } = require( '../models' );
 
 // Estos métodos se encargan de checar las existencias de los caballos y sus movimientos
 
@@ -163,6 +163,15 @@ const existeMedicinaBorrego = async ( id ) => {
     }
 }
 
+const existeHistoriaClinicaBorrego = async ( id ) => {
+
+    const historiaBorrego = await HistoriaClinicaBorrego.findById( id );
+
+    if ( !historiaBorrego ) {
+        throw new Error( `No existe registro de historial clínico de borrego con el id: ${ id }` )
+    }
+}
+
 const existeUsuario = async ( id ) => {
 
     const existeUsuario = await Usuario.findById( id );
@@ -190,6 +199,7 @@ module.exports = {
     existeTrasquilacionBorrego,
     existeRecortePesunaBorrego,
     existeMedicinaBorrego,
+    existeHistoriaClinicaBorrego,
 
     // Validadores para caballos
     existeCaballo,
