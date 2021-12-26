@@ -1,5 +1,5 @@
 const { Borrego, TratamientoPermanenteBorrego, TrasquilacionBorrego, RecortePesunaBorrego,
-        HistorialReproductivoBorrego,
+        HistorialReproductivoBorrego, PruebaLaboratorioBorrego,
 
         Caballo, Usuario, DietaCaballo, DietaYegua, TratamientoPermanente, 
         DesteteCaballo, MedicinaPreventiva, RecorteCasco, Odontologia, HistoriaClinica, 
@@ -183,6 +183,15 @@ const existeHistorialReproductivoBorrego = async ( id ) => {
     }
 }
 
+const existePruebaLaboratorioBorrego = async ( id ) => {
+
+    const pruebaLaboratorioBorrego = await PruebaLaboratorioBorrego.findById( id );
+
+    if ( !pruebaLaboratorioBorrego ) {
+        throw new Error( `No existe registro de la prueba de laboratorio de borrego con el id: ${ id }` )
+    }
+}
+
 const existeUsuario = async ( id ) => {
 
     const existeUsuario = await Usuario.findById( id );
@@ -212,6 +221,7 @@ module.exports = {
     existeMedicinaBorrego,
     existeHistoriaClinicaBorrego,
     existeHistorialReproductivoBorrego,
+    existePruebaLaboratorioBorrego,
 
     // Validadores para caballos
     existeCaballo,
