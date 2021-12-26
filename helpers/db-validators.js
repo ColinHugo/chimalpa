@@ -1,4 +1,6 @@
 const { Borrego, TratamientoPermanenteBorrego, TrasquilacionBorrego, RecortePesunaBorrego,
+        HistorialReproductivoBorrego,
+
         Caballo, Usuario, DietaCaballo, DietaYegua, TratamientoPermanente, 
         DesteteCaballo, MedicinaPreventiva, RecorteCasco, Odontologia, HistoriaClinica, 
         HistorialReproductivo, PruebasLaboratorio, DietaBorrego, MedicinaBorrego, HistoriaClinicaBorrego } = require( '../models' );
@@ -172,6 +174,15 @@ const existeHistoriaClinicaBorrego = async ( id ) => {
     }
 }
 
+const existeHistorialReproductivoBorrego = async ( id ) => {
+
+    const historialReproductivoBorrego = await HistorialReproductivoBorrego.findById( id );
+
+    if ( !historialReproductivoBorrego ) {
+        throw new Error( `No existe registro de historial reproductivo de borrego con el id: ${ id }` )
+    }
+}
+
 const existeUsuario = async ( id ) => {
 
     const existeUsuario = await Usuario.findById( id );
@@ -200,6 +211,7 @@ module.exports = {
     existeRecortePesunaBorrego,
     existeMedicinaBorrego,
     existeHistoriaClinicaBorrego,
+    existeHistorialReproductivoBorrego,
 
     // Validadores para caballos
     existeCaballo,

@@ -1,6 +1,6 @@
 const { Schema, model } = require( 'mongoose' );
 
-const HistorialReproductivoSchema = Schema( {
+const HistorialReproductivoBorregoSchema = Schema( {
 
     fechaCreacion: {
         type: Date,
@@ -22,9 +22,9 @@ const HistorialReproductivoSchema = Schema( {
         required: [ true, 'El tipo de monta es obligatorio.' ]
     },
 
-    caballo: {
+    borrego: {
         type: Schema.Types.ObjectId,
-        ref: 'Caballo'
+        ref: 'Borrego'
     }
 
 }, {
@@ -32,10 +32,10 @@ const HistorialReproductivoSchema = Schema( {
     timestamps: true,
 } );
 
-HistorialReproductivoSchema.methods.toJSON = function () {
+HistorialReproductivoBorregoSchema.methods.toJSON = function () {
     const { _id, ...historial } = this.toObject();
     historial.idHistorialReproductivo = _id;
     return historial;
 }
 
-module.exports = model( 'historial_reproductivo', HistorialReproductivoSchema );
+module.exports = model( 'historial_reproductivo_borrego', HistorialReproductivoBorregoSchema );
