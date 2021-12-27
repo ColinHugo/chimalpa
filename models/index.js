@@ -8,7 +8,6 @@ const HistoriaClinicaBorrego = require( './historia-clinica-borrego' );
 const HistorialReproductivoBorrego = require( './historial-reproductivo-borrego' );
 const PruebaLaboratorioBorrego = require( './prueba-laboratorio-borrego' );
 
-
 const Caballo = require( './caballo' );
 const DesteteCaballo = require( './destete' );
 const DietaCaballo = require( './dieta-caballo' );
@@ -20,6 +19,8 @@ const Odontologia = require( './odontologia' );
 const PruebasLaboratorio = require( './prueba-laboratorio' );
 const RecorteCasco = require( './recorte-casco' );
 const TratamientoPermanente = require( './tratamiento-permanente' );
+
+const Conejo = require( './conejo' );
 
 const Control = require( './control' );
 const Usuario = require( './usuario' );
@@ -34,6 +35,8 @@ module.exports = {
     HistoriaClinicaBorrego,
     HistorialReproductivoBorrego,
     PruebaLaboratorioBorrego,
+
+    Conejo,
 
     Caballo,
     TratamientoPermanente,

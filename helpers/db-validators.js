@@ -3,7 +3,11 @@ const { Borrego, TratamientoPermanenteBorrego, TrasquilacionBorrego, RecortePesu
 
         Caballo, Usuario, DietaCaballo, DietaYegua, TratamientoPermanente, 
         DesteteCaballo, MedicinaPreventiva, RecorteCasco, Odontologia, HistoriaClinica, 
-        HistorialReproductivo, PruebasLaboratorio, DietaBorrego, MedicinaBorrego, HistoriaClinicaBorrego } = require( '../models' );
+        HistorialReproductivo, PruebasLaboratorio, DietaBorrego, MedicinaBorrego, HistoriaClinicaBorrego,
+
+        Conejo
+    
+    } = require( '../models' );
 
 // Estos métodos se encargan de checar las existencias de los caballos y sus movimientos
 
@@ -192,6 +196,20 @@ const existePruebaLaboratorioBorrego = async ( id ) => {
     }
 }
 
+// Estos métodos se encargan de checar las existencias de los conejo y sus movimientos
+// ****************************************************
+// -                 C O N E J O S                    -
+// ****************************************************
+
+const existeConejo = async ( id ) => {
+
+    const existeConejo = await Conejo.findById( id );
+
+    if ( !existeConejo || !existeConejo.estado ) {
+        throw new Error( `No existe conejo con el id: ${ id }.` );
+    }
+}
+
 const existeUsuario = async ( id ) => {
 
     const existeUsuario = await Usuario.findById( id );
@@ -235,6 +253,9 @@ module.exports = {
     existePruebaLaboratorioCaballo,
     existeRecorteCasco,
     existeTratamiento,
+
+    // vALIDADORES PARA CONEJOS
+    existeConejo,
 
     existeUsuario,
     emailExiste,
