@@ -80,7 +80,7 @@ const registrarHistorialReproductivoCaballo = async ( req, res ) => {
 
         await historialReproductivoCaballo.save();
 
-        generarControl( nombre, apellidos, 'registrado un historial reproductivo', caballo.nombre );
+        generarControl( nombre, apellidos, 'registrado un historial reproductivo al caballo', caballo.nombre );
 
         return res.json( {
             value: 1,
@@ -112,7 +112,7 @@ const actualizarHistorialReproductivoCaballo = async ( req, res ) => {
 
         const caballo = await Caballo.findById( historial.caballo );
 
-        generarControl( nombre, apellidos, 'actualizado un historial reproductivo', caballo.nombre );
+        generarControl( nombre, apellidos, 'actualizado un historial reproductivo al caballo', caballo.nombre );
 
         return res.json( {
             value: 1,

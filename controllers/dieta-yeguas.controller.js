@@ -81,7 +81,7 @@ const registrarDietaYegua = async ( req, res ) => {
 
         await dieta.save()
 
-        generarControl( nombre, apellidos, 'registrado una dieta', caballo.nombre );
+        generarControl( nombre, apellidos, 'registrado una dieta a la yegua', caballo.nombre );
 
         return res.json( {
             value: 1,
@@ -114,7 +114,7 @@ const actualizarDietaYegua = async ( req, res ) => {
 
         const caballo = await Caballo.findById( dietaYegua.caballo );
 
-        generarControl( nombre, apellidos, 'actualizado una dieta de caballo', caballo.nombre );
+        generarControl( nombre, apellidos, 'actualizado una dieta a la yegua', caballo.nombre );
 
         return res.json( {
             value: 1,

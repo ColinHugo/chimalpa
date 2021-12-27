@@ -100,7 +100,7 @@ const actualizarBorrego = async ( req, res ) => {
         const borrego = await Borrego.findByIdAndUpdate( idBorrego, datos, { new: true } )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
-        generarControl( nombre, apellidos, 'actualizado al borrego', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'actualizado al borrego número', borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
@@ -130,7 +130,7 @@ const eliminarBorrego = async ( req, res ) => {
         const borrego = await Borrego.findByIdAndUpdate( idBorrego, { estado: false }, { new: true } )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
-        generarControl( nombre, apellidos, 'eliminado al borrego', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'eliminado al borrego número', borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
@@ -140,11 +140,11 @@ const eliminarBorrego = async ( req, res ) => {
         
     } catch ( error ) {
 
-        console.error( 'Error al borrar el borrego.', error );
+        console.error( 'Error al eliminar el borrego.', error );
 
         return res.json( {
             value: 0,
-            msg: 'Error al borrar el borrego.'
+            msg: 'Error al eliminar el borrego.'
         } );
     }
 }

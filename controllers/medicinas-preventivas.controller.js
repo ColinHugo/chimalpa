@@ -79,7 +79,7 @@ const registrarMedicinaPreventiva = async ( req, res ) => {
 
         await medicina.save();
 
-        generarControl( nombre, apellidos, 'registrado una medicina preventiva', caballo.nombre );
+        generarControl( nombre, apellidos, 'registrado una medicina preventiva al caballo', caballo.nombre );
 
         return res.json( {
             value: 1,
@@ -112,7 +112,7 @@ const actualizarMedicinaPreventiva = async ( req, res ) => {
 
         const caballo = await Caballo.findById( medicina.caballo );
 
-        generarControl( nombre, apellidos, 'actualizado una medicina preventiva', caballo.nombre );
+        generarControl( nombre, apellidos, 'actualizado una medicina preventiva al caballo', caballo.nombre );
 
         return res.json( {
             value: 1,

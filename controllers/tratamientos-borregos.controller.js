@@ -80,7 +80,7 @@ const registrarTratamientoBorrego = async ( req, res ) => {
 
         await tratamiento.save();
 
-        generarControl( nombre, apellidos, 'registrado un tratamiento permanente al borrego', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'registrado un tratamiento permanente al borrego número', borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
@@ -112,7 +112,7 @@ const actualizarTratamientoBorrego = async ( req, res ) => {
 
         const borrego = await Borrego.findById( tratamiento.borrego );
 
-        generarControl( nombre, apellidos, 'actualizado un tratamiento permanente al borrego', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'actualizado un tratamiento permanente al borrego número', borrego.numeroBorrego );
         
         return res.json( {
             value: 1,
@@ -132,7 +132,6 @@ const actualizarTratamientoBorrego = async ( req, res ) => {
 }
 
 module.exports = {
-    
     obtenerTratamientosBorregos,
     obtenerTratamientoBorregoById,
     registrarTratamientoBorrego,

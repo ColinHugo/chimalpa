@@ -80,7 +80,7 @@ const registrarHistoriaClinicaBorrego = async ( req, res ) => {
             
         await historiaBorrego.save();
 
-        generarControl( nombre, apellidos, 'registrado un historial clínico al borrego', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'registrado un historial clínico al borrego número', borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
@@ -112,7 +112,7 @@ const actualizarHistoriaClinicaBorrego = async ( req, res ) => {
 
         const borrego = await Borrego.findById( historiaBorrego.borrego );
 
-        generarControl( nombre, apellidos, 'actualizado un historial clínico del borrego', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'actualizado un historial clínico al borrego número', borrego.numeroBorrego );
 
         return res.json( {
             value: 1,

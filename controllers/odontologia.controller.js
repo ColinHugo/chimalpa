@@ -79,7 +79,7 @@ const registrarOdontologiaCaballo = async ( req, res ) => {
 
         await odontologia.save();
 
-        generarControl( nombre, apellidos, 'registrado una odontología', caballo.nombre );
+        generarControl( nombre, apellidos, 'registrado un registro odontológico al caballo', caballo.nombre );
 
         return res.json( {
             value: 1,
@@ -111,7 +111,7 @@ const actualizarOdontologiaCaballo = async ( req, res ) => {
 
         const caballo = await Caballo.findById( odontologia.caballo );
 
-        generarControl( nombre, apellidos, 'actualizado un registro odontológico', caballo.nombre );
+        generarControl( nombre, apellidos, 'actualizado un registro odontológico al caballo', caballo.nombre );
 
         return res.json( {
             value: 1,

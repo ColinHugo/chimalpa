@@ -69,7 +69,7 @@ const registrarCaballo = async ( req, res ) => {
 
         await caballo.save();
 
-        generarControl( nombre, apellidos, 'registrado', caballo.nombre );
+        generarControl( nombre, apellidos, 'registrado al caballo', caballo.nombre );
 
         return res.json( {
             value: 1,
@@ -100,7 +100,7 @@ const actualizarCaballo = async ( req, res ) => {
         const caballo = await Caballo.findByIdAndUpdate( idCaballo, datos, { new: true } )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
-        generarControl( nombre, apellidos, 'actualizado', caballo.nombre );
+        generarControl( nombre, apellidos, 'actualizado al caballo', caballo.nombre );
 
         return res.json( {
             value: 1,
@@ -130,7 +130,7 @@ const eliminarCaballo = async ( req, res ) => {
         const caballo = await Caballo.findByIdAndUpdate( idCaballo, { estado: false }, { new: true } )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
-        generarControl( nombre, apellidos, 'eliminado', caballo.nombre );
+        generarControl( nombre, apellidos, 'eliminado al caballo', caballo.nombre );
 
         return res.json( {
             value: 1,

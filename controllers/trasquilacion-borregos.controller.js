@@ -81,7 +81,7 @@ const registrarTrasquilacionBorrego = async ( req, res ) => {
 
         await trasquilacion.save()
 
-        generarControl( nombre, apellidos, 'registrado una trasquilacion al borrego', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'registrado una trasquilacion al borrego número', borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
@@ -113,7 +113,7 @@ const actualizarTrasquilacionBorrego = async ( req, res ) => {
 
         const borrego = await Borrego.findById( trasquilacionBorrego.borrego );
 
-        generarControl( nombre, apellidos, 'actualizado una trasquilacion del borrego', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'actualizado una trasquilacion al borrego número', borrego.numeroBorrego );
 
         return res.json( {
             value: 1,

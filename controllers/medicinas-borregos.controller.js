@@ -79,7 +79,7 @@ const registrarMedicinaBorrego = async ( req, res ) => {
 
         await medicina.save();
 
-        generarControl( nombre, apellidos, 'registrado una medicina al borrego', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'registrado una medicina al borrego número', borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
@@ -112,7 +112,7 @@ const actualizarMedicinaBorrego = async ( req, res ) => {
 
         const borrego = await Borrego.findById( medicina.borrego );
 
-        generarControl( nombre, apellidos, 'actualizado una medicina al borrego', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'actualizado una medicina al borrego número', borrego.numeroBorrego );
 
         return res.json( {
             value: 1,

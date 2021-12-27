@@ -81,7 +81,7 @@ const registrarDietaBorrego = async ( req, res ) => {
 
         await dieta.save()
 
-        generarControl( nombre, apellidos, 'registrado una dieta al borrego', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'registrado una dieta al borrego número', borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
@@ -113,7 +113,7 @@ const actualizarDietaBorrego = async ( req, res ) => {
 
         const borrego = await Borrego.findById( dietaBorrego.borrego );
 
-        generarControl( nombre, apellidos, 'actualizado una dieta del borrego', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'actualizado una dieta al borrego número', borrego.numeroBorrego );
 
         return res.json( {
             value: 1,

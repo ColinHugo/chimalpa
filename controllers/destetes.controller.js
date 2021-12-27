@@ -79,7 +79,7 @@ const registrarDesteteCaballo = async ( req, res ) => {
 
         await desteteCaballo.save();
 
-        generarControl( nombre, apellidos, 'registrado un destete', caballo.nombre );
+        generarControl( nombre, apellidos, 'registrado un destete al caballo', caballo.nombre );
 
         return res.json( {
             value: 1,
@@ -111,7 +111,7 @@ const actualizarDesteteCaballo = async ( req, res ) => {
 
         const caballo = await Caballo.findById( destete.caballo );
 
-        generarControl( nombre, apellidos, 'actualizado un destete de caballo', caballo.nombre );
+        generarControl( nombre, apellidos, 'actualizado un destete al caballo', caballo.nombre );
 
         return res.json( {
             value: 1,

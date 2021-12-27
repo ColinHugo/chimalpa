@@ -80,7 +80,7 @@ const registrarPruebaLaboratorioBorrego = async ( req, res ) => {
 
         await prueba.save();
 
-        generarControl( nombre, apellidos, 'registrado una prueba de laboratorio al borrego', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'registrado una prueba de laboratorio al borrego número', borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
@@ -113,7 +113,7 @@ const actualizarPruebaLaboratorioBorrego = async ( req, res ) => {
 
         const borrego = await Borrego.findById( prueba.borrego );
 
-        generarControl( nombre, apellidos, 'actualizado una prueba de laboratorio al borrego', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'actualizado una prueba de laboratorio al borrego número', borrego.numeroBorrego );
 
         return res.json( {
             value: 1,

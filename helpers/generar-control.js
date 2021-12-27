@@ -2,7 +2,7 @@ const { Control } = require( '../models' );
 
 const generarControl = async ( nombre, apellidos, accion, nombreAnimal ) => {
 
-    const mensaje = `${ nombre } ${ apellidos } ha ${ accion } a ${ nombreAnimal }.`;
+    const mensaje = `${ nombre } ${ apellidos } ha ${ accion } ${ nombreAnimal }.`;
 
     try {
 

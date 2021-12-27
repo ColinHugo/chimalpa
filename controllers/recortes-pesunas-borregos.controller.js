@@ -79,7 +79,7 @@ const registrarRecortePesunaBorrego = async ( req, res ) => {
 
         await recorte.save();
 
-        generarControl( nombre, apellidos, 'registrado un recorte de pesuña al borrego', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'registrado un recorte de pesuña al borrego número', borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
@@ -111,7 +111,7 @@ const actualizarRecortePesunaBorrego = async ( req, res ) => {
 
         const borrego = await Borrego.findById( recorte.borrego );
 
-        generarControl( nombre, apellidos, 'actualizado un recorte de pesuña al borrego', borrego.nombre );
+        generarControl( nombre, apellidos, 'actualizado un recorte de pesuña al borrego número', borrego.nombre );
 
         return res.json( {
             value: 1,

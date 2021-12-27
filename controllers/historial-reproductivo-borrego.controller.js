@@ -80,7 +80,7 @@ const registrarHistorialReproductivoBorrego = async ( req, res ) => {
 
         await historialReproductivoBorrego.save();
 
-        generarControl( nombre, apellidos, 'registrado un historial reproductivo al borrego', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'registrado un historial reproductivo al borrego número', borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
@@ -112,7 +112,7 @@ const actualizarHistorialReproductivoBorrego = async ( req, res ) => {
 
         const borrego = await Borrego.findById( historial.borrego );
 
-        generarControl( nombre, apellidos, 'actualizado un historial reproductivo al borrego', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'actualizado un historial reproductivo al borrego número', borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
