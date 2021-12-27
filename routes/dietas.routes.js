@@ -2,14 +2,18 @@ const router = require( 'express' ).Router();
 
 const { check } = require( 'express-validator' );
 
-const { existeCaballo, existeDietaCaballo, existeDietaYegua, 
-        existeBorrego, existeDietaBorrego } = require( '../helpers/db-validators' );
+const { existeBorrego, existeDietaBorrego,
+        existeCaballo, existeDietaCaballo, existeDietaYegua, 
+        existeConejo, existeDietaConejo } = require( '../helpers/db-validators' );
 
 const { obtenerDietaBorregos, obtenerDietaBorregoById,
         registrarDietaBorrego, actualizarDietaBorrego } = require( '../controllers/dieta-borregos.controller' );
 
 const { obtenerDietaCaballos, obtenerDietaCaballoById, 
         registrarDietaCaballo, actualizarDietaCaballo } = require( '../controllers/dieta-caballos.controller' );
+
+const { obtenerDietaConejos, obtenerDietaConejoById,
+        registrarDietaConejo, actualizarDietaConejo } = require('../controllers/dieta-conejos.controller');
 
 const { obtenerDietaYeguas, obtenerDietaYeguaById,
         registrarDietaYegua, actualizarDietaYegua } = require( '../controllers/dieta-yeguas.controller' );
@@ -54,15 +58,15 @@ router.put( '/borregos/:idDietaBorrego', [
 // ****************************************************
 // * * * * * * * * * * C A B A L L O S * * * * * * * * * *
 
-router.get( '/borregos', obtenerDietaCaballos );
+router.get( '/caballos', obtenerDietaCaballos );
 
-router.get( '/borregos/:idBorrego', [
+router.get( '/caballos/:idCaballo', [
     check( 'idCaballo', 'No es un id válido' ).isMongoId(),
     check( 'idCaballo' ).custom( existeCaballo ),
     validarCampos
 ], obtenerDietaCaballoById );
 
-router.post( '/borregos/:idBorrego', [
+router.post( '/caballos/:idCaballo', [
     validarJWT,
     check( 'idCaballo', 'No es un id válido' ).isMongoId(),
     check( 'idCaballo' ).custom( existeCaballo ),
@@ -132,5 +136,38 @@ router.put( '/yeguas/:idDietaCaballo', [
     check( 'idDietaCaballo' ).custom( existeDietaYegua ),
     validarCampos
 ], actualizarDietaYegua );
+
+// ****************************************************
+// -    End points para las dietas de los conejos     -
+// ****************************************************
+// * * * * * * * * * * C O N E J O S * * * * * * * * * *
+
+router.get( '/conejos', obtenerDietaConejos );
+
+router.get( '/conejos/:idConejo', [
+    check( 'idConejo', 'No es un id válido' ).isMongoId(),
+    check( 'idConejo' ).custom( existeConejo ),
+    validarCampos
+], obtenerDietaConejoById );
+
+router.post( '/conejos/:idConejo', [
+    validarJWT,
+    check( 'idConejo', 'No es un id válido' ).isMongoId(),
+    check( 'idConejo' ).custom( existeConejo ),
+    check( 'avena_cantidad_manana', 'La cantidad de la avena por la mañana es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'avena_cantidad_tarde', 'La cantidad de la avena por la tarde es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'alfalfa_cantidad_manana', 'La cantidad de la alfalfa por la mañana es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'alfalfa_cantidad_tarde', 'La cantidad de la alfalfa por la tarde es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'grano_cantidad_manana', 'La cantidad del grano por la mañana es obligatorio.' ).escape().trim().notEmpty(),
+    check( 'grano_cantidad_tarde', 'La cantidad del grano por la tarde es obligatorio.' ).escape().trim().notEmpty(),
+    validarCampos
+], registrarDietaConejo );
+
+router.put( '/conejos/:idDietaConejo', [
+    validarJWT,
+    check( 'idDietaConejo', 'No es un id válido' ).isMongoId(),
+    check( 'idDietaConejo' ).custom( existeDietaConejo ),
+    validarCampos
+], actualizarDietaConejo );
 
 module.exports = router;

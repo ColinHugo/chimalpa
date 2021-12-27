@@ -21,6 +21,7 @@ const RecorteCasco = require( './recorte-casco' );
 const TratamientoPermanente = require( './tratamiento-permanente' );
 
 const Conejo = require( './conejo' );
+const DietaConejo = require( './dieta-conejo' );
 
 const Control = require( './control' );
 const Usuario = require( './usuario' );
@@ -37,6 +38,7 @@ module.exports = {
     PruebaLaboratorioBorrego,
 
     Conejo,
+    DietaConejo,
 
     Caballo,
     TratamientoPermanente,

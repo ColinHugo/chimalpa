@@ -5,7 +5,8 @@ const { Borrego, TratamientoPermanenteBorrego, TrasquilacionBorrego, RecortePesu
         DesteteCaballo, MedicinaPreventiva, RecorteCasco, Odontologia, HistoriaClinica, 
         HistorialReproductivo, PruebasLaboratorio, DietaBorrego, MedicinaBorrego, HistoriaClinicaBorrego,
 
-        Conejo
+        Conejo,
+        DietaConejo
     
     } = require( '../models' );
 
@@ -210,6 +211,15 @@ const existeConejo = async ( id ) => {
     }
 }
 
+const existeDietaConejo = async ( id ) => {
+
+    const dieta = await DietaConejo.findById( id );
+
+    if ( !dieta ) {
+        throw new Error( `No existe dieta con el id: ${ id }` );
+    }
+}
+
 const existeUsuario = async ( id ) => {
 
     const existeUsuario = await Usuario.findById( id );
@@ -256,6 +266,7 @@ module.exports = {
 
     // vALIDADORES PARA CONEJOS
     existeConejo,
+    existeDietaConejo,
 
     existeUsuario,
     emailExiste,
