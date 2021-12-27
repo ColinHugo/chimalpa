@@ -3,13 +3,17 @@ const { check } = require( 'express-validator' );
 
 const { validarCampos, validarJWT } = require( '../middlewares' );
 const { existeCaballo, existeMedicinaPreventiva,
-        existeBorrego, existeMedicinaBorrego } = require( '../helpers/db-validators' );
+        existeBorrego, existeMedicinaBorrego, 
+        existeConejo, existeMedicinaConejo } = require( '../helpers/db-validators' );
 
 const { obtenerMedicinaBorrego, obtenerMedicinaBorregoById,
         registrarMedicinaBorrego, actualizarMedicinaBorrego } = require( '../controllers/medicinas-borregos.controller' );
 
 const { obtenerMedicinaPreventiva, obtenerMedicinaPreventivaById,
         registrarMedicinaPreventiva, actualizarMedicinaPreventiva } = require( '../controllers/medicinas-preventivas.controller' );
+
+const { obtenerMedicinaConejo, obtenerMedicinaConejoById,
+        registrarMedicinaConejo, actualizarMedicinaConejo } = require( '../controllers/medicinas-conejos.controller' );
 
 // ****************************************************
 // -   End points para las medicinas de los borregos  -
@@ -70,5 +74,35 @@ router.put( '/caballos/:idMedicina', [
     check( 'idMedicina' ).custom( existeMedicinaPreventiva ),
     validarCampos
 ], actualizarMedicinaPreventiva );
+
+// ****************************************************
+// -   End points para las medicinas de los conejos  -
+// ****************************************************
+// * * * * * * * * * * C O N E J O S * * * * * * * * * *
+
+router.get( '/conejos', obtenerMedicinaConejo );
+
+router.get( '/conejos/:idConejo', [
+    check( 'idConejo', 'No es un id válido' ).isMongoId(),
+    check( 'idConejo' ).custom( existeConejo ),
+    validarCampos
+], obtenerMedicinaConejoById );
+
+router.post( '/conejos/:idConejo', [
+    validarJWT,
+    check( 'idConejo', 'No es un id válido' ).isMongoId(),
+    check( 'idConejo' ).custom( existeConejo ),
+    check( 'tipo', 'El tipo de medicina es obligatorio' ).escape().trim().notEmpty(),
+    check( 'descripcion', 'La descripción es obligatoria' ).escape().trim().notEmpty(),
+    check( 'fecha', 'La fecha es obligatoria' ).trim().notEmpty(),
+    validarCampos
+], registrarMedicinaConejo );
+
+router.put( '/conejos/:idMedicina', [
+    validarJWT,
+    check( 'idMedicina', 'No es un id válido' ).isMongoId(),
+    check( 'idMedicina' ).custom( existeMedicinaConejo ),
+    validarCampos
+], actualizarMedicinaConejo );
 
 module.exports = router;

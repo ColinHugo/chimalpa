@@ -5,8 +5,7 @@ const { Borrego, TratamientoPermanenteBorrego, TrasquilacionBorrego, RecortePesu
         DesteteCaballo, MedicinaPreventiva, RecorteCasco, Odontologia, HistoriaClinica, 
         HistorialReproductivo, PruebasLaboratorio, DietaBorrego, MedicinaBorrego, HistoriaClinicaBorrego,
 
-        Conejo,
-        DietaConejo
+        Conejo, DietaConejo, MedicinaConejo
     
     } = require( '../models' );
 
@@ -220,6 +219,15 @@ const existeDietaConejo = async ( id ) => {
     }
 }
 
+const existeMedicinaConejo = async ( id ) => {
+
+    const medicinaPreventiva = await MedicinaConejo.findById( id );
+
+    if ( !medicinaPreventiva ) {
+        throw new Error( `No existe medicina preventiva con el id: ${ id }.` );
+    }
+}
+
 const existeUsuario = async ( id ) => {
 
     const existeUsuario = await Usuario.findById( id );
@@ -267,6 +275,7 @@ module.exports = {
     // vALIDADORES PARA CONEJOS
     existeConejo,
     existeDietaConejo,
+    existeMedicinaConejo,
 
     existeUsuario,
     emailExiste,
