@@ -5,7 +5,7 @@ const { Borrego, TratamientoPermanenteBorrego, TrasquilacionBorrego, RecortePesu
         DesteteCaballo, MedicinaPreventiva, RecorteCasco, Odontologia, HistoriaClinica, 
         HistorialReproductivo, PruebasLaboratorio, DietaBorrego, MedicinaBorrego, HistoriaClinicaBorrego,
 
-        Conejo, DietaConejo, MedicinaConejo, HistoriaClinicaConejo
+        Conejo, DietaConejo, MedicinaConejo, HistoriaClinicaConejo, HistorialReproductivoConejo,
     
     } = require( '../models' );
 
@@ -237,6 +237,15 @@ const existeHistoriaClinicaConejo = async ( id ) => {
     }
 }
 
+const existeHistorialReproductivoConejo = async ( id ) => {
+
+    const historialReproductivoConejo = await HistorialReproductivoConejo.findById( id );
+
+    if ( !historialReproductivoConejo ) {
+        throw new Error( `No existe registro de historial reproductivo de conejo con el id: ${ id }` )
+    }
+}
+
 const existeUsuario = async ( id ) => {
 
     const existeUsuario = await Usuario.findById( id );
@@ -286,6 +295,7 @@ module.exports = {
     existeDietaConejo,
     existeMedicinaConejo,
     existeHistoriaClinicaConejo,
+    existeHistorialReproductivoConejo,
 
     existeUsuario,
     emailExiste,
