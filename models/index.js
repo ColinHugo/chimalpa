@@ -23,6 +23,7 @@ const TratamientoPermanente = require( './tratamiento-permanente' );
 const Conejo = require( './conejo' );
 const DietaConejo = require( './dieta-conejo' );
 const MedicinaConejo = require( './medicina-conejo' );
+const HistoriaClinicaConejo = require( './historia-clinica-conejo');
 
 const Control = require( './control' );
 const Usuario = require( './usuario' );
@@ -41,6 +42,7 @@ module.exports = {
     Conejo,
     DietaConejo,
     MedicinaConejo,
+    HistoriaClinicaConejo,
 
     Caballo,
     TratamientoPermanente,
