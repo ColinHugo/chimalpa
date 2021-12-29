@@ -1,4 +1,6 @@
-const { Borrego, TratamientoPermanenteBorrego, TrasquilacionBorrego, RecortePesunaBorrego,
+const { Ave,
+
+        Borrego, TratamientoPermanenteBorrego, TrasquilacionBorrego, RecortePesunaBorrego,
         HistorialReproductivoBorrego, PruebaLaboratorioBorrego,
 
         Caballo, Usuario, DietaCaballo, DietaYegua, TratamientoPermanente, 
@@ -9,13 +11,30 @@ const { Borrego, TratamientoPermanenteBorrego, TrasquilacionBorrego, RecortePesu
     
     } = require( '../models' );
 
+// Estos métodos se encargan de checar las existencias de las aves y sus movimientos
+// ****************************************************
+// -                    A V E S                       -
+// ****************************************************
+
+const existeAve = async ( id ) => {
+
+    const existeAve = await Ave.findById( id );
+
+    if ( !existeAve || !existeAve.estado ) {
+        throw new Error( `No existe ave con el id: ${ id }.` );
+    }
+}
+
 // Estos métodos se encargan de checar las existencias de los caballos y sus movimientos
+// ****************************************************
+// -                C A B A L L O S                   -
+// ****************************************************
 
 const existeCaballo = async ( idCaballo ) => {
 
     const existeCaballo = await Caballo.findById( idCaballo );
 
-    if ( !existeCaballo ) {
+    if ( !existeCaballo || !existeCaballo.estado) {
         throw new Error( `No existe caballo con el id: ${ idCaballo }.` );
     }
 }
@@ -265,6 +284,9 @@ const emailExiste = async( correo = '' ) => {
 }
 
 module.exports = {
+
+    // Validadores para las aves
+    existeAve,
 
     // Validadores para borregos
     existeBorrego,

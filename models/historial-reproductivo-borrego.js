@@ -2,6 +2,11 @@ const { Schema, model } = require( 'mongoose' );
 
 const HistorialReproductivoBorregoSchema = Schema( {
 
+    numeroExpediente: {
+        type: String,
+        required: [ true, 'El numero de expediente es obligatorio.' ]
+    },
+
     fechaCreacion: {
         type: Date,
         default: Date.now

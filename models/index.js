@@ -1,3 +1,5 @@
+const Ave = require( './ave' );
+
 const Borrego = require( './borrego' );
 const DietaBorrego = require( './dieta-borrego' );
 const RecortePesunaBorrego = require( './recorte-pesuna-borrego' );
@@ -30,6 +32,9 @@ const Control = require( './control' );
 const Usuario = require( './usuario' );
 
 module.exports = {
+
+    Ave,
+
     Borrego,
     TrasquilacionBorrego,
     DietaBorrego,

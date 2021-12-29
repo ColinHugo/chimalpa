@@ -31,6 +31,7 @@ router.post( '/borregos/:idBorrego', [
     validarJWT,
     check( 'idBorrego', 'No es un id válido' ).isMongoId(),
     check( 'idBorrego' ).custom( existeBorrego ),
+    check( 'numeroExpediente', 'El numero de expediente es obligatorio' ).escape().trim().notEmpty(),
     check( 'inicioCelo', 'El inicio de celo es obligatorio' ).escape().trim().notEmpty(),
     check( 'semental', 'El semental es obligatorio' ).escape().trim().notEmpty(),
     check( 'tipoMonta', 'El tipo de monta es obligatorio' ).escape().trim().notEmpty(),

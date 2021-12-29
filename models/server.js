@@ -13,6 +13,7 @@ class Server{
 
         this.paths = {
             auth: '/auth',
+            aves: '/aves',
             borregos: '/borregos',
             caballos: '/caballos',
             conejos: '/conejos',
@@ -50,6 +51,7 @@ class Server{
 
     routes(){
         this.app.use( this.paths.auth, require( '../routes/auth.routes' ) );
+        this.app.use( this.paths.aves, require( '../routes/aves.routes' ) );
         this.app.use( this.paths.borregos, require( '../routes/borregos.routes' ) );
         this.app.use( this.paths.caballos, require( '../routes/caballos.routes' ) );
         this.app.use( this.paths.conejos, require( '../routes/conejos.routes' ) );
