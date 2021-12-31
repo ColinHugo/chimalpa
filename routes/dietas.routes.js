@@ -2,9 +2,13 @@ const router = require( 'express' ).Router();
 
 const { check } = require( 'express-validator' );
 
-const { existeBorrego, existeDietaBorrego,
+const { existeAve, existeDietaAve,
+        existeBorrego, existeDietaBorrego,
         existeCaballo, existeDietaCaballo, existeDietaYegua, 
         existeConejo, existeDietaConejo } = require( '../helpers/db-validators' );
+
+const { obtenerDietaAves, obtenerDietaAveById,
+        registrarDietaAve, actualizarDietaAve } = require( '../controllers/dieta-aves.controller' );
 
 const { obtenerDietaBorregos, obtenerDietaBorregoById,
         registrarDietaBorrego, actualizarDietaBorrego } = require( '../controllers/dieta-borregos.controller' );
@@ -19,6 +23,39 @@ const { obtenerDietaYeguas, obtenerDietaYeguaById,
         registrarDietaYegua, actualizarDietaYegua } = require( '../controllers/dieta-yeguas.controller' );
 
 const { validarCampos, validarJWT } = require( '../middlewares' );
+
+// ****************************************************
+// -    End points para las dietas de las aves    -
+// ****************************************************
+// * * * * * * * * * * A V E S * * * * * * * * * *
+
+router.get( '/aves', obtenerDietaAves );
+
+router.get( '/aves/:idAve', [
+    check( 'idAve', 'No es un id válido' ).isMongoId(),
+    check( 'idAve' ).custom( existeAve ),
+    validarCampos
+], obtenerDietaAveById );
+
+router.post( '/aves/:idAve', [
+    validarJWT,
+    check( 'idAve', 'No es un id válido' ).isMongoId(),
+    check( 'idAve' ).custom( existeAve ),
+    check( 'avena_cantidad_manana', 'La cantidad de la avena por la mañana es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'avena_cantidad_tarde', 'La cantidad de la avena por la tarde es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'alfalfa_cantidad_manana', 'La cantidad de la alfalfa por la mañana es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'alfalfa_cantidad_tarde', 'La cantidad de la alfalfa por la tarde es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'grano_cantidad_manana', 'La cantidad del grano por la mañana es obligatorio.' ).escape().trim().notEmpty(),
+    check( 'grano_cantidad_tarde', 'La cantidad del grano por la tarde es obligatorio.' ).escape().trim().notEmpty(),
+    validarCampos
+], registrarDietaAve );
+
+router.put( '/aves/:idDietaAve', [
+    validarJWT,
+    check( 'idDietaAve', 'No es un id válido' ).isMongoId(),
+    check( 'idDietaAve' ).custom( existeDietaAve ),
+    validarCampos
+], actualizarDietaAve );
 
 // ****************************************************
 // -    End points para las dietas de los borregos    -

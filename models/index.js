@@ -1,6 +1,7 @@
 const Ave = require( './ave' );
 const HistoriaClinicaAve = require( './historia-clinica-ave' );
 const MedicinaAve = require( './medicina-ave' );
+const DietaAve = require( './dieta-ave' );
 
 const Borrego = require( './borrego' );
 const DietaBorrego = require( './dieta-borrego' );
@@ -38,34 +39,35 @@ module.exports = {
     Ave,
     HistoriaClinicaAve,
     MedicinaAve,
+    DietaAve,
 
     Borrego,
-    TrasquilacionBorrego,
     DietaBorrego,
-    RecortePesunaBorrego,
-    TratamientoPermanenteBorrego,
-    MedicinaBorrego,
     HistoriaClinicaBorrego,
     HistorialReproductivoBorrego,
+    MedicinaBorrego,
     PruebaLaboratorioBorrego,
+    RecortePesunaBorrego,
+    TrasquilacionBorrego,
+    TratamientoPermanenteBorrego,
 
     Conejo,
     DietaConejo,
-    MedicinaConejo,
     HistoriaClinicaConejo,
     HistorialReproductivoConejo,
+    MedicinaConejo,
 
     Caballo,
-    TratamientoPermanente,
+    DesteteCaballo,
     DietaCaballo,
     DietaYegua,
-    DesteteCaballo,
-    MedicinaPreventiva,
-    RecorteCasco,
-    Odontologia,
     HistoriaClinica,
     HistorialReproductivo,
+    MedicinaPreventiva,
+    Odontologia,
     PruebasLaboratorio,
+    RecorteCasco,
+    TratamientoPermanente,
 
     Usuario,
     Control,
