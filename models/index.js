@@ -3,6 +3,7 @@ const HistoriaClinicaAve = require( './historia-clinica-ave' );
 const MedicinaAve = require( './medicina-ave' );
 const DietaAve = require( './dieta-ave' );
 const CuarentenaAve = require( './cuarentena-ave' );
+const HistorialReproductivoAve = require( './historial-reproductivo-ave' );
 
 const Borrego = require( './borrego' );
 const DietaBorrego = require( './dieta-borrego' );
@@ -42,6 +43,7 @@ module.exports = {
     DietaAve,
     HistoriaClinicaAve,
     MedicinaAve,
+    HistorialReproductivoAve,
 
     Borrego,
     DietaBorrego,

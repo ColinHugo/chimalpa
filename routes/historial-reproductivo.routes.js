@@ -1,10 +1,14 @@
 const router = require( 'express' ).Router();
 const { check } = require( 'express-validator' );
 
-const { existeBorrego, existeHistorialReproductivoBorrego, 
+const { existeAve, existeHistorialReproductivoAve,
+        existeBorrego, existeHistorialReproductivoBorrego, 
         existeCaballo, existeHistorialReproductivoCaballo,
         existeConejo, existeHistorialReproductivoConejo } = require( '../helpers/db-validators' );
 const { validarCampos, validarJWT } = require( '../middlewares' );
+
+const { obtenerHistorialReproductivoAves, obtenerHistorialReproductivoAveById,
+        registrarHistorialReproductivoAve, actualizarHistorialReproductivoAve } = require( '../controllers/historial-reproductivo-ave.controller' );
 
 const { obtenerHistorialReproductivoBorregos, obtenerHistorialReproductivoBorregoById, 
         registrarHistorialReproductivoBorrego, actualizarHistorialReproductivoBorrego } = require( '../controllers/historial-reproductivo-borrego.controller' );
@@ -14,6 +18,37 @@ const { obtenerHistorialReproductivoCaballos, obtenerHistorialReproductivoCaball
 
 const { obtenerHistorialReproductivoConejos, obtenerHistorialReproductivoConejoById,
         registrarHistorialReproductivoConejo, actualizarHistorialReproductivoConejo } = require( '../controllers/historial-reproductivo-conejo.controller' );
+
+// *************************************************************
+// -   End points para historiales reproductivos de las aves   -
+// *************************************************************
+// * * * * * * * * * A V E S * * * * * * * * * *
+
+router.get( '/aves', obtenerHistorialReproductivoAves );
+
+router.get( '/aves/:idAve', [
+    check( 'idAve', 'No es un id válido' ).isMongoId(),
+    check( 'idAve' ).custom( existeAve ),
+    validarCampos
+], obtenerHistorialReproductivoAveById );
+
+router.post( '/aves/:idAve', [
+    validarJWT,
+    check( 'idAve', 'No es un id válido' ).isMongoId(),
+    check( 'idAve' ).custom( existeAve ),
+    check( 'fechaInicio', 'El inicio de celo es obligatorio.' ).escape().trim().notEmpty(),
+    check( 'fechaTermino', 'El inicio de celo es obligatorio.' ).escape().trim().notEmpty(),
+    check( 'instrucciones', 'El semental es obligatorio.' ).escape().trim().notEmpty(),
+    validarCampos
+], registrarHistorialReproductivoAve );
+
+router.put( '/aves/:idHistorialReproductivo', [
+    validarJWT,
+    check( 'idHistorialReproductivo', 'No es un id válido' ).isMongoId(),
+    check( 'idHistorialReproductivo' ).custom( existeHistorialReproductivoAve ),
+    validarCampos
+], actualizarHistorialReproductivoAve );
+
 // *************************************************************
 // - End points para historiales reproductivos de los borregos -
 // *************************************************************
