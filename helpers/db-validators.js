@@ -2,13 +2,18 @@ const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, Historial
         PruebaLaboratorioAve,
 
         Borrego, TratamientoPermanenteBorrego, TrasquilacionBorrego, RecortePesunaBorrego,
-        HistorialReproductivoBorrego, PruebaLaboratorioBorrego,
+        HistorialReproductivoBorrego, PruebaLaboratorioBorrego, DietaBorrego, MedicinaBorrego, 
+        HistoriaClinicaBorrego,
 
-        Caballo, Usuario, DietaCaballo, DietaYegua, TratamientoPermanente, 
+        Caballo, DietaCaballo, DietaYegua, TratamientoPermanente, 
         DesteteCaballo, MedicinaPreventiva, RecorteCasco, Odontologia, HistoriaClinica, 
-        HistorialReproductivo, PruebasLaboratorio, DietaBorrego, MedicinaBorrego, HistoriaClinicaBorrego,
+        HistorialReproductivo, PruebasLaboratorio, 
 
         Conejo, DietaConejo, MedicinaConejo, HistoriaClinicaConejo, HistorialReproductivoConejo,
+
+        PerroGato,
+
+        Usuario
     
 } = require( '../models' );
 
@@ -338,6 +343,20 @@ const emailExiste = async( correo = '' ) => {
     }
 }
 
+// Estos métodos se encargan de checar las existencias de los perros y gatos y sus movimientos
+// ****************************************************
+// -                M A S C O T A S                   -
+// ****************************************************
+
+const existeMascota = async ( id ) => {
+
+    const existeMascota = await PerroGato.findById( id );
+
+    if ( !existeMascota || !existeMascota.estado ) {
+        throw new Error( `No existe mascota con el id: ${ id }.` );
+    }
+}
+
 module.exports = {
 
     // Validadores para las aves
@@ -379,6 +398,9 @@ module.exports = {
     existeMedicinaConejo,
     existeHistoriaClinicaConejo,
     existeHistorialReproductivoConejo,
+
+    // VALIDACIONES PARA MASCOTAS
+    existeMascota,
 
     existeUsuario,
     emailExiste,

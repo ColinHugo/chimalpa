@@ -1,20 +1,20 @@
 const Ave = require( './ave' );
-const HistoriaClinicaAve = require( './historia-clinica-ave' );
-const MedicinaAve = require( './medicina-ave' );
-const DietaAve = require( './dieta-ave' );
 const CuarentenaAve = require( './cuarentena-ave' );
+const DietaAve = require( './dieta-ave' );
+const HistoriaClinicaAve = require( './historia-clinica-ave' );
 const HistorialReproductivoAve = require( './historial-reproductivo-ave' );
+const MedicinaAve = require( './medicina-ave' );
 const PruebaLaboratorioAve = require( './prueba-laboratorio-ave' );
 
 const Borrego = require( './borrego' );
 const DietaBorrego = require( './dieta-borrego' );
+const HistoriaClinicaBorrego = require( './historia-clinica-borrego' );
+const HistorialReproductivoBorrego = require( './historial-reproductivo-borrego' );
+const MedicinaBorrego = require( './medicina-borrego' );
+const PruebaLaboratorioBorrego = require( './prueba-laboratorio-borrego' );
 const RecortePesunaBorrego = require( './recorte-pesuna-borrego' );
 const TrasquilacionBorrego = require( './trasquilacion-borrego' );
 const TratamientoPermanenteBorrego = require( './tratamiento-permanente-borrego' );
-const MedicinaBorrego = require( './medicina-borrego' );
-const HistoriaClinicaBorrego = require( './historia-clinica-borrego' );
-const HistorialReproductivoBorrego = require( './historial-reproductivo-borrego' );
-const PruebaLaboratorioBorrego = require( './prueba-laboratorio-borrego' );
 
 const Caballo = require( './caballo' );
 const DesteteCaballo = require( './destete' );
@@ -30,9 +30,11 @@ const TratamientoPermanente = require( './tratamiento-permanente' );
 
 const Conejo = require( './conejo' );
 const DietaConejo = require( './dieta-conejo' );
-const MedicinaConejo = require( './medicina-conejo' );
 const HistoriaClinicaConejo = require( './historia-clinica-conejo');
 const HistorialReproductivoConejo = require( './historial-reproductivo-conejo' );
+const MedicinaConejo = require( './medicina-conejo' );
+
+const PerroGato = require( './perro-gato' );
 
 const Control = require( './control' );
 const Usuario = require( './usuario' );
@@ -74,6 +76,8 @@ module.exports = {
     PruebasLaboratorio,
     RecorteCasco,
     TratamientoPermanente,
+
+    PerroGato,
 
     Usuario,
     Control,
