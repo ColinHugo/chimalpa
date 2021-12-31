@@ -1,4 +1,4 @@
-const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve,
+const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve,
 
         Borrego, TratamientoPermanenteBorrego, TrasquilacionBorrego, RecortePesunaBorrego,
         HistorialReproductivoBorrego, PruebaLaboratorioBorrego,
@@ -49,6 +49,15 @@ const existeDietaAve = async ( id ) => {
 
     if ( !dieta ) {
         throw new Error( `No existe dieta para el ave con el id: ${ id }` );
+    }
+}
+
+const existeCuarentenaAve = async ( id ) => {
+
+    const cuarentena = await CuarentenaAve.findById( id );
+
+    if ( !cuarentena ) {
+        throw new Error( `No existe cuarentena para el ave con el id: ${ id }` );
     }
 }
 
@@ -317,6 +326,7 @@ module.exports = {
     existeHistoriaClinicaAve,
     existeMedicinaAve,
     existeDietaAve,
+    existeCuarentenaAve,
 
     // Validadores para borregos
     existeBorrego,

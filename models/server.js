@@ -18,6 +18,7 @@ class Server{
             caballos: '/caballos',
             conejos: '/conejos',
             control: '/control',
+            cuarentenas: '/cuarentenas',
             dietas: '/dietas',
             destetes: '/destetes',
             historiaClinica: '/historia-clinica',
@@ -58,6 +59,9 @@ class Server{
         this.app.use( this.paths.control, require( '../routes/control.routes' ) );
         this.app.use( this.paths.tratamientos, require( '../routes/tratamientos.routes' ) );
         this.app.use( this.paths.usuarios, require( '../routes/usuarios.routes' ) );
+
+        // Cuarentenas
+        this.app.use( this.paths.cuarentenas, require( '../routes/cuarentenas.routes' ) );
 
         // Dietas de todos los animales
         this.app.use( this.paths.dietas, require( '../routes/dietas.routes' ) );

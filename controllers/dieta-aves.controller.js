@@ -113,7 +113,7 @@ const actualizarDietaAve = async ( req, res ) => {
 
         const ave = await Ave.findById( dietaAve.ave );
 
-        generarControl( nombre, apellidos, 'actualizado una dieta al ave número', dietaAve.numeroAve );
+        generarControl( nombre, apellidos, 'actualizado una dieta al ave número', ave.numeroAve );
 
         return res.json( {
             value: 1,
