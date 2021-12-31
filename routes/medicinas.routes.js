@@ -2,9 +2,13 @@ const router = require( 'express' ).Router();
 const { check } = require( 'express-validator' );
 
 const { validarCampos, validarJWT } = require( '../middlewares' );
-const { existeCaballo, existeMedicinaPreventiva,
-        existeBorrego, existeMedicinaBorrego, 
+const { existeAve, existeMedicinaAve,
+        existeBorrego, existeMedicinaBorrego,
+        existeCaballo, existeMedicinaPreventiva,
         existeConejo, existeMedicinaConejo } = require( '../helpers/db-validators' );
+
+const { obtenerMedicinaAve, obtenerMedicinaAveById,
+        registrarMedicinaAve, actualizarMedicinaAve } = require( '../controllers/medicinas-aves.controller' );
 
 const { obtenerMedicinaBorrego, obtenerMedicinaBorregoById,
         registrarMedicinaBorrego, actualizarMedicinaBorrego } = require( '../controllers/medicinas-borregos.controller' );
@@ -14,6 +18,36 @@ const { obtenerMedicinaPreventiva, obtenerMedicinaPreventivaById,
 
 const { obtenerMedicinaConejo, obtenerMedicinaConejoById,
         registrarMedicinaConejo, actualizarMedicinaConejo } = require( '../controllers/medicinas-conejos.controller' );
+
+// ****************************************************
+// -     End points para las medicinas de las aves    -
+// ****************************************************
+// * * * * * * * * * A V E S * * * * * * * * * *
+
+router.get( '/aves', obtenerMedicinaAve );
+
+router.get( '/aves/:idAve', [
+    check( 'idAve', 'No es un id válido' ).isMongoId(),
+    check( 'idAve' ).custom( existeAve ),
+    validarCampos
+], obtenerMedicinaAveById );
+
+router.post( '/aves/:idAve', [
+    validarJWT,
+    check( 'idAve', 'No es un id válido' ).isMongoId(),
+    check( 'idAve' ).custom( existeAve ),
+    check( 'tipo', 'El tipo de medicina es obligatorio' ).escape().trim().notEmpty(),
+    check( 'descripcion', 'La descripción es obligatoria' ).escape().trim().notEmpty(),
+    check( 'fecha', 'La fecha es obligatoria' ).trim().notEmpty(),
+    validarCampos
+], registrarMedicinaAve );
+
+router.put( '/aves/:idMedicina', [
+    validarJWT,
+    check( 'idMedicina', 'No es un id válido' ).isMongoId(),
+    check( 'idMedicina' ).custom( existeMedicinaAve ),
+    validarCampos
+], actualizarMedicinaAve );
 
 // ****************************************************
 // -   End points para las medicinas de los borregos  -

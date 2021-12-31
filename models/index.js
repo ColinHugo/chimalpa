@@ -1,5 +1,6 @@
 const Ave = require( './ave' );
 const HistoriaClinicaAve = require( './historia-clinica-ave' );
+const MedicinaAve = require( './medicina-ave' );
 
 const Borrego = require( './borrego' );
 const DietaBorrego = require( './dieta-borrego' );
@@ -36,6 +37,7 @@ module.exports = {
 
     Ave,
     HistoriaClinicaAve,
+    MedicinaAve,
 
     Borrego,
     TrasquilacionBorrego,

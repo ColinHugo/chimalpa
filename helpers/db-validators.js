@@ -1,4 +1,4 @@
-const { Ave, HistoriaClinicaAve,
+const { Ave, HistoriaClinicaAve, MedicinaAve,
 
         Borrego, TratamientoPermanenteBorrego, TrasquilacionBorrego, RecortePesunaBorrego,
         HistorialReproductivoBorrego, PruebaLaboratorioBorrego,
@@ -31,6 +31,15 @@ const existeHistoriaClinicaAve = async ( id ) => {
 
     if ( !historiaAve ) {
         throw new Error( `No existe registro de historial clínico de ave con el id: ${ id }` )
+    }
+}
+
+const existeMedicinaAve = async ( id ) => {
+
+    const medicinaPreventivaAve = await MedicinaAve.findById( id );
+
+    if ( !medicinaPreventivaAve ) {
+        throw new Error( `No existe medicina preventiva para el ave con el id: ${ id }.` );
     }
 }
 
@@ -297,6 +306,7 @@ module.exports = {
     // Validadores para las aves
     existeAve,
     existeHistoriaClinicaAve,
+    existeMedicinaAve,
 
     // Validadores para borregos
     existeBorrego,
