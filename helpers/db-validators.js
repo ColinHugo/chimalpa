@@ -1,4 +1,4 @@
-const { Ave,
+const { Ave, HistoriaClinicaAve,
 
         Borrego, TratamientoPermanenteBorrego, TrasquilacionBorrego, RecortePesunaBorrego,
         HistorialReproductivoBorrego, PruebaLaboratorioBorrego,
@@ -22,6 +22,101 @@ const existeAve = async ( id ) => {
 
     if ( !existeAve || !existeAve.estado ) {
         throw new Error( `No existe ave con el id: ${ id }.` );
+    }
+}
+
+const existeHistoriaClinicaAve = async ( id ) => {
+
+    const historiaAve = await HistoriaClinicaAve.findById( id );
+
+    if ( !historiaAve ) {
+        throw new Error( `No existe registro de historial clínico de ave con el id: ${ id }` )
+    }
+}
+
+// Estos métodos se encargan de checar las existencias de los borregos y sus movimientos
+// ****************************************************
+// -                B O R R E G O S                   -
+// ****************************************************
+
+const existeBorrego = async ( idBorrego ) => {
+
+    const existeBorrego = await Borrego.findById( idBorrego );
+
+    if ( !existeBorrego || !existeBorrego.estado ) {
+        throw new Error( `No existe borrego con el id: ${ idBorrego }.` );
+    }
+}
+
+const existeTratamientoBorrego = async ( id ) => {
+
+    const tratamiento = await TratamientoPermanenteBorrego.findById( id );
+
+    if ( !tratamiento ) {
+        throw new Error( `No existe tratamiento con el id: ${ id }.` );
+    }
+}
+
+const existeDietaBorrego = async ( id ) => {
+
+    const dieta = await DietaBorrego.findById( id );
+
+    if ( !dieta ) {
+        throw new Error( `No existe dieta con el id: ${ id }` );
+    }
+}
+
+const existeTrasquilacionBorrego = async ( id ) => {
+
+    const trasquilacion = await TrasquilacionBorrego.findById( id );
+
+    if ( !trasquilacion ) {
+        throw new Error( `No existe trasquilacion con el id: ${ id }.` );
+    }
+}
+
+const existeRecortePesunaBorrego = async ( id ) => {
+
+    const recortePesuna = await RecortePesunaBorrego.findById( id );
+
+    if ( !recortePesuna ) {
+        throw new Error( `No existe recorte de pesuña con el id: ${ id }.` );
+    }
+}
+
+const existeMedicinaBorrego = async ( id ) => {
+
+    const medicinaPreventiva = await MedicinaBorrego.findById( id );
+
+    if ( !medicinaPreventiva ) {
+        throw new Error( `No existe medicina preventiva con el id: ${ id }.` );
+    }
+}
+
+const existeHistoriaClinicaBorrego = async ( id ) => {
+
+    const historiaBorrego = await HistoriaClinicaBorrego.findById( id );
+
+    if ( !historiaBorrego ) {
+        throw new Error( `No existe registro de historial clínico de borrego con el id: ${ id }` )
+    }
+}
+
+const existeHistorialReproductivoBorrego = async ( id ) => {
+
+    const historialReproductivoBorrego = await HistorialReproductivoBorrego.findById( id );
+
+    if ( !historialReproductivoBorrego ) {
+        throw new Error( `No existe registro de historial reproductivo de borrego con el id: ${ id }` )
+    }
+}
+
+const existePruebaLaboratorioBorrego = async ( id ) => {
+
+    const pruebaLaboratorioBorrego = await PruebaLaboratorioBorrego.findById( id );
+
+    if ( !pruebaLaboratorioBorrego ) {
+        throw new Error( `No existe registro de la prueba de laboratorio de borrego con el id: ${ id }` )
     }
 }
 
@@ -129,92 +224,6 @@ const existePruebaLaboratorioCaballo = async ( id ) => {
     }
 }
 
-// Estos métodos se encargan de checar las existencias de los borregos y sus movimientos
-// ****************************************************
-// -                B O R R E G O S                   -
-// ****************************************************
-
-const existeBorrego = async ( idBorrego ) => {
-
-    const existeBorrego = await Borrego.findById( idBorrego );
-
-    if ( !existeBorrego || !existeBorrego.estado ) {
-        throw new Error( `No existe borrego con el id: ${ idBorrego }.` );
-    }
-}
-
-const existeTratamientoBorrego = async ( id ) => {
-
-    const tratamiento = await TratamientoPermanenteBorrego.findById( id );
-
-    if ( !tratamiento ) {
-        throw new Error( `No existe tratamiento con el id: ${ id }.` );
-    }
-}
-
-const existeDietaBorrego = async ( id ) => {
-
-    const dieta = await DietaBorrego.findById( id );
-
-    if ( !dieta ) {
-        throw new Error( `No existe dieta con el id: ${ id }` );
-    }
-}
-
-const existeTrasquilacionBorrego = async ( id ) => {
-
-    const trasquilacion = await TrasquilacionBorrego.findById( id );
-
-    if ( !trasquilacion ) {
-        throw new Error( `No existe trasquilacion con el id: ${ id }.` );
-    }
-}
-
-const existeRecortePesunaBorrego = async ( id ) => {
-
-    const recortePesuna = await RecortePesunaBorrego.findById( id );
-
-    if ( !recortePesuna ) {
-        throw new Error( `No existe recorte de pesuña con el id: ${ id }.` );
-    }
-}
-
-const existeMedicinaBorrego = async ( id ) => {
-
-    const medicinaPreventiva = await MedicinaBorrego.findById( id );
-
-    if ( !medicinaPreventiva ) {
-        throw new Error( `No existe medicina preventiva con el id: ${ id }.` );
-    }
-}
-
-const existeHistoriaClinicaBorrego = async ( id ) => {
-
-    const historiaBorrego = await HistoriaClinicaBorrego.findById( id );
-
-    if ( !historiaBorrego ) {
-        throw new Error( `No existe registro de historial clínico de borrego con el id: ${ id }` )
-    }
-}
-
-const existeHistorialReproductivoBorrego = async ( id ) => {
-
-    const historialReproductivoBorrego = await HistorialReproductivoBorrego.findById( id );
-
-    if ( !historialReproductivoBorrego ) {
-        throw new Error( `No existe registro de historial reproductivo de borrego con el id: ${ id }` )
-    }
-}
-
-const existePruebaLaboratorioBorrego = async ( id ) => {
-
-    const pruebaLaboratorioBorrego = await PruebaLaboratorioBorrego.findById( id );
-
-    if ( !pruebaLaboratorioBorrego ) {
-        throw new Error( `No existe registro de la prueba de laboratorio de borrego con el id: ${ id }` )
-    }
-}
-
 // Estos métodos se encargan de checar las existencias de los conejo y sus movimientos
 // ****************************************************
 // -                 C O N E J O S                    -
@@ -287,6 +296,7 @@ module.exports = {
 
     // Validadores para las aves
     existeAve,
+    existeHistoriaClinicaAve,
 
     // Validadores para borregos
     existeBorrego,

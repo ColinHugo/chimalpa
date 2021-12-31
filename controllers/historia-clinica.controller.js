@@ -125,7 +125,7 @@ const actualizarHistoriaClinicaCaballo = async ( req, res ) => {
 
         return res.json( {
             value: 0,
-            msg: 'Error al actualizar el destete del caballo.'
+            msg: 'Error al actualizar el historial del caballo.'
         } );
     }
 }
