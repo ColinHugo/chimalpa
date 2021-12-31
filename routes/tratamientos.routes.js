@@ -3,13 +3,18 @@ const { check } = require( 'express-validator' );
 
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
-const { existeBorrego, existeCaballo, existeTratamiento, existeTratamientoBorrego } = require( '../helpers/db-validators' );
+const { existeBorrego, existeTratamientoBorrego, 
+        existeCaballo, existeTratamiento, 
+        existeMascota, existeTratamientoMascota } = require( '../helpers/db-validators' );
 
 const { obtenerTratamientosBorregos, obtenerTratamientoBorregoById,
         registrarTratamientoBorrego, actualizarTratamientoBorrego } = require( '../controllers/tratamientos-borregos.controller' );
 
 const { obtenerTratamientosCaballos, obtenerTratamientoCaballoById,
         registrarTratamientoCaballo, actualizarTratamientoCaballo } = require( '../controllers/tratamientos.controller' );
+
+const { obtenerTratamientosMascotas, obtenerTratamientoMascotaById,
+        registrarTratamientoMascota, actualizarTratamientoMascota } = require( '../controllers/tratamientos-mascotas.controller' );
 
 // ****************************************************
 // - End points para los tratamientos de los caballos -
@@ -68,5 +73,34 @@ router.put( '/borregos/:idTratamiento', [
     check( 'idTratamiento' ).custom( existeTratamientoBorrego ),
     validarCampos
 ], actualizarTratamientoBorrego );
+
+// ****************************************************
+// - End points para los tratamientos de las mascotas -
+// ****************************************************
+
+router.get( '/mascotas', obtenerTratamientosMascotas );
+
+router.get( '/mascotas/:idMascota', [
+    check( 'idMascota', 'No es un id válido' ).isMongoId(),
+    check( 'idMascota' ).custom( existeMascota ),
+    validarCampos
+], obtenerTratamientoMascotaById );
+
+router.post( '/mascotas/:idMascota', [
+    validarJWT,
+    check( 'idMascota', 'No es un id válido' ).isMongoId(),
+    check( 'idMascota' ).custom( existeMascota ),
+    check( 'tipo', 'El tipo de tratamiento es obligatorio.' ).escape().trim().notEmpty(),
+    check( 'descripcion', 'La descripción del tratamiento es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'video', 'El link del video es obligatorio.' ).escape().trim().notEmpty(),
+    validarCampos
+], registrarTratamientoMascota );
+
+router.put( '/mascotas/:idTratamiento', [
+    validarJWT,
+    check( 'idTratamiento', 'No es un id válido' ).isMongoId(),
+    check( 'idTratamiento' ).custom( existeTratamientoMascota ),
+    validarCampos
+], actualizarTratamientoMascota );
 
 module.exports = router;

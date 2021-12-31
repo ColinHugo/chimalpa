@@ -56,4 +56,4 @@ MascotaSchema.methods.toJSON = function () {
     return mascota;
 }
 
-module.exports = model( 'mascota', MascotaSchema );
+module.exports = model( 'Mascota', MascotaSchema );

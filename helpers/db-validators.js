@@ -11,7 +11,7 @@ const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, Historial
 
         Conejo, DietaConejo, MedicinaConejo, HistoriaClinicaConejo, HistorialReproductivoConejo,
 
-        Mascota,
+        Mascota, TratamientoPermanenteMascota,
 
         Usuario
     
@@ -357,6 +357,15 @@ const existeMascota = async ( id ) => {
     }
 }
 
+const existeTratamientoMascota = async ( id ) => {
+
+    const tratamiento = await TratamientoPermanenteMascota.findById( id );
+
+    if ( !tratamiento ) {
+        throw new Error( `No existe tratamiento con el id: ${ id }.` );
+    }
+}
+
 module.exports = {
 
     // Validadores para las aves
@@ -401,6 +410,7 @@ module.exports = {
 
     // VALIDACIONES PARA MASCOTAS
     existeMascota,
+    existeTratamientoMascota,
 
     existeUsuario,
     emailExiste,
