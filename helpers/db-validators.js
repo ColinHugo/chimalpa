@@ -1,4 +1,5 @@
 const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, HistorialReproductivoAve,
+        PruebaLaboratorioAve,
 
         Borrego, TratamientoPermanenteBorrego, TrasquilacionBorrego, RecortePesunaBorrego,
         HistorialReproductivoBorrego, PruebaLaboratorioBorrego,
@@ -9,7 +10,7 @@ const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, Historial
 
         Conejo, DietaConejo, MedicinaConejo, HistoriaClinicaConejo, HistorialReproductivoConejo,
     
-    } = require( '../models' );
+} = require( '../models' );
 
 // Estos métodos se encargan de checar las existencias de las aves y sus movimientos
 // ****************************************************
@@ -67,6 +68,15 @@ const existeHistorialReproductivoAve = async ( id ) => {
 
     if ( !historialReproductivoAve ) {
         throw new Error( `No existe registro de historial reproductivo de ave con el id: ${ id }` )
+    }
+}
+
+const existePruebaLaboratorioAve = async ( id ) => {
+
+    const pruebaLaboratorioAve = await PruebaLaboratorioAve.findById( id );
+
+    if ( !pruebaLaboratorioAve ) {
+        throw new Error( `No existe registro de la prueba de laboratorio de ave con el id: ${ id }` )
     }
 }
 
@@ -337,6 +347,7 @@ module.exports = {
     existeDietaAve,
     existeCuarentenaAve,
     existeHistorialReproductivoAve,
+    existePruebaLaboratorioAve,
 
     // Validadores para borregos
     existeBorrego,
