@@ -34,7 +34,8 @@ const HistoriaClinicaConejo = require( './historia-clinica-conejo');
 const HistorialReproductivoConejo = require( './historial-reproductivo-conejo' );
 const MedicinaConejo = require( './medicina-conejo' );
 
-const PerroGato = require( './perro-gato' );
+const Mascota = require( './mascota' );
+const TratamientoPermanentePerroGato = require( './tratamiento-permanente-perro-gato' );
 
 const Control = require( './control' );
 const Usuario = require( './usuario' );
@@ -77,7 +78,8 @@ module.exports = {
     RecorteCasco,
     TratamientoPermanente,
 
-    PerroGato,
+    Mascota,
+    TratamientoPermanentePerroGato,
 
     Usuario,
     Control,

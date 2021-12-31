@@ -5,7 +5,7 @@ const { existeMascota } = require( '../helpers/db-validators' );
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
 const { obtenerMascotas, obtenerMascotaById, registrarMascota, 
-        actualizarMascota, eliminarMascota } = require( '../controllers/perros-gatos.controller' );
+        actualizarMascota, eliminarMascota } = require( '../controllers/mascotas.controller' );
 
 router.get( '/', obtenerMascotas );
 

@@ -11,7 +11,7 @@ const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, Historial
 
         Conejo, DietaConejo, MedicinaConejo, HistoriaClinicaConejo, HistorialReproductivoConejo,
 
-        PerroGato,
+        Mascota,
 
         Usuario
     
@@ -350,7 +350,7 @@ const emailExiste = async( correo = '' ) => {
 
 const existeMascota = async ( id ) => {
 
-    const existeMascota = await PerroGato.findById( id );
+    const existeMascota = await Mascota.findById( id );
 
     if ( !existeMascota || !existeMascota.estado ) {
         throw new Error( `No existe mascota con el id: ${ id }.` );
