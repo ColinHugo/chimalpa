@@ -11,7 +11,7 @@ const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, Historial
 
         Conejo, DietaConejo, MedicinaConejo, HistoriaClinicaConejo, HistorialReproductivoConejo,
 
-        Mascota, TratamientoPermanenteMascota, DietaMascota, MedicinaMascota,
+        Mascota, TratamientoPermanenteMascota, DietaMascota, MedicinaMascota, HistoriaClinicaMascota,
 
         Usuario
     
@@ -384,6 +384,15 @@ const existeMedicinaMascota = async ( id ) => {
     }
 }
 
+const existeHistoriaClinicaMascota = async ( id ) => {
+
+    const historiaMascota = await HistoriaClinicaMascota.findById( id );
+
+    if ( !historiaMascota ) {
+        throw new Error( `No existe registro de historial clínico de la mascota con el id: ${ id }` )
+    }
+}
+
 module.exports = {
 
     // Validadores para las aves
@@ -431,6 +440,7 @@ module.exports = {
     existeTratamientoMascota,
     existeDietaMascota,
     existeMedicinaMascota,
+    existeHistoriaClinicaMascota,
 
     existeUsuario,
     emailExiste,
