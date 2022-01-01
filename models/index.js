@@ -40,6 +40,7 @@ const DietaMascota = require( './dieta-mascota' );
 const MedicinaMascota = require( './medicina-mascota' );
 const HistoriaClinicaMascota = require( './historia-clinica-mascota' );
 const HistorialReproductivoMascota = require( './historial-reproductivo-mascota' );
+const PruebaLaboratorioMascota = require( './prueba-laboratorio-mascota' );
 
 const Control = require( './control' );
 const Usuario = require( './usuario' );
@@ -50,8 +51,8 @@ module.exports = {
     CuarentenaAve,
     DietaAve,
     HistoriaClinicaAve,
-    MedicinaAve,
     HistorialReproductivoAve,
+    MedicinaAve,
     PruebaLaboratorioAve,
 
     Borrego,
@@ -83,11 +84,12 @@ module.exports = {
     TratamientoPermanente,
 
     Mascota,
-    TratamientoPermanenteMascota,
     DietaMascota,
-    MedicinaMascota,
     HistoriaClinicaMascota,
     HistorialReproductivoMascota,
+    MedicinaMascota,
+    PruebaLaboratorioMascota,
+    TratamientoPermanenteMascota,
 
     Usuario,
     Control,

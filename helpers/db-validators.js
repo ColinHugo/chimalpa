@@ -12,7 +12,7 @@ const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, Historial
         Conejo, DietaConejo, MedicinaConejo, HistoriaClinicaConejo, HistorialReproductivoConejo,
 
         Mascota, TratamientoPermanenteMascota, DietaMascota, MedicinaMascota, HistoriaClinicaMascota,
-        HistorialReproductivoMascota,
+        HistorialReproductivoMascota, PruebaLaboratorioMascota,
 
         Usuario,
     
@@ -403,6 +403,15 @@ const existeHistorialReproductivoMascota = async ( id ) => {
     }
 }
 
+const existePruebaLaboratorioMascota = async ( id ) => {
+
+    const pruebaLaboratorioMascota = await PruebaLaboratorioMascota.findById( id );
+
+    if ( !pruebaLaboratorioMascota ) {
+        throw new Error( `No existe registro de la prueba de laboratorio para mascota con el id: ${ id }` )
+    }
+}
+
 module.exports = {
 
     // Validadores para las aves
@@ -452,6 +461,7 @@ module.exports = {
     existeMedicinaMascota,
     existeHistoriaClinicaMascota,
     existeHistorialReproductivoMascota,
+    existePruebaLaboratorioMascota,
 
     existeUsuario,
     emailExiste,

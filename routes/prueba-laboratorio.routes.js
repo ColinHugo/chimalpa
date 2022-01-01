@@ -3,7 +3,8 @@ const { check } = require( 'express-validator' );
 
 const { existeAve, existePruebaLaboratorioAve,
         existeBorrego, existePruebaLaboratorioBorrego,
-        existeCaballo, existePruebaLaboratorioCaballo } = require( '../helpers/db-validators' );
+        existeCaballo, existePruebaLaboratorioCaballo,
+        existeMascota, existePruebaLaboratorioMascota } = require( '../helpers/db-validators' );
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
 const { obtenerPruebasLaboratorioAves, obtenerPruebaLaboratorioAveById,
@@ -14,6 +15,9 @@ const { obtenerPruebasLaboratorioBorregos, obtenerPruebaLaboratorioBorregoById,
 
 const { obtenerPruebasLaboratoriosCaballos, obtenerPruebaLaboratorioCaballoById, 
         registrarPruebaLaboratorioCaballo, actualizarPruebaLaboratorioCaballo } = require( '../controllers/prueba-laboratorio.controller' );
+
+const { obtenerPruebasLaboratorioMascotas, obtenerPruebaLaboratorioMascotaById,
+        registrarPruebaLaboratorioMascota, actualizarPruebaLaboratorioMascota } = require( '../controllers/prueba-laboratorio-mascota.controller' );
 
 // **************************************************************
 // -   End points para las pruebas de laboratorio de las aves   -
@@ -95,5 +99,32 @@ router.put( '/caballos/:idPruebaLaboratorio', [
     check( 'idPruebaLaboratorio' ).custom( existePruebaLaboratorioCaballo ),
     validarCampos
 ], actualizarPruebaLaboratorioCaballo );
+
+// **************************************************************
+// - End points para las pruebas de laboratorio de las mascotas -
+// **************************************************************
+// * * * * * * * * * * M A S C O T A S * * * * * * * * * *
+
+router.get( '/mascotas', obtenerPruebasLaboratorioMascotas );
+
+router.get( '/mascotas/:idMascota', [
+    check( 'idMascota', 'No es un id válido' ).isMongoId(),
+    check( 'idMascota' ).custom( existeMascota ),
+    validarCampos
+], obtenerPruebaLaboratorioMascotaById );
+
+router.post( '/mascotas/:idMascota', [
+    validarJWT,
+    check( 'link', 'El link de la prueba de laboratorio es obligatorio' ).escape().trim().notEmpty(),
+    check( 'idMascota' ).custom( existeMascota ),
+    validarCampos
+], registrarPruebaLaboratorioMascota );
+
+router.put( '/mascotas/:idPruebaLaboratorio', [
+    validarJWT,
+    check( 'idPruebaLaboratorio', 'No es un id válido' ).isMongoId(),
+    check( 'idPruebaLaboratorio' ).custom( existePruebaLaboratorioMascota ),
+    validarCampos
+], actualizarPruebaLaboratorioMascota );
 
 module.exports = router;
