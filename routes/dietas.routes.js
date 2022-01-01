@@ -5,7 +5,8 @@ const { check } = require( 'express-validator' );
 const { existeAve, existeDietaAve,
         existeBorrego, existeDietaBorrego,
         existeCaballo, existeDietaCaballo, existeDietaYegua, 
-        existeConejo, existeDietaConejo } = require( '../helpers/db-validators' );
+        existeConejo, existeDietaConejo,
+        existeMascota, existeDietaMascota } = require( '../helpers/db-validators' );
 
 const { obtenerDietaAves, obtenerDietaAveById,
         registrarDietaAve, actualizarDietaAve } = require( '../controllers/dieta-aves.controller' );
@@ -18,6 +19,9 @@ const { obtenerDietaCaballos, obtenerDietaCaballoById,
 
 const { obtenerDietaConejos, obtenerDietaConejoById,
         registrarDietaConejo, actualizarDietaConejo } = require('../controllers/dieta-conejos.controller');
+
+const { obtenerDietaMascotas, obtenerDietaMascotaById,
+        registrarDietaMascota, actualizarDietaMascota } = require( '../controllers/dieta-mascotas.controller' );
 
 const { obtenerDietaYeguas, obtenerDietaYeguaById,
         registrarDietaYegua, actualizarDietaYegua } = require( '../controllers/dieta-yeguas.controller' );
@@ -206,5 +210,38 @@ router.put( '/conejos/:idDietaConejo', [
     check( 'idDietaConejo' ).custom( existeDietaConejo ),
     validarCampos
 ], actualizarDietaConejo );
+
+// ****************************************************
+// -    End points para las dietas de las mascotas     -
+// ****************************************************
+// * * * * * * * * * * M A S C O T A S * * * * * * * * * *
+
+router.get( '/mascotas', obtenerDietaMascotas );
+
+router.get( '/mascotas/:idMascota', [
+    check( 'idMascota', 'No es un id válido' ).isMongoId(),
+    check( 'idMascota' ).custom( existeMascota ),
+    validarCampos
+], obtenerDietaMascotaById );
+
+router.post( '/mascotas/:idMascota', [
+    validarJWT,
+    check( 'idMascota', 'No es un id válido' ).isMongoId(),
+    check( 'idMascota' ).custom( existeMascota ),
+    check( 'avena_cantidad_manana', 'La cantidad de la avena por la mañana es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'avena_cantidad_tarde', 'La cantidad de la avena por la tarde es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'alfalfa_cantidad_manana', 'La cantidad de la alfalfa por la mañana es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'alfalfa_cantidad_tarde', 'La cantidad de la alfalfa por la tarde es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'grano_cantidad_manana', 'La cantidad del grano por la mañana es obligatorio.' ).escape().trim().notEmpty(),
+    check( 'grano_cantidad_tarde', 'La cantidad del grano por la tarde es obligatorio.' ).escape().trim().notEmpty(),
+    validarCampos
+], registrarDietaMascota );
+
+router.put( '/mascotas/:idDietaMascota', [
+    validarJWT,
+    check( 'idDietaMascota', 'No es un id válido' ).isMongoId(),
+    check( 'idDietaMascota' ).custom( existeDietaMascota ),
+    validarCampos
+], actualizarDietaMascota );
 
 module.exports = router;
