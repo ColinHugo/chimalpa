@@ -12,8 +12,9 @@ const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, Historial
         Conejo, DietaConejo, MedicinaConejo, HistoriaClinicaConejo, HistorialReproductivoConejo,
 
         Mascota, TratamientoPermanenteMascota, DietaMascota, MedicinaMascota, HistoriaClinicaMascota,
+        HistorialReproductivoMascota,
 
-        Usuario
+        Usuario,
     
 } = require( '../models' );
 
@@ -393,6 +394,15 @@ const existeHistoriaClinicaMascota = async ( id ) => {
     }
 }
 
+const existeHistorialReproductivoMascota = async ( id ) => {
+
+    const historialReproductivoMascota = await HistorialReproductivoMascota.findById( id );
+
+    if ( !historialReproductivoMascota ) {
+        throw new Error( `No existe registro de historial reproductivo de la mascota con el id: ${ id }` )
+    }
+}
+
 module.exports = {
 
     // Validadores para las aves
@@ -441,6 +451,7 @@ module.exports = {
     existeDietaMascota,
     existeMedicinaMascota,
     existeHistoriaClinicaMascota,
+    existeHistorialReproductivoMascota,
 
     existeUsuario,
     emailExiste,

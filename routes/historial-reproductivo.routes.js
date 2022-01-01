@@ -4,7 +4,9 @@ const { check } = require( 'express-validator' );
 const { existeAve, existeHistorialReproductivoAve,
         existeBorrego, existeHistorialReproductivoBorrego, 
         existeCaballo, existeHistorialReproductivoCaballo,
-        existeConejo, existeHistorialReproductivoConejo } = require( '../helpers/db-validators' );
+        existeConejo, existeHistorialReproductivoConejo,
+        existeMascota, existeHistorialReproductivoMascota
+} = require( '../helpers/db-validators' );
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
 const { obtenerHistorialReproductivoAves, obtenerHistorialReproductivoAveById,
@@ -18,6 +20,9 @@ const { obtenerHistorialReproductivoCaballos, obtenerHistorialReproductivoCaball
 
 const { obtenerHistorialReproductivoConejos, obtenerHistorialReproductivoConejoById,
         registrarHistorialReproductivoConejo, actualizarHistorialReproductivoConejo } = require( '../controllers/historial-reproductivo-conejo.controller' );
+
+const { obtenerHistorialReproductivoMascotas, obtenerHistorialReproductivoMascotaById,
+        registrarHistorialReproductivoMascota, actualizarHistorialReproductivoMascota } = require( '../controllers/historial-reproductivo-mascota.controller' );
 
 // *************************************************************
 // -   End points para historiales reproductivos de las aves   -
@@ -148,5 +153,36 @@ router.put( '/conejos/:idHistorialReproductivo', [
     check( 'idHistorialReproductivo' ).custom( existeHistorialReproductivoConejo ),
     validarCampos
 ], actualizarHistorialReproductivoConejo );
+
+// *************************************************************
+// - End points para historiales reproductivos de las mascotas -
+// *************************************************************
+// * * * * * * * * * M A S C O T A S * * * * * * * * * *
+
+router.get( '/mascotas', obtenerHistorialReproductivoMascotas );
+
+router.get( '/mascotas/:idMascota', [
+    check( 'idMascota', 'No es un id válido' ).isMongoId(),
+    check( 'idMascota' ).custom( existeMascota ),
+    validarCampos
+], obtenerHistorialReproductivoMascotaById );
+
+router.post( '/mascotas/:idMascota', [
+    validarJWT,
+    check( 'idMascota', 'No es un id válido' ).isMongoId(),
+    check( 'idMascota' ).custom( existeMascota ),
+    check( 'numeroExpediente', 'El número de expediente es obligatorio' ).escape().trim().notEmpty(), 
+    check( 'fechaCreacion', 'La fecha de creación es obligatoria' ).escape().trim().notEmpty(),
+    check( 'inicioCelo', 'El inicio de celo es obligatorio' ).escape().trim().notEmpty(),
+    check( 'tipo', 'El tipo de reproducción es obligatorio' ).escape().trim().notEmpty(),    
+    validarCampos
+], registrarHistorialReproductivoMascota );
+
+router.put( '/mascotas/:idHistorialReproductivo', [
+    validarJWT,
+    check( 'idHistorialReproductivo', 'No es un id válido' ).isMongoId(),
+    check( 'idHistorialReproductivo' ).custom( existeHistorialReproductivoMascota ),
+    validarCampos
+], actualizarHistorialReproductivoMascota );
 
 module.exports = router;

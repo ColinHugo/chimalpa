@@ -39,6 +39,7 @@ const TratamientoPermanenteMascota = require( './tratamiento-permanente-mascota'
 const DietaMascota = require( './dieta-mascota' );
 const MedicinaMascota = require( './medicina-mascota' );
 const HistoriaClinicaMascota = require( './historia-clinica-mascota' );
+const HistorialReproductivoMascota = require( './historial-reproductivo-mascota' );
 
 const Control = require( './control' );
 const Usuario = require( './usuario' );
@@ -86,6 +87,7 @@ module.exports = {
     DietaMascota,
     MedicinaMascota,
     HistoriaClinicaMascota,
+    HistorialReproductivoMascota,
 
     Usuario,
     Control,
