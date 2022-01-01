@@ -11,7 +11,7 @@ const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, Historial
 
         Conejo, DietaConejo, MedicinaConejo, HistoriaClinicaConejo, HistorialReproductivoConejo,
 
-        Mascota, TratamientoPermanenteMascota, DietaMascota,
+        Mascota, TratamientoPermanenteMascota, DietaMascota, MedicinaMascota,
 
         Usuario
     
@@ -375,6 +375,15 @@ const existeDietaMascota = async ( id ) => {
     }
 }
 
+const existeMedicinaMascota = async ( id ) => {
+
+    const medicinaPreventiva = await MedicinaMascota.findById( id );
+
+    if ( !medicinaPreventiva ) {
+        throw new Error( `No existe medicina preventiva para la masota con el id: ${ id }.` );
+    }
+}
+
 module.exports = {
 
     // Validadores para las aves
@@ -421,6 +430,7 @@ module.exports = {
     existeMascota,
     existeTratamientoMascota,
     existeDietaMascota,
+    existeMedicinaMascota,
 
     existeUsuario,
     emailExiste,

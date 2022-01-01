@@ -5,7 +5,8 @@ const { validarCampos, validarJWT } = require( '../middlewares' );
 const { existeAve, existeMedicinaAve,
         existeBorrego, existeMedicinaBorrego,
         existeCaballo, existeMedicinaPreventiva,
-        existeConejo, existeMedicinaConejo } = require( '../helpers/db-validators' );
+        existeConejo, existeMedicinaConejo,
+        existeMascota, existeMedicinaMascota } = require( '../helpers/db-validators' );
 
 const { obtenerMedicinaAve, obtenerMedicinaAveById,
         registrarMedicinaAve, actualizarMedicinaAve } = require( '../controllers/medicinas-aves.controller' );
@@ -18,6 +19,9 @@ const { obtenerMedicinaPreventiva, obtenerMedicinaPreventivaById,
 
 const { obtenerMedicinaConejo, obtenerMedicinaConejoById,
         registrarMedicinaConejo, actualizarMedicinaConejo } = require( '../controllers/medicinas-conejos.controller' );
+
+const { obtenerMedicinaMascota, obtenerMedicinaMascotaById,
+        registrarMedicinaMascota, actualizarMedicinaMascota } = require( '../controllers/medicinas-mascotas.controller' );
 
 // ****************************************************
 // -     End points para las medicinas de las aves    -
@@ -138,5 +142,35 @@ router.put( '/conejos/:idMedicina', [
     check( 'idMedicina' ).custom( existeMedicinaConejo ),
     validarCampos
 ], actualizarMedicinaConejo );
+
+// ****************************************************
+// -   End points para las medicinas de las mascotas  -
+// ****************************************************
+// * * * * * * * * * * M A S C O T A S * * * * * * * * * *
+
+router.get( '/mascotas', obtenerMedicinaMascota );
+
+router.get( '/mascotas/:idMascota', [
+    check( 'idMascota', 'No es un id válido' ).isMongoId(),
+    check( 'idMascota' ).custom( existeMascota ),
+    validarCampos
+], obtenerMedicinaMascotaById );
+
+router.post( '/mascotas/:idMascota', [
+    validarJWT,
+    check( 'idMascota', 'No es un id válido' ).isMongoId(),
+    check( 'idMascota' ).custom( existeMascota ),
+    check( 'tipo', 'El tipo de medicina es obligatorio' ).escape().trim().notEmpty(),
+    check( 'descripcion', 'La descripción es obligatoria' ).escape().trim().notEmpty(),
+    check( 'fecha', 'La fecha es obligatoria' ).trim().notEmpty(),
+    validarCampos
+], registrarMedicinaMascota );
+
+router.put( '/mascotas/:idMedicina', [
+    validarJWT,
+    check( 'idMedicina', 'No es un id válido' ).isMongoId(),
+    check( 'idMedicina' ).custom( existeMedicinaMascota ),
+    validarCampos
+], actualizarMedicinaMascota );
 
 module.exports = router;
