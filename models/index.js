@@ -26,6 +26,7 @@ const MedicinaPreventiva = require( './medicina-preventiva' );
 const Odontologia = require( './odontologia' );
 const PruebasLaboratorio = require( './prueba-laboratorio' );
 const RecorteCasco = require( './recorte-casco' );
+const RondinCaballo = require( './rondin-caballo' );
 const TratamientoPermanente = require( './tratamiento-permanente' );
 
 const Conejo = require( './conejo' );
@@ -83,6 +84,7 @@ module.exports = {
     Odontologia,
     PruebasLaboratorio,
     RecorteCasco,
+    RondinCaballo,
     TratamientoPermanente,
 
     Herramienta,

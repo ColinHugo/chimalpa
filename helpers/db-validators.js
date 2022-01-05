@@ -7,7 +7,7 @@ const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, Historial
 
         Caballo, DietaCaballo, DietaYegua, TratamientoPermanente, 
         DesteteCaballo, MedicinaPreventiva, RecorteCasco, Odontologia, HistoriaClinica, 
-        HistorialReproductivo, PruebasLaboratorio, 
+        HistorialReproductivo, PruebasLaboratorio, RondinCaballo,
 
         Conejo, DietaConejo, MedicinaConejo, HistoriaClinicaConejo, HistorialReproductivoConejo,
 
@@ -278,6 +278,15 @@ const existePruebaLaboratorioCaballo = async ( id ) => {
     }
 }
 
+const existeRondinCaballo = async ( id ) => {
+
+    const rondinCaballo = await RondinCaballo.findById( id );
+
+    if ( !rondinCaballo ) {
+        throw new Error( `No existe rondín para el caballo con el id: ${ id }` )
+    }
+}
+
 // Estos métodos se encargan de checar las existencias de los conejo y sus movimientos
 // ****************************************************
 // -                 C O N E J O S                    -
@@ -461,6 +470,7 @@ module.exports = {
     existeOdontologia,
     existePruebaLaboratorioCaballo,
     existeRecorteCasco,
+    existeRondinCaballo,
     existeTratamiento,
 
     // vALIDADORES PARA CONEJOS

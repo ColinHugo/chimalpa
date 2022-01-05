@@ -1,7 +1,9 @@
 const router = require( 'express' ).Router();
 
-const { obtenerReportes }  = require( '../controllers/control.controller' );
+const { obtenerReportes, obtenerReportesFecha }  = require( '../controllers/control.controller' );
 
-router.get( '/', obtenerReportes )
+router.get( '/', obtenerReportes );
+
+router.get( '/:desde', obtenerReportesFecha );
 
 module.exports = router;

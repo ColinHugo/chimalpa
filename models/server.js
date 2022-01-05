@@ -30,6 +30,7 @@ class Server{
             pruebasLaboratorio: '/pruebas-laboratorio',
             recortesCascos: '/recortes-cascos',
             recortesPesunas: '/recortes-pesunas',
+            rondin: '/rondin',
             trasquilacion: '/trasquilacion',
             tratamientos: '/tratamientos',
             usuarios: '/usuarios',
@@ -61,6 +62,7 @@ class Server{
         this.app.use( this.paths.control, require( '../routes/control.routes' ) );
         this.app.use( this.paths.herramientas, require( '../routes/herramientas.routes' ) );
         this.app.use( this.paths.mascotas, require( '../routes/mascotas.routes' ) );
+        this.app.use( this.paths.rondin, require( '../routes/rondin-caballo.routes' ) );
         this.app.use( this.paths.tratamientos, require( '../routes/tratamientos.routes' ) );
         this.app.use( this.paths.usuarios, require( '../routes/usuarios.routes' ) );
 
