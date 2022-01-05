@@ -5,7 +5,7 @@ const { existeAve } = require( '../helpers/db-validators' );
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
 const { obtenerAves, obtenerAveById, registrarAve, 
-        actualizarAve, eliminarAve } = require( '../controllers/aves.controller copy' );
+        actualizarAve, eliminarAve } = require( '../controllers/aves.controller' );
 
 router.get( '/', obtenerAves );
 
