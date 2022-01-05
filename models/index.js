@@ -32,6 +32,8 @@ const Conejo = require( './conejo' );
 const DietaConejo = require( './dieta-conejo' );
 const HistoriaClinicaConejo = require( './historia-clinica-conejo');
 const HistorialReproductivoConejo = require( './historial-reproductivo-conejo' );
+
+const Herramienta = require( './herramienta' );
 const MedicinaConejo = require( './medicina-conejo' );
 
 const Mascota = require( './mascota' );
@@ -82,6 +84,8 @@ module.exports = {
     PruebasLaboratorio,
     RecorteCasco,
     TratamientoPermanente,
+
+    Herramienta,
 
     Mascota,
     DietaMascota,

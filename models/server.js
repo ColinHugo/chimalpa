@@ -21,6 +21,7 @@ class Server{
             cuarentenas: '/cuarentenas',
             dietas: '/dietas',
             destetes: '/destetes',
+            herramientas: '/herramientas',
             historiaClinica: '/historia-clinica',
             historialReproductivo: '/historial-reproductivo',
             mascotas: '/mascotas',
@@ -58,6 +59,7 @@ class Server{
         this.app.use( this.paths.caballos, require( '../routes/caballos.routes' ) );
         this.app.use( this.paths.conejos, require( '../routes/conejos.routes' ) );
         this.app.use( this.paths.control, require( '../routes/control.routes' ) );
+        this.app.use( this.paths.herramientas, require( '../routes/herramientas.routes' ) );
         this.app.use( this.paths.mascotas, require( '../routes/mascotas.routes' ) );
         this.app.use( this.paths.tratamientos, require( '../routes/tratamientos.routes' ) );
         this.app.use( this.paths.usuarios, require( '../routes/usuarios.routes' ) );

@@ -11,6 +11,8 @@ const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, Historial
 
         Conejo, DietaConejo, MedicinaConejo, HistoriaClinicaConejo, HistorialReproductivoConejo,
 
+        Herramienta,
+
         Mascota, TratamientoPermanenteMascota, DietaMascota, MedicinaMascota, HistoriaClinicaMascota,
         HistorialReproductivoMascota, PruebaLaboratorioMascota,
 
@@ -326,6 +328,20 @@ const existeHistorialReproductivoConejo = async ( id ) => {
     }
 }
 
+// Estos métodos se encargan de checar las existencias de las herramientas y sus movimientos
+// ****************************************************
+// -            H E R R A M I E N T A S               -
+// ****************************************************
+
+const existeHerramienta = async ( id ) => {
+
+    const existeHerramienta = await Herramienta.findById( id );
+
+    if ( !existeHerramienta ) {
+        throw new Error( `No existe herramienta con el id: ${ id }.` );
+    }
+}
+
 const existeUsuario = async ( id ) => {
 
     const existeUsuario = await Usuario.findById( id );
@@ -453,6 +469,9 @@ module.exports = {
     existeMedicinaConejo,
     existeHistoriaClinicaConejo,
     existeHistorialReproductivoConejo,
+
+    // VALIDACIONES PARA HERRAMIENTAS
+    existeHerramienta,
 
     // VALIDACIONES PARA MASCOTAS
     existeMascota,
