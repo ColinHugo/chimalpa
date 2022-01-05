@@ -11,11 +11,11 @@ const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, Historial
 
         Conejo, DietaConejo, MedicinaConejo, HistoriaClinicaConejo, HistorialReproductivoConejo,
 
-        Herramienta,
-
         Mascota, TratamientoPermanenteMascota, DietaMascota, MedicinaMascota, HistoriaClinicaMascota,
         HistorialReproductivoMascota, PruebaLaboratorioMascota,
 
+        Herramienta,
+        Tarea,
         Usuario,
     
 } = require( '../models' );
@@ -360,6 +360,15 @@ const existeUsuario = async ( id ) => {
     }
 }
 
+const existeTarea = async ( id ) => {
+
+    const tarea = await Tarea.findById( id );
+
+    if ( !tarea ) {
+        throw new Error( `No existe tarea con el id: ${ id }.` );
+    }
+}
+
 const emailExiste = async( correo = '' ) => {
     
     const existeEmail = await Usuario.findOne( { correo } );
@@ -480,9 +489,6 @@ module.exports = {
     existeHistoriaClinicaConejo,
     existeHistorialReproductivoConejo,
 
-    // VALIDACIONES PARA HERRAMIENTAS
-    existeHerramienta,
-
     // VALIDACIONES PARA MASCOTAS
     existeMascota,
     existeTratamientoMascota,
@@ -492,6 +498,8 @@ module.exports = {
     existeHistorialReproductivoMascota,
     existePruebaLaboratorioMascota,
 
-    existeUsuario,
     emailExiste,
+    existeHerramienta,
+    existeTarea,
+    existeUsuario,
 }

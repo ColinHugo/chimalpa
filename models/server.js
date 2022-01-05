@@ -31,6 +31,7 @@ class Server{
             recortesCascos: '/recortes-cascos',
             recortesPesunas: '/recortes-pesunas',
             rondin: '/rondin',
+            tareas: '/tareas',
             trasquilacion: '/trasquilacion',
             tratamientos: '/tratamientos',
             usuarios: '/usuarios',
@@ -64,6 +65,7 @@ class Server{
         this.app.use( this.paths.mascotas, require( '../routes/mascotas.routes' ) );
         this.app.use( this.paths.rondin, require( '../routes/rondin-caballo.routes' ) );
         this.app.use( this.paths.tratamientos, require( '../routes/tratamientos.routes' ) );
+        this.app.use( this.paths.tareas, require( '../routes/tareas.routes' ) );
         this.app.use( this.paths.usuarios, require( '../routes/usuarios.routes' ) );
 
         // Cuarentenas

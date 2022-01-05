@@ -33,19 +33,19 @@ const Conejo = require( './conejo' );
 const DietaConejo = require( './dieta-conejo' );
 const HistoriaClinicaConejo = require( './historia-clinica-conejo');
 const HistorialReproductivoConejo = require( './historial-reproductivo-conejo' );
-
-const Herramienta = require( './herramienta' );
 const MedicinaConejo = require( './medicina-conejo' );
 
 const Mascota = require( './mascota' );
-const TratamientoPermanenteMascota = require( './tratamiento-permanente-mascota' );
 const DietaMascota = require( './dieta-mascota' );
-const MedicinaMascota = require( './medicina-mascota' );
 const HistoriaClinicaMascota = require( './historia-clinica-mascota' );
 const HistorialReproductivoMascota = require( './historial-reproductivo-mascota' );
+const MedicinaMascota = require( './medicina-mascota' );
 const PruebaLaboratorioMascota = require( './prueba-laboratorio-mascota' );
+const TratamientoPermanenteMascota = require( './tratamiento-permanente-mascota' );
 
 const Control = require( './control' );
+const Herramienta = require( './herramienta' );
+const Tarea = require( './tarea' );
 const Usuario = require( './usuario' );
 
 module.exports = {
@@ -87,8 +87,6 @@ module.exports = {
     RondinCaballo,
     TratamientoPermanente,
 
-    Herramienta,
-
     Mascota,
     DietaMascota,
     HistoriaClinicaMascota,
@@ -97,6 +95,8 @@ module.exports = {
     PruebaLaboratorioMascota,
     TratamientoPermanenteMascota,
 
-    Usuario,
     Control,
+    Herramienta,
+    Tarea,
+    Usuario,
 }
