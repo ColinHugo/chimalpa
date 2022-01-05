@@ -2,9 +2,16 @@ const { Control } = require( '../models' );
 
 const obtenerReportes = async ( req, res ) => {
 
+    const { desde, hasta } = req.body;
+
     try {
 
-        const reporte = await Control.find();
+        const reporte = await Control.find( {
+            createdAt: {
+                $gte: desde,
+                $lte: hasta
+            }
+        } );
 
         if ( reporte.length === 0 ) {
 
