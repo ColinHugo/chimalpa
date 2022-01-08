@@ -32,7 +32,9 @@ const obtenerReportes = async ( req, res ) => {
 
 const obtenerReportesFecha = async ( req, res ) => {
 
-    const { desde } = req.params;
+    let { desde } = req.params;
+
+    desde = desde.substring( 0, 10 );
 
     try {
 

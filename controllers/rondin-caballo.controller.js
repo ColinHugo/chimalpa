@@ -5,7 +5,41 @@ const { generarControl } = require( '../helpers/generar-control' );
 const obtenerRondinById = async ( req, res ) => {
 
     const { idCaballo } = req.params;
-    const { desde } = req.body;
+
+    try {
+
+        const rondin = await RondinCaballo.where( { caballo: idCaballo } )
+            .populate( 'usuario', [ 'nombre', 'apellidos' ] )
+            .populate( 'caballo', [ 'nombre' , 'foto'] );
+
+        if ( rondin.length === 0 ) {
+            return res.json( {
+                value: 0,
+                msg: 'No hay rondines que mostrar.'
+            } );
+        }
+
+        return res.json( {
+            value: 1,
+            rondin
+        } );
+        
+    } catch ( error ) {
+
+        console.error( `Error al obtener los rondines del caballo con id ${ idCaballo }. ${ error }` );
+
+        return res.json( {
+            value: 0,
+            msg: `Error al obtener los rondines del caballo con id ${ idCaballo }.`
+        } );
+    }
+}
+
+const obtenerRondinByIdDate = async ( req, res ) => {
+
+    let { idCaballo, desde } = req.params;
+
+    desde = desde.substring( 0, 10 );
 
     try {
 
@@ -15,7 +49,7 @@ const obtenerRondinById = async ( req, res ) => {
             }
         } )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] )
-            .populate( 'caballo', 'nombre' );
+            .populate( 'caballo', [ 'nombre' , 'foto'] );
 
         if ( rondin.length === 0 ) {
             return res.json( {
@@ -108,6 +142,7 @@ const actualizarRondinCaballo = async ( req, res ) => {
 
 module.exports = {
     obtenerRondinById,
+    obtenerRondinByIdDate,
     registrarRondin,
     actualizarRondinCaballo
 }

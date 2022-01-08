@@ -4,13 +4,20 @@ const { check } = require( 'express-validator' );
 const { existeCaballo, existeRondinCaballo } = require( '../helpers/db-validators' );
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
-const { obtenerRondinById, registrarRondin, actualizarRondinCaballo } = require( '../controllers/rondin-caballo.controller' );
+const { obtenerRondinById, obtenerRondinByIdDate,
+         registrarRondin, actualizarRondinCaballo } = require( '../controllers/rondin-caballo.controller' );
 
 router.get( '/:idCaballo', [
     check( 'idCaballo', 'No es un id válido' ).isMongoId(),
     check( 'idCaballo' ).custom( existeCaballo ),
     validarCampos
 ], obtenerRondinById );
+
+router.get( '/:idCaballo/:desde', [
+    check( 'idCaballo', 'No es un id válido' ).isMongoId(),
+    check( 'idCaballo' ).custom( existeCaballo ),
+    validarCampos
+], obtenerRondinByIdDate );
 
 router.post( '/:idCaballo', [
     validarJWT,
