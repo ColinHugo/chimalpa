@@ -34,7 +34,7 @@ router.get( '/aves/:idAve', [
 
 router.post( '/aves/:idAve', [
     validarJWT,
-    check( 'link', 'El link de la prueba de laboratorio es obligatorio' ).escape().trim().notEmpty(),
+    check( 'link', 'El link de la prueba de laboratorio es obligatorio' ).trim().notEmpty(),
     check( 'idAve' ).custom( existeAve ),
     validarCampos
 ], registrarPruebaLaboratorioAve );
@@ -61,7 +61,7 @@ router.get( '/borregos/:idBorrego', [
 
 router.post( '/borregos/:idBorrego', [
     validarJWT,
-    check( 'link', 'El link de la prueba de laboratorio es obligatorio' ).escape().trim().notEmpty(),
+    check( 'link', 'El link de la prueba de laboratorio es obligatorio' ).trim().notEmpty(),
     check( 'idBorrego' ).custom( existeBorrego ),
     validarCampos
 ], registrarPruebaLaboratorioBorrego );
@@ -88,7 +88,7 @@ router.get( '/caballos/:idCaballo', [
 
 router.post( '/caballos/:idCaballo', [
     validarJWT,
-    check( 'link', 'El link de la prueba de laboratorio es obligatorio' ).escape().trim().notEmpty(),
+    check( 'link', 'El link de la prueba de laboratorio es obligatorio' ).trim().notEmpty(),
     check( 'idCaballo' ).custom( existeCaballo ),
     validarCampos
 ], registrarPruebaLaboratorioCaballo );
@@ -115,7 +115,7 @@ router.get( '/mascotas/:idMascota', [
 
 router.post( '/mascotas/:idMascota', [
     validarJWT,
-    check( 'link', 'El link de la prueba de laboratorio es obligatorio' ).escape().trim().notEmpty(),
+    check( 'link', 'El link de la prueba de laboratorio es obligatorio' ).trim().notEmpty(),
     check( 'idMascota' ).custom( existeMascota ),
     validarCampos
 ], registrarPruebaLaboratorioMascota );

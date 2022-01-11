@@ -88,7 +88,7 @@ router.put( '/borregos/:idMedicina', [
 // ****************************************************
 // * * * * * * * * * * C A B A L L O S * * * * * * * * * *
 
-router.get( '/borregos', obtenerMedicinaPreventiva );
+router.get( '/caballos', obtenerMedicinaPreventiva );
 
 router.get( '/caballos/:idCaballo', [
     check( 'idCaballo', 'No es un id válido' ).isMongoId(),

@@ -2,44 +2,9 @@ const { Schema, model } = require( 'mongoose' );
 
 const HistoriaClinicaBorregoSchema = Schema( {
 
-    estadoNutricional: {
+    inspeccion: {
         type: String,
-        required: [ true, 'El estado nutricional es obligatorio' ]
-    },
-
-    piel: {
-        type: String,
-        required: [ true, 'El estado de la piel es obligatorio' ]
-    },
-
-    pelo: {
-        type: String,
-        required: [ true, 'El estado del pelo es obligatorio' ]
-    },
-
-    sensorio: {
-        type: String,
-        required: [ true, 'El estado sensorial es obligatorio' ]
-    },
-
-    faciales: {
-        type: String,
-        required: [ true, 'El estado facial es obligatorio' ]
-    },
-
-    actitudes: {
-        type: String,
-        required: [ true, 'Las actitudes son obligatorias' ]
-    },
-
-    deformaciones: {
-        type: String,
-        required: [ true, 'Las deformaciones evidentes son obligatorias' ]
-    },
-
-    hallazgos: {
-        type: String,
-        required: [ true, 'Los hallazgos notables son obligatorios' ]
+        required: [ true, 'La inspección es obligatoria' ]
     },
 
     mucosa: {
@@ -47,7 +12,7 @@ const HistoriaClinicaBorregoSchema = Schema( {
         required: [ true, 'El estado de la mucosa es obligatoria' ]
     },
 
-    llenadoCapilar: {
+    capilar: {
         type: String,
         required: [ true, 'El llenado capilar es obligatorio' ]
     },
@@ -57,17 +22,17 @@ const HistoriaClinicaBorregoSchema = Schema( {
         required: [ true, 'La exploración de los linfónodos superficiales es obligatoria' ]
     },
 
-    corazon: {
+    cardiaca: {
         type: String,
         required: [ true, 'El pulso y frecuencia cardiaca son obligatorias' ]
     },
 
-    respiracion: {
+    respiratoria: {
         type: String,
         required: [ true, 'Tipo y frecuencia respiratoria son sobligatorios' ]
     },
 
-    pulmones: {
+    pulmonares: {
         type: String,
         required: [ true, 'Los campos pulmonares son obligatorios' ]
     },
@@ -82,7 +47,7 @@ const HistoriaClinicaBorregoSchema = Schema( {
         required: [ true, 'La temperatura es obligatoria' ]
     },
 
-    sonidosIntestinales: {
+    intestinales: {
         type: String,
         required: [ true, 'Los sonidos intestinales son obligatorios' ]
     },
@@ -127,11 +92,6 @@ const HistoriaClinicaBorregoSchema = Schema( {
         required: [ true, 'El examen oftamologico es obligatorio' ]
     },
 
-    examenOtologico: {
-        type: String,
-        required: [ true, 'El examen otológico es obligatorio' ]
-    },
-
     aparatoLocomotor: {
         type: String,
         required: [ true, 'El aparato locomotor es obligatorio' ]
@@ -142,14 +102,14 @@ const HistoriaClinicaBorregoSchema = Schema( {
         required: [ true, 'El examen neurológico es obligatorio' ]
     },
 
-    pronostico: {
-        type: String,
-        required: [ true, 'El pronóstico es obligatorio' ]
-    },
-
     tratamiento: {
         type: String,
         required: [ true, 'El tratamiento es obligatorio' ]
+    },
+
+    pronostico: {
+        type: String,
+        required: [ true, 'El pronóstico es obligatorio' ]
     },
 
     borrego: {

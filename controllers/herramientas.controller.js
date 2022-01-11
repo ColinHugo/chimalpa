@@ -100,6 +100,17 @@ const actualizarHerramienta = async ( req, res ) => {
         const herramienta = await Herramienta.findByIdAndUpdate( idHerramienta, datos, { new: true } )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
+        Number( cantidad );
+        Number( herramienta.cantidad );
+
+        if ( isNaN( cantidad ) || isNaN( herramienta.cantidad ) ) {
+
+            return res.json( {
+                value: 0,
+                msg: 'No son cantidades númericas válidas.'
+            } );
+        } 
+
         herramienta.cantidad += cantidad;
 
         await herramienta.save();

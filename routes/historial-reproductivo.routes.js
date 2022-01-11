@@ -41,9 +41,9 @@ router.post( '/aves/:idAve', [
     validarJWT,
     check( 'idAve', 'No es un id válido' ).isMongoId(),
     check( 'idAve' ).custom( existeAve ),
-    check( 'fechaInicio', 'El inicio de celo es obligatorio.' ).escape().trim().notEmpty(),
-    check( 'fechaTermino', 'El inicio de celo es obligatorio.' ).escape().trim().notEmpty(),
-    check( 'instrucciones', 'El semental es obligatorio.' ).escape().trim().notEmpty(),
+    check( 'fechaInicio', 'El inicio de celo es obligatorio.' ).trim().notEmpty(),
+    check( 'fechaTermino', 'El inicio de celo es obligatorio.' ).trim().notEmpty(),
+    check( 'instrucciones', 'El semental es obligatorio.' ).trim().notEmpty(),
     validarCampos
 ], registrarHistorialReproductivoAve );
 
@@ -71,10 +71,10 @@ router.post( '/borregos/:idBorrego', [
     validarJWT,
     check( 'idBorrego', 'No es un id válido' ).isMongoId(),
     check( 'idBorrego' ).custom( existeBorrego ),
-    check( 'numeroExpediente', 'El numero de expediente es obligatorio' ).escape().trim().notEmpty(),
-    check( 'inicioCelo', 'El inicio de celo es obligatorio' ).escape().trim().notEmpty(),
-    check( 'semental', 'El semental es obligatorio' ).escape().trim().notEmpty(),
-    check( 'tipoMonta', 'El tipo de monta es obligatorio' ).escape().trim().notEmpty(),
+    check( 'numeroExpediente', 'El numero de expediente es obligatorio' ).trim().notEmpty(),
+    check( 'inicioCelo', 'El inicio de celo es obligatorio' ).trim().notEmpty(),
+    check( 'semental', 'El semental es obligatorio' ).trim().notEmpty(),
+    check( 'tipoMonta', 'El tipo de monta es obligatorio' ).trim().notEmpty(),
     validarCampos
 ], registrarHistorialReproductivoBorrego );
 
@@ -102,9 +102,9 @@ router.post( '/caballos/:idCaballo', [
     validarJWT,
     check( 'idCaballo', 'No es un id válido' ).isMongoId(),
     check( 'idCaballo' ).custom( existeCaballo ),
-    check( 'inicioCelo', 'El inicio de celo es obligatorio' ).escape().trim().notEmpty(),
-    check( 'semental', 'El semental es obligatorio' ).escape().trim().notEmpty(),
-    check( 'tipoMonta', 'El tipo de monta es obligatorio' ).escape().trim().notEmpty(),
+    check( 'inicioCelo', 'El inicio de celo es obligatorio' ).trim().notEmpty(),
+    check( 'semental', 'El semental es obligatorio' ).trim().notEmpty(),
+    check( 'tipoMonta', 'El tipo de monta es obligatorio' ).trim().notEmpty(),
     validarCampos
 ], registrarHistorialReproductivoCaballo );
 
@@ -132,18 +132,18 @@ router.post( '/conejos/:idConejo', [
     validarJWT,
     check( 'idConejo', 'No es un id válido' ).isMongoId(),
     check( 'idConejo' ).custom( existeConejo ),
-    check( 'montaAnterior', 'La monta anterior es obligatoria' ).escape().trim().notEmpty(), 
-    check( 'fechaMonta1', 'La fecha de la primera monta es obligatoria' ).escape().trim().notEmpty(),
-    check( 'semental', 'El semental es obligatorio' ).escape().trim().notEmpty(),
-    check( 'opcionSemental', 'La opción del semental es obligatoria' ).escape().trim().notEmpty(),
-    check( 'observacionesSemental', 'Las observaciones del semental son obligatorias' ).escape().trim().notEmpty(),
-    check( 'observacionesMonta', 'Las observaciones de la monta son obligatorias' ).escape().trim().notEmpty(),
-    check( 'nido', 'El nido del conejo es obligatorio' ).escape().trim().notEmpty(),
-    check( 'monta2', 'La segunda monta es obligatoria' ).escape().trim().notEmpty(),
-    check( 'destete', 'El destete es obligatorio' ).escape().trim().notEmpty(),
-    check( 'gazaposVivos', 'Los gazapos vivos son obligatorios' ).escape().trim().notEmpty(),
-    check( 'gazaposMuertos', 'Los gazapos muertos son obligatorios' ).escape().trim().notEmpty(),
-    check( 'causaMuerte', 'La causa de muerte de los gazapos vivos son obligatorios' ).escape().trim().notEmpty(),
+    check( 'montaAnterior', 'La monta anterior es obligatoria' ).trim().notEmpty(), 
+    check( 'fechaMonta1', 'La fecha de la primera monta es obligatoria' ).trim().notEmpty(),
+    check( 'semental', 'El semental es obligatorio' ).trim().notEmpty(),
+    check( 'opcionSemental', 'La opción del semental es obligatoria' ).trim().notEmpty(),
+    check( 'observacionesSemental', 'Las observaciones del semental son obligatorias' ).trim().notEmpty(),
+    check( 'observacionesMonta', 'Las observaciones de la monta son obligatorias' ).trim().notEmpty(),
+    check( 'nido', 'El nido del conejo es obligatorio' ).trim().notEmpty(),
+    check( 'monta2', 'La segunda monta es obligatoria' ).trim().notEmpty(),
+    check( 'destete', 'El destete es obligatorio' ).trim().notEmpty(),
+    check( 'gazaposVivos', 'Los gazapos vivos son obligatorios' ).trim().notEmpty(),
+    check( 'gazaposMuertos', 'Los gazapos muertos son obligatorios' ).trim().notEmpty(),
+    check( 'causaMuerte', 'La causa de muerte de los gazapos vivos son obligatorios' ).trim().notEmpty(),
     validarCampos
 ], registrarHistorialReproductivoConejo );
 
@@ -171,10 +171,10 @@ router.post( '/mascotas/:idMascota', [
     validarJWT,
     check( 'idMascota', 'No es un id válido' ).isMongoId(),
     check( 'idMascota' ).custom( existeMascota ),
-    check( 'numeroExpediente', 'El número de expediente es obligatorio' ).escape().trim().notEmpty(), 
-    check( 'fechaCreacion', 'La fecha de creación es obligatoria' ).escape().trim().notEmpty(),
-    check( 'inicioCelo', 'El inicio de celo es obligatorio' ).escape().trim().notEmpty(),
-    check( 'tipo', 'El tipo de reproducción es obligatorio' ).escape().trim().notEmpty(),    
+    check( 'numeroExpediente', 'El número de expediente es obligatorio' ).trim().notEmpty(), 
+    check( 'fechaCreacion', 'La fecha de creación es obligatoria' ).trim().notEmpty(),
+    check( 'inicioCelo', 'El inicio de celo es obligatorio' ).trim().notEmpty(),
+    check( 'tipo', 'El tipo de reproducción es obligatorio' ).trim().notEmpty(),    
     validarCampos
 ], registrarHistorialReproductivoMascota );
 

@@ -24,7 +24,7 @@ const UsuarioSchema = Schema( {
         required: [ true, 'La contraseña es obligatoria' ],
     },
 
-    img: {
+    foto: {
         type: String,
     },
 
@@ -32,6 +32,10 @@ const UsuarioSchema = Schema( {
         type: Number,
         default: 3,
         enum: [ 1, 2, 3 ]
+    },
+
+    descanso: {
+        type: String
     },
 
     estado: {
