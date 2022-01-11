@@ -74,7 +74,7 @@ const registrarCuarentenaAve = async ( req, res ) => {
     try {
 
         const ave = await Ave.findById( idAve );
-        
+
         req.body.ave = ave;
 
         const cuarentena = new CuarentenaAve( req.body );
