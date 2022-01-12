@@ -43,6 +43,7 @@ const MedicinaMascota = require( './medicina-mascota' );
 const PruebaLaboratorioMascota = require( './prueba-laboratorio-mascota' );
 const TratamientoPermanenteMascota = require( './tratamiento-permanente-mascota' );
 
+const Capacitacion = require( './capacitacion' );
 const Control = require( './control' );
 const Herramienta = require( './herramienta' );
 const Tarea = require( './tarea' );
@@ -95,6 +96,7 @@ module.exports = {
     PruebaLaboratorioMascota,
     TratamientoPermanenteMascota,
 
+    Capacitacion,
     Control,
     Herramienta,
     Tarea,

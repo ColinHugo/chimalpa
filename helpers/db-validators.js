@@ -15,6 +15,7 @@ const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, Historial
         HistorialReproductivoMascota, PruebaLaboratorioMascota,
 
         Herramienta,
+        Capacitacion,
         Tarea,
         Usuario,
     
@@ -287,6 +288,20 @@ const existeRondinCaballo = async ( id ) => {
     }
 }
 
+// Estos métodos se encargan de checar las existencias de las capacitaciones y sus movimientos
+// ****************************************************
+// -          C A P A C I T A C I O N E S             -
+// ****************************************************
+
+const existeCapacitacion = async ( id ) => {
+
+    const capacitacion = await Capacitacion.findById( id );
+
+    if ( !capacitacion ) {
+        throw new Error( `No existe capacitación con el id: ${ id }.` );
+    }
+}
+
 // Estos métodos se encargan de checar las existencias de los conejo y sus movimientos
 // ****************************************************
 // -                 C O N E J O S                    -
@@ -500,6 +515,7 @@ module.exports = {
 
     emailExiste,
     existeHerramienta,
+    existeCapacitacion,
     existeTarea,
     existeUsuario,
 }
