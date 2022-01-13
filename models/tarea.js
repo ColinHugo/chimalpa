@@ -13,21 +13,22 @@ const TareaSchema = Schema( {
     },
 
     encargado: {
-        type: String,
-        required: [ true, 'El encargado de la tarea es obligatoria' ]
+        type: Schema.Types.ObjectId,
+        ref: 'Usuario'
     },
 
-    video: {
-        type: String
-    },    
+    empleado: {
+        type: Schema.Types.ObjectId,
+        ref: 'Usuario'
+    },
 
     evidencia: {
         type: String
     },
 
-    usuario: {
-        type: Schema.Types.ObjectId,
-        ref: 'Usuario'
+    estado: {
+        type: Boolean,
+        default: false
     }
 
 }, {

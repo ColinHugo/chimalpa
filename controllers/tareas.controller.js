@@ -4,10 +4,15 @@ const { generarControl } = require( '../helpers/generar-control' );
 
 const obtenerTareas = async ( req, res ) => {
 
+    let { estado } = req.params;
+
+    ( estado == "true" ) ? estado = true : estado = false;
+
     try {
 
-        const tareas = await Tarea.find()
-            .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+        const tareas = await Tarea.where( { estado } )
+            .populate( 'encargado', [ 'nombre', 'apellidos'] )
+            .populate( 'empleado', [ 'nombre', 'apellidos'] );
 
         if ( tareas.length === 0 ) {
             return res.json( {
@@ -34,12 +39,13 @@ const obtenerTareas = async ( req, res ) => {
 
 const obtenerTareaById = async ( req, res ) => {
 
-    const { idUsuario } = req.params;
+    const { idEmpleado } = req.params;
 
     try {
 
-        const tarea = await Tarea.where( { usuario: idUsuario } )
-            .populate( 'usuario', [ 'nombre', 'apellidos'] );
+        const tarea = await Tarea.where( { empleado: idEmpleado } )
+            .populate( 'encargado', [ 'nombre', 'apellidos'] )
+            .populate( 'empleado', [ 'nombre', 'apellidos'] );
 
         if ( tarea.length === 0 ) {
             return res.json( {
@@ -66,22 +72,24 @@ const obtenerTareaById = async ( req, res ) => {
 
 const registrarTarea = async ( req, res ) => {
 
+    // Estos datos son del encargado, es decir, quien asigna la tarea
     const { nombre, apellidos } = req.body.usuario;
-    const { idUsuario } = req.params;
+    const { idEmpleado } = req.params;
 
     try {
-
-        const usuario = await Usuario.findById( idUsuario );
         
-        req.body.usuario = usuario;
+        // El empleado es quien realizará la tarea aseignada por el encargado
+        const empleado = await Usuario.findById( idEmpleado );
+        req.body.empleado = empleado;
+        req.body.encargado = req.body.usuario;
 
         const tarea = new Tarea( req.body );
 
         await tarea.save();
 
-        const datos = usuario.nombre + ' ' + usuario. apellidos;
+        const nombreCompleto = empleado.nombre + ' ' + empleado. apellidos;
 
-        generarControl( nombre, apellidos, 'registrado una tarea al usuario', datos );
+        generarControl( nombre, apellidos, `registrado la tarea ${ tarea.nombre } al usuario`, nombreCompleto );
 
         return res.json( {
             value: 1,
@@ -109,11 +117,14 @@ const actualizarTarea = async ( req, res ) => {
     try {
 
         const tarea = await Tarea.findByIdAndUpdate( idTarea, datos, { new: true } )
-            .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+            .populate( 'encargado', [ 'nombre', 'apellidos'] )
+            .populate( 'empleado', [ 'nombre', 'apellidos'] );
 
-        const usuario = await Usuario.findById( tarea.usuario );
+        const empleado = await Usuario.findById( tarea.empleado );
 
-        generarControl( nombre, apellidos, 'actualizado una tarea al usuario', usuario.nombre );
+        const nombreCompleto = empleado.nombre + ' ' + empleado. apellidos;
+
+        generarControl( nombre, apellidos, `actualizado la tarea ${ tarea.nombre } al usuario`, nombreCompleto );
 
         return res.json( {
             value: 1,
@@ -131,9 +142,41 @@ const actualizarTarea = async ( req, res ) => {
     }
 }
 
+const eliminarTarea = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idTarea } = req.params;
+
+    try {
+
+        const tarea = await Tarea.findByIdAndDelete( idTarea )
+
+        const empleado = await Usuario.findById( tarea.empleado );
+
+        const nombreCompleto = empleado.nombre + ' ' + empleado. apellidos;
+
+        generarControl( nombre, apellidos, `eliminado la tarea ${ tarea.nombre } al usuario`, nombreCompleto );
+
+        return res.json( {
+            value: 1,
+            msg: 'La tarea se ha eliminado.',
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar la tarea.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar la tarea.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerTareas,
     obtenerTareaById,
     registrarTarea,
-    actualizarTarea
+    actualizarTarea,
+    eliminarTarea
 }

@@ -6,9 +6,16 @@ const obtenerAlertas = async ( req, res ) => {
 
     try {
 
-        const alertas = await Alerta.where()
+        const alertas = await Alerta.find()
             .populate( 'caballo', 'nombre' )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+
+        if ( alertas.length === 0 ) {
+            return res.json( {
+                value: 0,
+                msg: 'No hay alertas que mostrar'
+            } );
+        }
 
         return res.json( {
             value: 1,
