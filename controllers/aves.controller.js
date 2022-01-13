@@ -50,7 +50,7 @@ const obtenerAveById = async ( req, res ) => {
         
     } catch ( error ) {
 
-        console.error( `Error al obtener el ave con id ${ id }.` );
+        console.error( `Error al obtener el ave con id ${ id }. ${ error }` );
 
         return res.json( {
             value: 0,

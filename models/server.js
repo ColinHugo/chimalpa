@@ -12,6 +12,7 @@ class Server{
         this.port = process.env.PORT;
 
         this.paths = {
+            alertas: '/alertas',
             auth: '/auth',
             aves: '/aves',
             borregos: '/borregos',
@@ -56,11 +57,12 @@ class Server{
     }
 
     routes(){
+        this.app.use( this.paths.alertas, require( '../routes/alertas.routes' ) );
         this.app.use( this.paths.auth, require( '../routes/auth.routes' ) );
         this.app.use( this.paths.aves, require( '../routes/aves.routes' ) );
         this.app.use( this.paths.borregos, require( '../routes/borregos.routes' ) );
         this.app.use( this.paths.caballos, require( '../routes/caballos.routes' ) );
-        this.app.use( this.paths.capacitaciones, require( '../routes/link-capacitacion.routes' ) );
+        this.app.use( this.paths.capacitaciones, require( '../routes/capacitacion.routes' ) );
         this.app.use( this.paths.conejos, require( '../routes/conejos.routes' ) );
         this.app.use( this.paths.control, require( '../routes/control.routes' ) );
         this.app.use( this.paths.cuarentenas, require( '../routes/cuarentenas.routes' ) );

@@ -5,7 +5,7 @@ const { existeCapacitacion } = require( '../helpers/db-validators' );
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
 const { obtenerCapacitaciones, registrarCapacitacion, 
-        actualizarCapacitacion, eliminarCapacitacion } = require( '../controllers/link-capacitacion' );
+        actualizarCapacitacion, eliminarCapacitacion } = require( '../controllers/capacitacion' );
 
 router.get( '/', obtenerCapacitaciones );
 

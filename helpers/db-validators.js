@@ -14,12 +14,27 @@ const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, Historial
         Mascota, TratamientoPermanenteMascota, DietaMascota, MedicinaMascota, HistoriaClinicaMascota,
         HistorialReproductivoMascota, PruebaLaboratorioMascota,
 
+        Alerta,
         Herramienta,
         Capacitacion,
         Tarea,
         Usuario,
     
 } = require( '../models' );
+
+// Estos métodos se encargan de checar las existencias de las alertas y sus movimientos
+// ****************************************************
+// -                 A L E R T A S                    -
+// ****************************************************
+
+const existeAlerta = async ( id ) => {
+
+    const alerta = await Alerta.findById( id );
+
+    if ( !alerta ) {
+        throw new Error( `No existe la alerta con el id: ${ id }.` );
+    }
+}
 
 // Estos métodos se encargan de checar las existencias de las aves y sus movimientos
 // ****************************************************
@@ -462,6 +477,9 @@ const existePruebaLaboratorioMascota = async ( id ) => {
 }
 
 module.exports = {
+
+    // Validadores para las alertas
+    existeAlerta,
 
     // Validadores para las aves
     existeAve,
