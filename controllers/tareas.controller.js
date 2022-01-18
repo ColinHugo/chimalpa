@@ -6,7 +6,7 @@ const obtenerTareas = async ( req, res ) => {
 
     let { estado } = req.params;
 
-    ( estado == "true" ) ? estado = true : estado = false;
+    ( estado === "true" ) ? estado = true : estado = false;
 
     try {
 
@@ -41,11 +41,15 @@ const obtenerTareaById = async ( req, res ) => {
 
     const { idEmpleado } = req.params;
 
+    let { estado } = req.params;
+
+    ( estado === "true" ) ? estado = true : estado = false;
+
     try {
 
-        const tarea = await Tarea.where( { empleado: idEmpleado } )
-            .populate( 'encargado', [ 'nombre', 'apellidos'] )
-            .populate( 'empleado', [ 'nombre', 'apellidos'] );
+        const tarea = await Tarea.where( { empleado: idEmpleado, estado } )
+            .populate( 'encargado', [ 'nombre', 'apellidos' ] )
+            .populate( 'empleado', [ 'nombre', 'apellidos' ] );
 
         if ( tarea.length === 0 ) {
             return res.json( {
