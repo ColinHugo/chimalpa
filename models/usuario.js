@@ -46,15 +46,15 @@ const UsuarioSchema = Schema( {
     versionKey: false
 } );
 
-UsuarioSchema.statics.encryptPassword = async ( password ) => {
+UsuarioSchema.statics.encryptPassword = ( password ) => {
 
-    const salt = await bcrypt.genSalt();
+    const salt = bcrypt.genSalt();
 
-    return await bcrypt.hash( password, salt );
+    return bcrypt.hashSync( password, salt );
 }
 
-UsuarioSchema.statics.comparePassword = async ( password, receivedPassword ) => {
-    return await bcrypt.compare( password, receivedPassword );
+UsuarioSchema.statics.comparePassword = ( password, receivedPassword ) => {
+    return bcrypt.compare( password, receivedPassword );
 }
 
 UsuarioSchema.methods.toJSON = function () {
