@@ -53,8 +53,8 @@ UsuarioSchema.statics.encryptPassword = ( password ) => {
     return bcrypt.hashSync( password, salt );
 }
 
-UsuarioSchema.statics.comparePassword = ( password, receivedPassword ) => {
-    return bcrypt.compare( password, receivedPassword );
+UsuarioSchema.statics.comparePassword = async ( password, receivedPassword ) => {
+    return await bcrypt.compare( password, receivedPassword );
 }
 
 UsuarioSchema.methods.toJSON = function () {
