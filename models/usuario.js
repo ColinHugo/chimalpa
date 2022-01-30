@@ -46,9 +46,9 @@ const UsuarioSchema = Schema( {
     versionKey: false
 } );
 
-UsuarioSchema.statics.encryptPassword = ( password ) => {
+UsuarioSchema.statics.encryptPassword = async ( password ) => {
 
-    const salt = bcrypt.genSalt();
+    const salt = await bcrypt.genSalt();
 
     return bcrypt.hashSync( password, salt );
 }
