@@ -12,9 +12,12 @@ const OdontologiaSchema = Schema( {
         required: [ true, 'La descripción de la odontología es obligatoria' ]
     },
 
-    frecuencia: {
-        type: String,
-        required: [ true, 'La frecuencia de la odontología es obligatoria' ]
+    ultimaFecha: {
+        type: String
+    },
+
+    proximaFecha: {
+        type: String
     },
 
     caballo: {

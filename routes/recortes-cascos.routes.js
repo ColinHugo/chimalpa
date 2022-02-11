@@ -19,8 +19,7 @@ router.post( '/caballos/:idCaballo', [
     validarJWT,
     check( 'idCaballo', 'No es un id válido' ).isMongoId(),
     check( 'idCaballo' ).custom( existeCaballo ),
-    check( 'frecuencia', 'La frecuencia del casco es obligatoria' ).escape().trim().notEmpty(),
-    check( 'descripcion', 'La descripción del recorte es obligatoria' ).escape().trim().notEmpty(),
+    check( 'instrucciones', 'Las instrucciones del recorte del casco son obligatorias.' ).escape().trim().notEmpty(),
     validarCampos
 ], registrarRecorte );
 

@@ -12,9 +12,12 @@ const TratamientoPermanenteSchema = Schema( {
         required: [ true, 'La descripción es obligatoria.' ]
     },
 
-    frecuencia: {
-        type: String,
-        required: [ true, 'La frecuencia es obligatoria.' ]
+    ultimaFecha: {
+        type: String
+    },
+
+    proximaFecha: {
+        type: String
     },
 
     video: {

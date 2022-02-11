@@ -2,14 +2,17 @@ const { Schema, model } = require( 'mongoose' );
 
 const RecorteCascoSchema = Schema( {
 
-    frecuencia: {
+    instrucciones: {
         type: String,
-        required: [ true, 'La frecuencia del recorte del casco es obligatoria.' ]
+        required: [ true, 'Las instrucciones del recorte del casco son obligatorias.' ]
     },
 
-    descripcion: {
-        type: String,
-        required: [ true, 'La descripción del recorte del casco es obligatoria.' ]
+    ultimaFecha: {
+        type: String
+    },
+
+    proximaFecha: {
+        type: String
     },
 
     caballo: {

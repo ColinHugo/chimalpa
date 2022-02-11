@@ -18,8 +18,7 @@ router.get( '/caballos/:idCaballo', [
 router.post( '/caballos/:idCaballo', [
     validarJWT,
     check( 'tratamiento', 'El tratamiento es obligatorio' ).escape().trim().notEmpty(), 
-    check( 'descripcion', 'La descripción es obligatoria' ).escape().trim().notEmpty(), 
-    check( 'frecuencia', 'La frecuencia es obligatoria' ).escape().trim().notEmpty(), 
+    check( 'descripcion', 'La descripción es obligatoria' ).escape().trim().notEmpty(),
     validarCampos
 ], registrarOdontologiaCaballo );
 

@@ -102,7 +102,6 @@ router.post( '/caballos/:idCaballo', [
     check( 'idCaballo' ).custom( existeCaballo ),
     check( 'tipoMedicina', 'El tipo de medicina es obligatorio' ).escape().trim().notEmpty(),
     check( 'descripcion', 'La descripción es obligatoria' ).escape().trim().notEmpty(),
-    check( 'fecha', 'La fecha es obligatoria' ).trim().notEmpty(),
     validarCampos
 ], registrarMedicinaPreventiva );
 
