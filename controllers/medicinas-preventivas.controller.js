@@ -68,13 +68,14 @@ const registrarMedicinaPreventiva = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
     const { idCaballo } = req.params;
-    const { tipoMedicina, descripcion, fecha } = req.body;
 
     try {
 
         const caballo = await Caballo.findById( idCaballo );
 
-        const medicina = await MedicinaPreventiva( { tipoMedicina, descripcion, fecha, caballo } )
+        req.body.caballo = caballo;
+
+        const medicina = await MedicinaPreventiva( req.body )
             .populate( 'caballo', 'nombre' );
 
         await medicina.save();

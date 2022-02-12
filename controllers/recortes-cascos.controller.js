@@ -67,14 +67,15 @@ const obtenerRecorteById = async ( req, res ) => {
 const registrarRecorte = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
-    const { frecuencia, descripcion } = req.body;
     const { idCaballo } = req.params;
 
     try {
 
         const caballo = await Caballo.findById( idCaballo );
 
-        const recorte = await RecorteCasco( { frecuencia, descripcion, caballo } )
+        req.body.caballo = caballo;
+
+        const recorte = await RecorteCasco( req.body )
             .populate( 'caballo', 'nombre' );
 
         await recorte.save();

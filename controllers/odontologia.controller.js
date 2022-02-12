@@ -68,13 +68,14 @@ const registrarOdontologiaCaballo = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
     const { idCaballo } = req.params;
-    const { tratamiento, descripcion, frecuencia } = req.body;
 
     try {
 
         const caballo = await Caballo.findById( idCaballo );
 
-        const odontologia = await Odontologia( { tratamiento, descripcion, frecuencia, caballo } )
+        req.body.caballo = caballo;
+
+        const odontologia = await Odontologia( req.body )
             .populate( 'caballo', 'nombre' );
 
         await odontologia.save();
