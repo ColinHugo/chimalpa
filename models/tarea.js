@@ -12,6 +12,11 @@ const TareaSchema = Schema( {
         required: [ true, 'La descripción de la tarea es obligatorio' ]
     },
 
+    fechaLimite:{
+        type: String,
+        required: [ true, 'La fecha límite de la tarea es obligatoria' ]
+    },
+
     encargado: {
         type: Schema.Types.ObjectId,
         ref: 'Usuario'
