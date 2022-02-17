@@ -35,7 +35,7 @@ class Server{
             rondin: '/rondin',
             tareas: '/tareas',
             trasquilacion: '/trasquilacion',
-            tratamientos: '/tratamientos',
+            tratamientosPermanentes: '/tratamientos-permanentes',
             usuarios: '/usuarios',
         }
 
@@ -80,7 +80,7 @@ class Server{
         this.app.use( this.paths.rondin, require( '../routes/rondin-caballo.routes' ) );
         this.app.use( this.paths.tareas, require( '../routes/tareas.routes' ) );
         this.app.use( this.paths.trasquilacion, require( '../routes/trasquilacion.routes' ) );
-        this.app.use( this.paths.tratamientos, require( '../routes/tratamientos.routes' ) );
+        this.app.use( this.paths.tratamientosPermanentes, require( '../routes/tratamientos-permanentes.routes' ) );
         this.app.use( this.paths.usuarios, require( '../routes/usuarios.routes' ) );
     }
 
