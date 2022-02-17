@@ -91,9 +91,13 @@ const agregarUsuario = async ( req, res ) => {
 const actualizarUsuario = async ( req, res ) => {
 
     const { id } = req.params;
-    const { ...datos } = req.body;
+    const { password, ...datos } = req.body;
 
     try {
+
+        if ( password ) {
+            datos.password = await Usuario.encryptPassword( password );
+        }
 
         const usuario = await Usuario.findByIdAndUpdate( id, datos, { new: true } );
 
