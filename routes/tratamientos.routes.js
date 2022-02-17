@@ -11,7 +11,7 @@ const { obtenerTratamientosBorregos, obtenerTratamientoBorregoById,
         registrarTratamientoBorrego, actualizarTratamientoBorrego } = require( '../controllers/tratamientos-borregos.controller' );
 
 const { obtenerTratamientosCaballos, obtenerTratamientoCaballoById,
-        registrarTratamientoCaballo, actualizarTratamientoCaballo } = require( '../controllers/tratamientos.controller' );
+        registrarTratamientoCaballo, actualizarTratamientoCaballo } = require( '../controllers/tratamientos-caballos.controller' );
 
 const { obtenerTratamientosMascotas, obtenerTratamientoMascotaById,
         registrarTratamientoMascota, actualizarTratamientoMascota } = require( '../controllers/tratamientos-mascotas.controller' );
