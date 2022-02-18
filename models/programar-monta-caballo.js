@@ -7,7 +7,8 @@ const ProgramarMontaCaballoSchema = Schema( {
     },
 
     estado: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
 
     usuario: {
