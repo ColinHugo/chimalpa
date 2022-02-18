@@ -6,8 +6,8 @@ const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, Historial
         HistoriaClinicaBorrego,
 
         Caballo, DietaCaballo, DietaYegua, TratamientoPermanente, 
-        DesteteCaballo, MedicinaPreventiva, RecorteCasco, Odontologia, HistoriaClinica, 
-        HistorialReproductivo, PruebasLaboratorio, RondinCaballo,
+        DesteteCaballo, MedicinaPreventiva, RecorteCasco, TratamientoEventualCaballo,
+        Odontologia, HistoriaClinica, HistorialReproductivo, PruebasLaboratorio, RondinCaballo,
 
         Conejo, DietaConejo, MedicinaConejo, HistoriaClinicaConejo, HistorialReproductivoConejo,
 
@@ -228,6 +228,15 @@ const existeTratamiento = async ( id ) => {
 
     if ( !tratamiento ) {
         throw new Error( `No existe tratamiento con el id: ${ id }.` );
+    }
+}
+
+const existeTratamientoEventual = async ( id ) => {
+
+    const tratamiento = await TratamientoEventualCaballo.findById( id );
+
+    if ( !tratamiento ) {
+        throw new Error( `No existe tratamiento eventual con el id: ${ id }.` );
     }
 }
 
@@ -511,6 +520,7 @@ module.exports = {
     existeMedicinaPreventiva,
     existeOdontologia,
     existePruebaLaboratorioCaballo,
+    existeTratamientoEventual,
     existeRecorteCasco,
     existeRondinCaballo,
     existeTratamiento,

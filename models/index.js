@@ -27,6 +27,7 @@ const Odontologia = require( './odontologia' );
 const PruebasLaboratorio = require( './prueba-laboratorio' );
 const RecorteCasco = require( './recorte-casco' );
 const RondinCaballo = require( './rondin-caballo' );
+const TratamientoEventualCaballo = require( './tratamiento-eventual-caballo' );
 const TratamientoPermanente = require( './tratamiento-permanente' );
 
 const Conejo = require( './conejo' );
@@ -87,6 +88,7 @@ module.exports = {
     PruebasLaboratorio,
     RecorteCasco,
     RondinCaballo,
+    TratamientoEventualCaballo,
     TratamientoPermanente,
 
     Mascota,
