@@ -29,6 +29,7 @@ class Server{
             mascotas: '/mascotas',
             medicinas: '/medicinas',
             odontologia: '/odontologia',
+            programarMontas: '/programar-montas',
             pruebasLaboratorio: '/pruebas-laboratorio',
             recortesCascos: '/recortes-cascos',
             recortesPesunas: '/recortes-pesunas',
@@ -75,6 +76,7 @@ class Server{
         this.app.use( this.paths.mascotas, require( '../routes/mascotas.routes' ) );
         this.app.use( this.paths.medicinas, require( '../routes/medicinas.routes' ) );
         this.app.use( this.paths.odontologia, require( '../routes/odontologia.routes' ) );
+        this.app.use( this.paths.programarMontas, require( '../routes/programar-montas.routes' ) );
         this.app.use( this.paths.pruebasLaboratorio, require( '../routes/prueba-laboratorio.routes' ) );
         this.app.use( this.paths.recortesCascos, require( '../routes/recortes-cascos.routes' ) );
         this.app.use( this.paths.recortesPesunas, require( '../routes/recortes-pesunas-borregos.routes' ) );

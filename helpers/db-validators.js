@@ -5,9 +5,10 @@ const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, Historial
         HistorialReproductivoBorrego, PruebaLaboratorioBorrego, DietaBorrego, MedicinaBorrego, 
         HistoriaClinicaBorrego,
 
-        Caballo, DietaCaballo, DietaYegua, TratamientoPermanente, 
+        Caballo, DietaCaballo, DietaYegua, TratamientoPermanente,
         DesteteCaballo, MedicinaPreventiva, RecorteCasco, TratamientoEventualCaballo,
-        Odontologia, HistoriaClinica, HistorialReproductivo, PruebasLaboratorio, RondinCaballo,
+        Odontologia, ProgramarMontaCaballo, HistoriaClinica, HistorialReproductivo,
+        PruebasLaboratorio, RondinCaballo,
 
         Conejo, DietaConejo, MedicinaConejo, HistoriaClinicaConejo, HistorialReproductivoConejo,
 
@@ -255,6 +256,15 @@ const existeMedicinaPreventiva = async ( id ) => {
 
     if ( !medicinaPreventiva ) {
         throw new Error( `No existe medicina preventiva con el id: ${ id }.` );
+    }
+}
+
+const existeMonta = async ( id ) => {
+
+    const monta = await ProgramarMontaCaballo.findById( id );
+
+    if ( !monta ) {
+        throw new Error( `No existe monta con el id: ${ id }.` );
     }
 }
 
@@ -518,6 +528,7 @@ module.exports = {
     existeHistoriaClinicaCaballo,
     existeHistorialReproductivoCaballo,
     existeMedicinaPreventiva,
+    existeMonta,
     existeOdontologia,
     existePruebaLaboratorioCaballo,
     existeTratamientoEventual,
