@@ -30,6 +30,7 @@ const RecorteCasco = require( './recorte-casco' );
 const RondinCaballo = require( './rondin-caballo' );
 const TratamientoEventualCaballo = require( './tratamiento-eventual-caballo' );
 const TratamientoPermanente = require( './tratamiento-permanente' );
+const UltrasonidoCaballo = require( './ultrasonido-caballo' );
 
 const Conejo = require( './conejo' );
 const DietaConejo = require( './dieta-conejo' );
@@ -92,6 +93,7 @@ module.exports = {
     RondinCaballo,
     TratamientoEventualCaballo,
     TratamientoPermanente,
+    UltrasonidoCaballo,
 
     Mascota,
     DietaMascota,

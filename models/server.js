@@ -38,6 +38,7 @@ class Server{
             trasquilacion: '/trasquilacion',
             tratamientosEventuales: '/tratamientos-eventuales',
             tratamientosPermanentes: '/tratamientos-permanentes',
+            ultrasonidos: '/ultrasonidos',
             usuarios: '/usuarios',
         }
 
@@ -86,6 +87,7 @@ class Server{
         this.app.use( this.paths.tratamientosEventuales, require( '../routes/tratamientos-eventuales.routes' ) );
         this.app.use( this.paths.tratamientosPermanentes, require( '../routes/tratamientos-permanentes.routes' ) );
         this.app.use( this.paths.usuarios, require( '../routes/usuarios.routes' ) );
+        this.app.use( this.paths.ultrasonidos, require( '../routes/ultrasonidos-caballos.routes' ) );
     }
 
     listen(){

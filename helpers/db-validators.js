@@ -5,10 +5,10 @@ const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, Historial
         HistorialReproductivoBorrego, PruebaLaboratorioBorrego, DietaBorrego, MedicinaBorrego, 
         HistoriaClinicaBorrego,
 
-        Caballo, DietaCaballo, DietaYegua, TratamientoPermanente,
-        DesteteCaballo, MedicinaPreventiva, RecorteCasco, TratamientoEventualCaballo,
-        Odontologia, ProgramarMontaCaballo, HistoriaClinica, HistorialReproductivo,
-        PruebasLaboratorio, RondinCaballo,
+        Caballo, DesteteCaballo, DietaCaballo, DietaYegua, HistoriaClinica, HistorialReproductivo,
+        MedicinaPreventiva, Odontologia, PruebasLaboratorio, ProgramarMontaCaballo,
+        RecorteCasco, RondinCaballo, TratamientoEventualCaballo, TratamientoPermanente,
+        UltraSonidoCaballo,
 
         Conejo, DietaConejo, MedicinaConejo, HistoriaClinicaConejo, HistorialReproductivoConejo,
 
@@ -265,6 +265,15 @@ const existeMonta = async ( id ) => {
 
     if ( !monta ) {
         throw new Error( `No existe monta con el id: ${ id }.` );
+    }
+}
+
+const existeUltrasonido = async ( id ) => {
+
+    const ultraSonido = await UltraSonidoCaballo.findById( id );
+
+    if ( !ultraSonido ) {
+        throw new Error( `No existe ultraSonido con el id: ${ id }.` );
     }
 }
 
@@ -535,6 +544,7 @@ module.exports = {
     existeRecorteCasco,
     existeRondinCaballo,
     existeTratamiento,
+    existeUltrasonido,
 
     // vALIDADORES PARA CONEJOS
     existeConejo,
