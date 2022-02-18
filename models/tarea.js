@@ -12,6 +12,10 @@ const TareaSchema = Schema( {
         required: [ true, 'La descripción de la tarea es obligatorio' ]
     },
 
+    fechaProgramada:{
+        type: String
+    },
+
     fechaLimite:{
         type: String,
         required: [ true, 'La fecha límite de la tarea es obligatoria' ]

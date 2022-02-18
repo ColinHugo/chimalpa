@@ -21,6 +21,7 @@ router.post( '/:idEmpleado', [
     check( 'idEmpleado' ).custom( existeUsuario ),
     check( 'nombre', 'El nombre de la tarea es obligatorio' ).escape().trim().notEmpty(),
     check( 'descripcion', 'La descripción de la tarea es obligatorio' ).escape().trim().notEmpty(),
+    check( 'fechaLimite', 'La fecha límite de la tarea es obligatoria' ).escape().trim().notEmpty(),
     validarCampos
 ], registrarTarea );
 
