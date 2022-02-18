@@ -36,7 +36,6 @@ const obtenerMontaCaballoById = async ( req, res ) => {
             msg: 'Error al obtener las montas.'
         } );
     }
-
 }
 
 const registrarMontaCaballo = async ( req, res ) => {
@@ -77,6 +76,39 @@ const registrarMontaCaballo = async ( req, res ) => {
     }
 }
 
+const actualizarMontaCaballo = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+
+    const { idMonta } = req.params;
+    const { ...datos } = req.body;
+
+    try {
+
+        const monta = await ProgramarMontaCaballo.findByIdAndUpdate( idMonta, datos, { new: true } )
+            .populate( 'caballo', 'nombre' );
+
+        const caballo = await Caballo.findById( monta.caballo );
+
+        generarControl( nombre, apellidos, 'actualizado una monta a la yegua', caballo.nombre );
+
+        return res.json( {
+            value: 1,
+            msg: 'La monta se ha actualizado.',
+            medicina: monta
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al actualizar la monta.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al actualizar la monta.'
+        } );
+    }
+}
+
 const eliminarMontaCaballo = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
@@ -110,5 +142,6 @@ const eliminarMontaCaballo = async ( req, res ) => {
 module.exports = {
     obtenerMontaCaballoById,
     registrarMontaCaballo,
+    actualizarMontaCaballo,
     eliminarMontaCaballo
 }

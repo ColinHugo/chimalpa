@@ -6,7 +6,7 @@ const { validarCampos, validarJWT } = require( '../middlewares' );
 const { existeCaballo, existeHistorialReproductivoCaballo,
         existeMonta } = require( '../helpers/db-validators' );
 
-const { obtenerMontaCaballoById, registrarMontaCaballo,
+const { obtenerMontaCaballoById, registrarMontaCaballo, actualizarMontaCaballo,
         eliminarMontaCaballo } = require( '../controllers/programar-montas-caballos.controller' );
 
 router.get( '/caballos/:idCaballo/:idHistorialReproductivo', [
@@ -25,6 +25,13 @@ router.post( '/caballos/:idCaballo/:idHistorialReproductivo', [
     check( 'idHistorialReproductivo' ).custom( existeHistorialReproductivoCaballo ),
     validarCampos
 ], registrarMontaCaballo );
+
+router.put( '/caballos/:idMonta', [
+    validarJWT,
+    check( 'idMonta', 'No es un id válido' ).isMongoId(),
+    check( 'idMonta' ).custom( existeMonta ),
+    validarCampos
+], actualizarMontaCaballo );
 
 router.delete( '/caballos/:idMonta', [
     validarJWT,
