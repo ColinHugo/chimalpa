@@ -7,7 +7,7 @@ const { existeCaballo, existeHistorialReproductivoCaballo,
         existeMonta } = require( '../helpers/db-validators' );
 
 const { obtenerMontaCaballoById, registrarMontaCaballo,
-        eliminarMontaCaballo } = require( '../controllers/proggramar-montas-caballos.controller' );
+        eliminarMontaCaballo } = require( '../controllers/programar-montas-caballos.controller' );
 
 router.get( '/caballos/:idCaballo/:idHistorialReproductivo', [
     check( 'idCaballo', 'No es un id válido' ).isMongoId(),
