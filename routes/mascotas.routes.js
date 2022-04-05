@@ -1,7 +1,7 @@
 const router = require( 'express' ).Router();
 const { check } = require( 'express-validator' );
 
-const { existeMascota } = require( '../helpers/db-validators' );
+const { existeMascota } = require( '../helpers' );
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
 const { obtenerMascotas, obtenerMascotaById, registrarMascota, 
