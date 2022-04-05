@@ -48,7 +48,7 @@ const obtenerBorregoById = async ( req, res ) => {
         let borrego = await Borrego.findById( idBorrego )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
-        borrego = generarControl( req, 'borregos', borrego );
+        borrego = generarUrlFotos( req, 'borregos', borrego );
 
         return res.json( {
             value: 1,
