@@ -1,7 +1,7 @@
 const router = require( 'express' ).Router();
 const { check } = require( 'express-validator' );
 
-const { existeBorrego } = require( '../helpers/db-validators' );
+const { existeBorrego } = require( '../helpers' );
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
 const { obtenerBorregos, obtenerBorregoById, registrarBorrego, 

@@ -1,6 +1,9 @@
+const fs = require( 'fs' );
+const path = require( 'path' );
+
 const { Borrego } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl, generarUrlFotos, subirFoto } = require( '../helpers' );
 
 const obtenerBorregos = async ( req, res ) => {
 
@@ -8,7 +11,7 @@ const obtenerBorregos = async ( req, res ) => {
 
     try {
 
-        const borregos = await Borrego.find( query )
+        let borregos = await Borrego.find( query )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
         if ( borregos.length === 0 ) {
@@ -17,6 +20,8 @@ const obtenerBorregos = async ( req, res ) => {
                 msg: 'No hay borregos registrados.'
             } );
         }
+
+        borregos = generarUrlFotos( req, 'borregos', borregos );
 
         return res.json( {
             value: 1,
@@ -40,8 +45,10 @@ const obtenerBorregoById = async ( req, res ) => {
 
     try {
 
-        const borrego = await Borrego.findById( idBorrego )
+        let borrego = await Borrego.findById( idBorrego )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+
+        borrego = generarControl( req, 'borregos', borrego );
 
         return res.json( {
             value: 1,
@@ -50,11 +57,11 @@ const obtenerBorregoById = async ( req, res ) => {
         
     } catch ( error ) {
 
-        console.error( `Error al obtener el borrego con id ${ id }.` );
+        console.error( `Error al obtener el borrego con id ${ idBorrego }.` );
 
         return res.json( {
             value: 0,
-            msg: `Error al obtener el borrego con id ${ id }.`
+            msg: `Error al obtener el borrego con id ${ idBorrego }.`
         } );
     }
 }
@@ -65,6 +72,10 @@ const registrarBorrego = async ( req, res ) => {
 
     try {
 
+        if ( req.body.foto ) {
+            req.body.foto = await subirFoto( req.body.foto, undefined, 'borregos' );
+        }
+
         const borrego = new Borrego( req.body );
 
         await borrego.save();
@@ -73,8 +84,7 @@ const registrarBorrego = async ( req, res ) => {
 
         return res.json( {
             value: 1,
-            msg: 'El borrego se ha registrado.',
-            borrego,
+            msg: 'El borrego se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -93,19 +103,31 @@ const actualizarBorrego = async ( req, res ) => {
     const { nombre, apellidos } = req.body.usuario;
 
     const { idBorrego } = req.params;
-    const { ...datos } = req.body;
+    const { foto, ...datos } = req.body;
 
     try {
 
-        const borrego = await Borrego.findByIdAndUpdate( idBorrego, datos, { new: true } )
-            .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+        const borrego = await Borrego.findById( idBorrego );
+
+        if ( foto ) {
+            if ( borrego.foto ) {
+                const pathImagen = path.join( __dirname, '../uploads/borregos/', borrego.foto );
+
+                if ( fs.existsSync( pathImagen ) ) {
+                    fs.unlinkSync( pathImagen );
+                }
+            }
+
+            datos.foto = await subirFoto( req.body.foto, undefined, 'borregos' );
+        }
+
+        await borrego.updateOne( datos );
 
         generarControl( nombre, apellidos, 'actualizado al borrego número', borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
-            msg: 'El borrego se ha actualizado.',
-            borrego
+            msg: 'El borrego se ha actualizado correctamente.'
         } );
         
     } catch ( error ) {
@@ -127,15 +149,14 @@ const eliminarBorrego = async ( req, res ) => {
 
     try {
 
-        const borrego = await Borrego.findByIdAndUpdate( idBorrego, { estado: false }, { new: true } )
+        const borrego = await Borrego.findByIdAndUpdate( idBorrego, { estado: false } )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
         generarControl( nombre, apellidos, 'eliminado al borrego número', borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
-            msg: 'El borrego se ha eliminado.',
-            borrego
+            msg: 'El borrego se ha eliminado.'
         } );
         
     } catch ( error ) {

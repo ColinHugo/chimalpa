@@ -84,8 +84,7 @@ const registrarAve = async ( req, res ) => {
 
         return res.json( {
             value: 1,
-            msg: 'El ave se ha registrado.',
-            ave,
+            msg: 'El ave se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -111,9 +110,7 @@ const actualizarAve = async ( req, res ) => {
         const ave = await Ave.findById( idAve );
 
         if ( foto ) {
-            
             if ( ave.foto ) {
-    
                 const pathImagen = path.join( __dirname, '../uploads/aves/', ave.foto );
 
                 if ( fs.existsSync( pathImagen ) ) {
@@ -152,15 +149,14 @@ const eliminarAve = async ( req, res ) => {
 
     try {
 
-        const ave = await Ave.findByIdAndUpdate( idAve, { estado: false }, { new: true } )
+        const ave = await Ave.findByIdAndUpdate( idAve, { estado: false } )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
         generarControl( nombre, apellidos, 'eliminado al ave número', ave.numeroAve );
 
         return res.json( {
             value: 1,
-            msg: 'El ave se ha eliminado.',
-            ave
+            msg: 'El ave se ha eliminado.'
         } );
         
     } catch ( error ) {
