@@ -1,6 +1,9 @@
+const fs = require( 'fs' );
+const path = require( 'path' );
+
 const { Ave } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl, generarUrlFotos, subirFoto } = require( '../helpers' );
 
 const obtenerAves = async ( req, res ) => {
 
@@ -8,7 +11,7 @@ const obtenerAves = async ( req, res ) => {
 
     try {
 
-        const aves = await Ave.find( query )
+        let aves = await Ave.find( query )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
         if ( aves.length === 0 ) {
@@ -17,6 +20,8 @@ const obtenerAves = async ( req, res ) => {
                 msg: 'No hay aves registradas.'
             } );
         }
+
+        aves = generarUrlFotos( req, 'aves', aves );
 
         return res.json( {
             value: 1,
@@ -40,8 +45,10 @@ const obtenerAveById = async ( req, res ) => {
 
     try {
 
-        const ave = await Ave.findById( idAve )
+        let ave = await Ave.findById( idAve )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+
+        ave = generarUrlFotos( req, 'aves', ave );
 
         return res.json( {
             value: 1,
@@ -50,11 +57,11 @@ const obtenerAveById = async ( req, res ) => {
         
     } catch ( error ) {
 
-        console.error( `Error al obtener el ave con id ${ id }. ${ error }` );
+        console.error( `Error al obtener el ave con id ${ idAve }. ${ error }` );
 
         return res.json( {
             value: 0,
-            msg: `Error al obtener el ave con id ${ id }.`
+            msg: `Error al obtener el ave con id ${ idAve }.`
         } );
     }
 }
@@ -64,6 +71,10 @@ const registrarAve = async ( req, res ) => {
     const { nombre, apellidos } = req.body.usuario;
 
     try {
+
+        if ( req.body.foto ) {
+            req.body.foto = await subirFoto( req.body.foto, undefined, 'aves' );
+        }
 
         const ave = new Ave( req.body );
 
@@ -93,19 +104,33 @@ const actualizarAve = async ( req, res ) => {
     const { nombre, apellidos } = req.body.usuario;
 
     const { idAve } = req.params;
-    const { ...datos } = req.body;
+    const { foto, ...datos } = req.body;
 
     try {
 
-        const ave = await Ave.findByIdAndUpdate( idAve, datos, { new: true } )
-            .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+        const ave = await Ave.findById( idAve );
+
+        if ( foto ) {
+            
+            if ( ave.foto ) {
+    
+                const pathImagen = path.join( __dirname, '../uploads/aves/', ave.foto );
+
+                if ( fs.existsSync( pathImagen ) ) {
+                    fs.unlinkSync( pathImagen );
+                }
+            }
+
+            datos.foto = await subirFoto( req.body.foto, undefined, 'aves' );
+        }
+
+        await ave.updateOne( datos );
 
         generarControl( nombre, apellidos, 'actualizado al ave número', ave.numeroAve );
 
         return res.json( {
             value: 1,
-            msg: 'El ave se ha actualizado.',
-            ave
+            msg: 'El ave se ha actualizado correctamente.'
         } );
         
     } catch ( error ) {
