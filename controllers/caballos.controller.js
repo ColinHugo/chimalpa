@@ -1,6 +1,9 @@
+const fs = require( 'fs' );
+const path = require( 'path' );
+
 const { Caballo } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl, generarUrlFotos, subirFoto } = require( '../helpers' );
 
 const obtenerCaballos = async ( req, res ) => {
 
@@ -8,7 +11,7 @@ const obtenerCaballos = async ( req, res ) => {
 
     try {
 
-        const caballos = await Caballo.find( query )
+        let caballos = await Caballo.find( query )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
         if ( caballos.length === 0 ) {
@@ -17,6 +20,8 @@ const obtenerCaballos = async ( req, res ) => {
                 msg: 'No hay caballos registrados.'
             } );
         }
+
+        caballos = generarUrlFotos( req, 'caballos', caballos );
 
         return res.json( {
             value: 1,
@@ -36,12 +41,14 @@ const obtenerCaballos = async ( req, res ) => {
 
 const obtenerCaballoById = async ( req, res ) => {
 
-    const { id } = req.params;
+    const { idCaballo } = req.params;
 
     try {
 
-        const caballo = await Caballo.findById( id )
+        let caballo = await Caballo.findById( idCaballo )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+
+        caballo = generarUrlFotos( req, 'caballos', caballo );
 
         return res.json( {
             value: 1,
@@ -65,6 +72,10 @@ const registrarCaballo = async ( req, res ) => {
 
     try {
 
+        if ( req.body.foto ) {
+            req.body.foto = await subirFoto( req.body.foto, undefined, 'caballos' );
+        }
+
         const caballo = new Caballo( req.body );
 
         await caballo.save();
@@ -73,8 +84,7 @@ const registrarCaballo = async ( req, res ) => {
 
         return res.json( {
             value: 1,
-            msg: 'El caballo se ha registrado.',
-            caballo,
+            msg: 'El caballo se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -93,19 +103,31 @@ const actualizarCaballo = async ( req, res ) => {
     const { nombre, apellidos } = req.body.usuario;
 
     const { idCaballo } = req.params;
-    const { ...datos } = req.body;
+    const { foto, ...datos } = req.body;
 
     try {
 
-        const caballo = await Caballo.findByIdAndUpdate( idCaballo, datos, { new: true } )
-            .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+        const caballo = await Caballo.findById( idCaballo );
+
+        if ( foto ) {
+            if ( caballo.foto ) {
+                const pathImagen = path.join( __dirname, '../uploads/caballos/', caballo.foto );
+
+                if ( fs.existsSync( pathImagen ) ) {
+                    fs.unlinkSync( pathImagen );
+                }
+            }
+
+            datos.foto = await subirFoto( req.body.foto, undefined, 'caballos' );
+        }
+
+        await caballo.updateOne( datos );
 
         generarControl( nombre, apellidos, 'actualizado al caballo', caballo.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'El caballo se ha actualizado.',
-            caballo
+            msg: 'El caballo se ha actualizado.'
         } );
         
     } catch ( error ) {
@@ -127,15 +149,14 @@ const eliminarCaballo = async ( req, res ) => {
 
     try {
 
-        const caballo = await Caballo.findByIdAndUpdate( idCaballo, { estado: false }, { new: true } )
+        const caballo = await Caballo.findByIdAndUpdate( idCaballo, { estado: false } )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
         generarControl( nombre, apellidos, 'eliminado al caballo', caballo.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'El caballo se ha eliminado.',
-            caballo
+            msg: 'El caballo se ha eliminado.'
         } );
         
     } catch ( error ) {
