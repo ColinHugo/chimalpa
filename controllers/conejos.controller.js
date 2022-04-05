@@ -1,6 +1,9 @@
+const fs = require( 'fs' );
+const path = require( 'path' );
+
 const { Conejo } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl, generarUrlFotos, subirFoto } = require( '../helpers' );
 
 const obtenerConejos = async ( req, res ) => {
 
@@ -8,7 +11,7 @@ const obtenerConejos = async ( req, res ) => {
 
     try {
 
-        const conejos = await Conejo.find( query )
+        let conejos = await Conejo.find( query )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
         if ( conejos.length === 0 ) {
@@ -17,6 +20,8 @@ const obtenerConejos = async ( req, res ) => {
                 msg: 'No hay conejos registrados.'
             } );
         }
+
+        conejos = generarUrlFotos( req, 'conejos', conejos );
 
         return res.json( {
             value: 1,
@@ -40,8 +45,10 @@ const obtenerConejoById = async ( req, res ) => {
 
     try {
 
-        const conejo = await Conejo.findById( idConejo )
+        let conejo = await Conejo.findById( idConejo )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+
+        conejo = generarUrlFotos( req, 'conejos', conejo );
 
         return res.json( {
             value: 1,
@@ -50,11 +57,11 @@ const obtenerConejoById = async ( req, res ) => {
         
     } catch ( error ) {
 
-        console.error( `Error al obtener el conejo con id ${ id }.` );
+        console.error( `Error al obtener el conejo con id ${ idConejo }.` );
 
         return res.json( {
             value: 0,
-            msg: `Error al obtener el conejo con id ${ id }.`
+            msg: `Error al obtener el conejo con id ${ idConejo }.`
         } );
     }
 }
@@ -65,6 +72,10 @@ const registrarConejo = async ( req, res ) => {
 
     try {
 
+        if ( req.body.foto ) {
+            req.body.foto = await subirFoto( req.body.foto, undefined, 'conejos' );
+        }
+
         const conejo = new Conejo( req.body );
 
         await conejo.save();
@@ -73,8 +84,7 @@ const registrarConejo = async ( req, res ) => {
 
         return res.json( {
             value: 1,
-            msg: 'El conejo se ha registrado.',
-            conejo,
+            msg: 'El conejo se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -93,19 +103,31 @@ const actualizarConejo = async ( req, res ) => {
     const { nombre, apellidos } = req.body.usuario;
 
     const { idConejo } = req.params;
-    const { ...datos } = req.body;
+    const { foto, ...datos } = req.body;
 
     try {
 
-        const conejo = await Conejo.findByIdAndUpdate( idConejo, datos, { new: true } )
-            .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+        const conejo = await Conejo.findById( idConejo );
+
+        if ( foto ) {
+            if ( conejo.foto ) {
+                const pathImagen = path.join( __dirname, '../uploads/conejos/', conejo.foto );
+
+                if ( fs.existsSync( pathImagen ) ) {
+                    fs.unlinkSync( pathImagen );
+                }
+            }
+
+            datos.foto = await subirFoto( req.body.foto, undefined, 'conejos' );
+        }
+
+        await conejo.updateOne( datos );
 
         generarControl( nombre, apellidos, 'actualizado al conejo número', conejo.numeroConejo );
 
         return res.json( {
             value: 1,
-            msg: 'El conejo se ha actualizado.',
-            conejo
+            msg: 'El conejo se ha actualizado.'
         } );
         
     } catch ( error ) {
@@ -127,15 +149,14 @@ const eliminarConejo = async ( req, res ) => {
 
     try {
 
-        const conejo = await Conejo.findByIdAndUpdate( idConejo, { estado: false }, { new: true } )
+        const conejo = await Conejo.findByIdAndUpdate( idConejo, { estado: false } )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
         generarControl( nombre, apellidos, 'eliminado al conejo número', conejo.numeroConejo );
 
         return res.json( {
             value: 1,
-            msg: 'El conejo se ha eliminado.',
-            conejo
+            msg: 'El conejo se ha eliminado.'
         } );
         
     } catch ( error ) {

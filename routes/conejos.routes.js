@@ -1,7 +1,7 @@
 const router = require( 'express' ).Router();
 const { check } = require( 'express-validator' );
 
-const { existeConejo } = require( '../helpers/db-validators' );
+const { existeConejo } = require( '../helpers' );
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
 const { obtenerConejos, obtenerConejoById, registrarConejo, 
