@@ -1,17 +1,17 @@
 const router = require( 'express' ).Router();
 const { check } = require( 'express-validator' );
 
-const { existeUsuario, emailExiste } = require( '../helpers/db-validators' );
-const { validarCampos } = require( '../middlewares/validar-campos' );
+const { existeUsuario, emailExiste } = require( '../helpers' );
+const { validarCampos } = require( '../middlewares' );
 
 const { obtenerUsuarios, obtenerUsuarioById, agregarUsuario, actualizarUsuario, 
         eliminarUsuario } = require( '../controllers/usuarios.controller' );
 
 router.get( '/', obtenerUsuarios );
 
-router.get( '/:id', [
-    check( 'id', 'No es un id válido' ).isMongoId(),
-    check( 'id' ).custom( existeUsuario ),
+router.get( '/:idUsuario', [
+    check( 'idUsuario', 'No es un id válido' ).isMongoId(),
+    check( 'idUsuario' ).custom( existeUsuario ),
     validarCampos
 ], obtenerUsuarioById );
 
@@ -26,15 +26,15 @@ router.post( '/', [
     validarCampos
 ], agregarUsuario );
 
-router.put( '/:id', [
-    check( 'id', 'No es un id válido' ).isMongoId(),
-    check( 'id' ).custom( existeUsuario ),
+router.put( '/:idUsuario', [
+    check( 'idUsuario', 'No es un id válido' ).isMongoId(),
+    check( 'idUsuario' ).custom( existeUsuario ),
     validarCampos
 ], actualizarUsuario );
 
-router.delete( '/:id', [
-    check( 'id', 'No es un id válido' ).isMongoId(),
-    check( 'id' ).custom( existeUsuario ),
+router.delete( '/:idUsuario', [
+    check( 'idUsuario', 'No es un id válido' ).isMongoId(),
+    check( 'idUsuario' ).custom( existeUsuario ),
     validarCampos
 ], eliminarUsuario );
 

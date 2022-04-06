@@ -1,4 +1,9 @@
+const fs = require( 'fs' );
+const path = require( 'path' );
+
 const { Usuario } = require( '../models' );
+
+const { generarUrlFotos, subirFoto } = require( '../helpers' );
 
 const obtenerUsuarios = async ( req, res ) => {
 
@@ -6,7 +11,7 @@ const obtenerUsuarios = async ( req, res ) => {
 
     try {
 
-        const usuarios = await Usuario.find( query );
+        let usuarios = await Usuario.find( query );
 
         if ( usuarios.length === 0 ) {
 
@@ -15,6 +20,8 @@ const obtenerUsuarios = async ( req, res ) => {
                 msg: 'No hay usuarios registrados.'
             } );
         }
+
+        usuarios = generarUrlFotos( req, 'usuarios', usuarios );
 
         return res.json( {
             value: 1,
@@ -34,11 +41,13 @@ const obtenerUsuarios = async ( req, res ) => {
 
 const obtenerUsuarioById = async ( req, res ) => {
 
-    const { id } = req.params;
+    const { idUsuario } = req.params;
 
     try {
 
-        const usuario = await Usuario.findById( id );
+        let usuario = await Usuario.findById( idUsuario );
+
+        usuario = generarUrlFotos( req, 'usuarios', usuario );
 
         return res.json( {
             value: 1,
@@ -47,34 +56,30 @@ const obtenerUsuarioById = async ( req, res ) => {
         
     } catch ( error ) {
 
-        console.log( `Error al obtener el usuario con id ${ id }` );
+        console.log( `Error al obtener el usuario con id ${ idUsuario }` );
 
         return res.json( {
             value: 0,
-            msg: `Error al obtener el usuario con id ${ id }`
+            msg: `Error al obtener el usuario con id ${ idUsuario }`
         } );
     }
 }
 
 const agregarUsuario = async ( req, res ) => {
 
-    const { nombre, apellidos, correo, password } = req.body;
-
     try {
 
-        const usuario = new Usuario( {
-            nombre,
-            apellidos,
-            correo,
-            password: await Usuario.encryptPassword( password )
-        } );
+        if ( req.body.foto ) {
+            req.body.foto = await subirFoto( req.body.foto, undefined, 'usuarios' );
+        }
+
+        const usuario = new Usuario( req.body );
 
         await usuario.save();
 
         return res.json( {
             value: 1,
-            msg: 'El usuario se ha registrado.',
-            usuario
+            msg: 'El usuario se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -90,21 +95,34 @@ const agregarUsuario = async ( req, res ) => {
 
 const actualizarUsuario = async ( req, res ) => {
 
-    const { id } = req.params;
-    const { password, ...datos } = req.body;
+    const { idUsuario } = req.params;
+    const { password, foto, ...datos } = req.body;
 
     try {
+
+        const usuario = await Usuario.findById( idUsuario );
 
         if ( password ) {
             datos.password = await Usuario.encryptPassword( password );
         }
 
-        const usuario = await Usuario.findByIdAndUpdate( id, datos, { new: true } );
+        if ( foto ) {
+            if ( usuario.foto ) {
+                const pathImagen = path.join( __dirname, '../uploads/usuarios/', usuario.foto );
+
+                if ( fs.existsSync( pathImagen ) ) {
+                    fs.unlinkSync( pathImagen );
+                }
+            }
+
+            datos.foto = await subirFoto( req.body.foto, undefined, 'usuarios' );
+        }
+
+        await usuario.updateOne( datos );
 
         return res.json( {
             value: 1,
-            msg: 'El usuario se ha actualizado.',
-            usuario
+            msg: 'El usuario se ha actualizado.'
         } );
         
     } catch ( error ) {
@@ -115,31 +133,46 @@ const actualizarUsuario = async ( req, res ) => {
             value: 0,
             msg: 'Error al actualizar el usuario.'
         } );
-    }}
+    }
+}
 
-    const eliminarUsuario = async ( req, res ) => {
+const eliminarUsuario = async ( req, res ) => {
 
-        const { id } = req.params;
-    
-        try {
-    
-            const usuario = await Usuario.findByIdAndUpdate( id, { estado: false }, { new: true } );
-    
-            return res.json( {
-                value: 1,
-                msg: 'El usuario se ha eliminado.',
-                usuario
-            } );
+    const { idUsuario } = req.params;
+
+    try {
+
+        const usuario = await Usuario.findById( idUsuario );
+
+        if ( usuario.foto ) {
             
-        } catch ( error ) {
-    
-            console.error( 'Error al borrar el usuario.', error );
-    
-            return res.json( {
-                value: 0,
-                msg: 'Error al borrar el usuario.'
-            } );
-        }}
+            const pathImagen = path.join( __dirname, '../uploads/usuarios/', usuario.foto );
+
+            if ( fs.existsSync( pathImagen ) ){
+                fs.unlinkSync( pathImagen );
+            }
+        }
+
+        usuario.estado = false;
+        usuario.foto = '';
+
+        await usuario.save();
+
+        return res.json( {
+            value: 1,
+            msg: 'El usuario se ha eliminado.'
+        } );
+            
+    } catch ( error ) {
+        
+        console.error( 'Error al borrar el usuario.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al borrar el usuario.'
+        } );
+    }
+}
 
 module.exports = {
     obtenerUsuarios,
