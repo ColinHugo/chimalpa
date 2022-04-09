@@ -17,7 +17,7 @@ router.get( '/:idHerramienta', [
 
 router.post( '/', [
     validarJWT,
-    check( 'cantidad', 'La cantidad de herramientas es necesaria' ).escape().trim().notEmpty(),
+    check( 'cantidad', 'Ingrese una cantidad de herramientas válida' ).trim().isNumeric().toInt(),
     check( 'tipo', 'El tipo de herramienta es obligatoria' ).escape().trim().notEmpty(),
     check( 'descripcion', 'La descripción de herramienta es obligatoria' ).escape().trim().notEmpty(),
     validarCampos
@@ -34,6 +34,7 @@ router.delete( '/:idHerramienta', [
     validarJWT,
     check( 'idHerramienta', 'No es un id válido' ).isMongoId(),
     check( 'idHerramienta' ).custom( existeHerramienta ),
+    check( 'cantidad', 'Ingrese una cantidad de herramientas válida' ).trim().isNumeric().toInt(),
     validarCampos
 ], eliminarHerramienta );
 
