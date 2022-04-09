@@ -1,12 +1,15 @@
+const fs = require( 'fs' );
+const path = require( 'path' );
+
 const { Alerta, Caballo } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl, generarUrlFotos, subirFoto } = require( '../helpers' );
 
 const obtenerAlertas = async ( req, res ) => {
 
     try {
 
-        const alertas = await Alerta.find()
+        let alertas = await Alerta.find()
             .populate( 'caballo', 'nombre' )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
@@ -16,6 +19,8 @@ const obtenerAlertas = async ( req, res ) => {
                 msg: 'No hay alertas que mostrar'
             } );
         }
+
+        alertas = generarUrlFotos( req, 'caballos', alertas );
 
         return res.json( {
             value: 1,
@@ -41,8 +46,11 @@ const registrarAlerta = async ( req, res ) => {
     try {
 
         const caballo = await Caballo.findById( idCaballo );
-
         req.body.caballo = caballo;
+
+        if ( req.body.foto ) {
+            req.body.foto = await subirFoto( req.body.foto, undefined, 'caballos' );
+        }
 
         const alerta = new Alerta( req.body );
 
@@ -52,8 +60,7 @@ const registrarAlerta = async ( req, res ) => {
 
         return res.json( {
             value: 1,
-            msg: 'La alerta se ha registrado.',
-            alerta,
+            msg: 'La alerta se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -72,15 +79,27 @@ const actualizarAlerta = async ( req, res ) => {
     const { nombre, apellidos } = req.body.usuario;
 
     const { idAlerta } = req.params;
-    const { ...datos } = req.body;
+    const { foto, ...datos } = req.body;
 
     try {
 
-        const alerta = await Alerta.findByIdAndUpdate( idAlerta, datos, { new: true } )
-            .populate( 'caballo', 'nombre' )
-            .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+        const alerta = await Alerta.findById( idAlerta );
 
-            generarControl( nombre, apellidos, 'actualizado la alerta', alerta.descripcion );
+        if ( foto ) {
+            if ( alerta.foto ) {
+                const pathImagen = path.join( __dirname, '../uploads/caballos', alerta.foto );
+
+                if ( fs.existsSync( pathImagen ) ) {
+                    fs.unlinkSync( pathImagen );
+                }
+            }
+
+            datos.foto = await subirFoto( req.body.foto, undefined, 'caballos' );
+        }
+
+        await alerta.updateOne( datos );
+
+        generarControl( nombre, apellidos, 'actualizado la alerta', alerta.descripcion );
 
         return res.json( {
             value: 1,
@@ -90,11 +109,11 @@ const actualizarAlerta = async ( req, res ) => {
         
     } catch ( error ) {
 
-        console.error( 'Error al actualizar el ave.', error );
+        console.error( 'Error al actualizar la alerta.', error );
 
         return res.json( {
             value: 0,
-            msg: 'Error al actualizar el ave.'
+            msg: 'Error al actualizar la alerta.'
         } );
     }
 }
@@ -107,14 +126,24 @@ const eliminarAlerta = async ( req, res ) => {
 
     try {
 
-        const alerta = await Alerta.findByIdAndDelete( idAlerta )
+        const alerta = await Alerta.findById( idAlerta )
+
+        if ( alerta.foto ) {
+
+            const pathImagen = path.join( __dirname, '../uploads/caballos', alerta.foto );
+
+            if ( fs.existsSync( pathImagen ) ) {
+                fs.unlinkSync( pathImagen );
+            }
+        }
+
+        await alerta.deleteOne();
 
         generarControl( nombre, apellidos, 'eliminado la alerta', alerta.descripcion );
 
         return res.json( {
             value: 1,
-            msg: 'La alerta se ha eliminado.',
-            alerta
+            msg: 'La alerta se ha eliminado.'
         } );
         
     } catch ( error ) {
