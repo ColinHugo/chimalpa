@@ -6,7 +6,7 @@ const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, Historial
         HistoriaClinicaBorrego,
 
         Caballo, DesteteCaballo, DietaCaballo, DietaYegua, HistoriaClinica, HistorialReproductivo,
-        MedicinaPreventiva, Odontologia, PruebasLaboratorio, ProgramarMontaCaballo,
+        MedicinaPreventiva, Odontologia, PruebasLaboratorio, MontaCaballo,
         RecorteCasco, RondinCaballo, TratamientoEventualCaballo, TratamientoPermanente,
         UltraSonidoCaballo,
 
@@ -261,7 +261,7 @@ const existeMedicinaPreventiva = async ( id ) => {
 
 const existeMonta = async ( id ) => {
 
-    const monta = await ProgramarMontaCaballo.findById( id );
+    const monta = await MontaCaballo.findById( id );
 
     if ( !monta ) {
         throw new Error( `No existe monta con el id: ${ id }.` );

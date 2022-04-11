@@ -1,6 +1,6 @@
 const { Schema, model } = require( 'mongoose' );
 
-const ProgramarMontaCaballoSchema = Schema( {
+const MontaCaballoSchema = Schema( {
 
     fechaMonta: {
         type: String
@@ -31,10 +31,10 @@ const ProgramarMontaCaballoSchema = Schema( {
     timestamps: true
 } );
 
-ProgramarMontaCaballoSchema.methods.toJSON = function () {
+MontaCaballoSchema.methods.toJSON = function () {
     const { _id, ...monta } = this.toObject();
     monta.idMonta = _id;
     return monta;
 }
 
-module.exports = model( 'programar_monta_caballo', ProgramarMontaCaballoSchema );
+module.exports = model( 'monta_caballo', MontaCaballoSchema );

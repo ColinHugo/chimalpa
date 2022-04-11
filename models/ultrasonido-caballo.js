@@ -25,7 +25,7 @@ const UltrasonidoSchema = Schema( {
 
     monta: {
         type: Schema.Types.ObjectId,
-        ref: 'programar_monta_caballo'
+        ref: 'monta_caballo'
     }
 
 }, {

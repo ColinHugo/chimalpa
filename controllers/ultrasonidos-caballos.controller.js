@@ -1,4 +1,4 @@
-const { Caballo, ProgramarMontaCaballo, UltrasonidoCaballo } = require( '../models' );
+const { Caballo, MontaCaballo, UltrasonidoCaballo } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -41,7 +41,7 @@ const registrarUltraSonidoCaballo = async ( req, res ) => {
 
     try {
 
-        const monta = await ProgramarMontaCaballo.findById( idMonta );
+        const monta = await MontaCaballo.findById( idMonta );
         req.body.monta = monta;
 
         const ultrasonido = new UltrasonidoCaballo( req.body );

@@ -24,7 +24,7 @@ const HistoriaClinica = require( './historia-clinica' );
 const HistorialReproductivo = require( './historial-reproductivo' );
 const MedicinaPreventiva = require( './medicina-preventiva' );
 const Odontologia = require( './odontologia' );
-const ProgramarMontaCaballo = require( './programar-monta-caballo' );
+const MontaCaballo = require( './monta-caballo' );
 const PruebasLaboratorio = require( './prueba-laboratorio' );
 const RecorteCasco = require( './recorte-casco' );
 const RondinCaballo = require( './rondin-caballo' );
@@ -87,7 +87,7 @@ module.exports = {
     HistorialReproductivo,
     MedicinaPreventiva,
     Odontologia,
-    ProgramarMontaCaballo,
+    MontaCaballo,
     PruebasLaboratorio,
     RecorteCasco,
     RondinCaballo,
