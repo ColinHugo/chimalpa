@@ -26,6 +26,36 @@ const generarUrlFotos = ( req, carpeta, documentos ) => {
     return documentos;
 }
 
+const generarUrlFotosRondines = ( req, carpeta, documentos ) => {
+
+    const { foto } = documentos[ 0 ].caballo;
+    documentos[ 0 ].caballo.foto = `${ req.protocol }://${ req.headers.host }/caballos/${ foto }`;
+
+    documentos.forEach( documento => {
+
+        if ( documento.fotoAgua ) {
+            documento.fotoAgua = `${ req.protocol }://${ req.headers.host }/${ carpeta }/${ documento.fotoAgua }`;
+        } else {
+            documento.fotoAgua = `${ req.protocol }://${ req.headers.host }/no-image.jpg`;
+        }
+
+        if ( documento.fotoComida ) {
+            documento.fotoComida = `${ req.protocol }://${ req.headers.host }/${ carpeta }/${ documento.fotoComida }`;
+        } else {
+            documento.fotoComida = `${ req.protocol }://${ req.headers.host }/no-image.jpg`;
+        }
+
+        if ( documento.fotoHece ) {
+            documento.fotoHece = `${ req.protocol }://${ req.headers.host }/${ carpeta }/${ documento.fotoHece }`;
+        } else {
+            documento.fotoHece = `${ req.protocol }://${ req.headers.host }/no-image.jpg`;
+        }
+    } );
+
+    return documentos;
+}
+
 module.exports = {
-    generarUrlFotos
+    generarUrlFotos,
+    generarUrlFotosRondines
 }

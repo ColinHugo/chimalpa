@@ -1,14 +1,17 @@
+const fs = require( 'fs' );
+const path = require( 'path' );
+
 const { Caballo, RondinCaballo } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl, generarUrlFotosRondines, subirFoto } = require( '../helpers' );
 
 const obtenerRondinById = async ( req, res ) => {
 
-    const { idCaballo } = req.params;
+    let { idCaballo } = req.params;
 
     try {
 
-        const rondin = await RondinCaballo.where( { caballo: idCaballo } )
+        let rondin = await RondinCaballo.where( { caballo: idCaballo } )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] )
             .populate( 'caballo', [ 'nombre' , 'foto'] );
 
@@ -18,6 +21,8 @@ const obtenerRondinById = async ( req, res ) => {
                 msg: 'No hay rondines que mostrar.'
             } );
         }
+
+        rondin = generarUrlFotosRondines( req, 'rondines', rondin );
 
         return res.json( {
             value: 1,
@@ -43,7 +48,7 @@ const obtenerRondinByIdDate = async ( req, res ) => {
 
     try {
 
-        const rondin = await RondinCaballo.where( { caballo: idCaballo,
+        let rondin = await RondinCaballo.where( { caballo: idCaballo,
             createdAt: {
                 $gte: desde
             }
@@ -57,6 +62,8 @@ const obtenerRondinByIdDate = async ( req, res ) => {
                 msg: 'No hay rondines que mostrar.'
             } );
         }
+
+        rondin = generarUrlFotosRondines( req, 'rondines', rondin );
 
         return res.json( {
             value: 1,
@@ -82,11 +89,21 @@ const registrarRondin = async ( req, res ) => {
     try {
 
         const caballo = await Caballo.findById( idCaballo );
-
         req.body.caballo = caballo;
 
-        const rondin = await RondinCaballo( req.body )
-            .populate( 'caballo', 'nombre' );
+        if ( req.body.fotoAgua ) {
+            req.body.fotoAgua = await subirFoto( req.body.foto, undefined, 'rondines' );
+        }
+
+        if ( req.body.fotoComida ) {
+            req.body.fotoComida = await subirFoto( req.body.foto, undefined, 'rondines' );
+        }
+
+        if ( req.body.fotoHece ) {
+            req.body.fotoHece = await subirFoto( req.body.foto, undefined, 'rondines' );
+        }
+
+        const rondin = await new RondinCaballo( req.body );
 
         await rondin.save();
 
@@ -94,8 +111,7 @@ const registrarRondin = async ( req, res ) => {
 
         return res.json( {
             value: 1,
-            msg: 'El rondín se ha registrado.',
-            rondin,
+            msg: 'El rondín se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -114,19 +130,52 @@ const actualizarRondinCaballo = async ( req, res ) => {
     const { nombre, apellidos } = req.body.usuario;
 
     const { idRondin } = req.params;
-    const { ...datos } = req.body;
+    const { fotoAgua, fotoComida, fotoHece, ...datos } = req.body;
 
     try {
 
-        const rondin = await RondinCaballo.findByIdAndUpdate( idRondin, datos, { new: true } )
-            .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+        const rondin = await RondinCaballo.findById( idRondin );
+
+        if ( fotoAgua  ) {
+            if ( rondin.fotoAgua ) {
+                const pathImagen = path.join( __dirname, '../uploads/rondines/', rondin.fotoAgua );
+
+                if ( fs.existsSync( pathImagen ) ) {
+                    fs.unlinkSync( pathImagen );
+                }
+            }
+            datos.fotoAgua = await subirFoto( fotoAgua, undefined, 'rondines' );
+        }
+
+        if ( fotoComida  ) {
+            if ( rondin.fotoComida ) {
+                const pathImagen = path.join( __dirname, '../uploads/rondines/', rondin.fotoComida );
+
+                if ( fs.existsSync( pathImagen ) ) {
+                    fs.unlinkSync( pathImagen );
+                }
+            }
+            datos.fotoComida = await subirFoto( fotoComida, undefined, 'rondines' );
+        }
+
+        if ( fotoHece  ) {
+            if ( rondin.fotoHece ) {
+                const pathImagen = path.join( __dirname, '../uploads/rondines/', rondin.fotoHece );
+
+                if ( fs.existsSync( pathImagen ) ) {
+                    fs.unlinkSync( pathImagen );
+                }
+            }
+            datos.fotoHece = await subirFoto( fotoHece, undefined, 'rondines' );
+        }
+
+        await rondin.updateOne( datos );
 
         generarControl( nombre, apellidos, 'actualizado un rondín al caballo', rondin.caballo );
 
         return res.json( {
             value: 1,
-            msg: 'El rondín se ha actualizado.',
-            rondin
+            msg: 'El rondín se ha actualizado.'
         } );
         
     } catch ( error ) {

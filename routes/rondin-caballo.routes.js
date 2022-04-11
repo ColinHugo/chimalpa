@@ -27,6 +27,7 @@ router.post( '/:idCaballo', [
     check( 'descripcionComida', 'La descripción de la comida del caballo es obligatoria' ).escape().trim().notEmpty(),
     check( 'hece', 'La hece del caballo es obligatoria' ).escape().trim().notEmpty(),
     check( 'descripcionHece', 'La descripción de la hece del caballo es obligatoria' ).escape().trim().notEmpty(),
+    check( 'idCaballo' ).custom( existeCaballo ),
     validarCampos
 ], registrarRondin );
 
