@@ -1,4 +1,4 @@
-const { Caballo, ProgramarMontaCaballo, HistorialReproductivo } = require( '../models' );
+const { Caballo, MontaCaballo, HistorialReproductivo } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -8,7 +8,7 @@ const obtenerMontaCaballoById = async ( req, res ) => {
 
     try {
 
-        const monta = await ProgramarMontaCaballo.where( {
+        const monta = await MontaCaballo.where( {
             caballo: idCaballo,
             historialReproductivo: idHistorialReproductivo
         } )
@@ -53,7 +53,7 @@ const registrarMontaCaballo = async ( req, res ) => {
         req.body.caballo = caballo;
         req.body.historialReproductivo = historialReproductivo;
 
-        const monta = new ProgramarMontaCaballo( req.body );
+        const monta = new MontaCaballo( req.body );
 
         await monta.save();
 
@@ -85,7 +85,7 @@ const actualizarMontaCaballo = async ( req, res ) => {
 
     try {
 
-        const monta = await ProgramarMontaCaballo.findByIdAndUpdate( idMonta, datos, { new: true } )
+        const monta = await MontaCaballo.findByIdAndUpdate( idMonta, datos )
             .populate( 'caballo', 'nombre' );
 
         const caballo = await Caballo.findById( monta.caballo );
@@ -94,8 +94,7 @@ const actualizarMontaCaballo = async ( req, res ) => {
 
         return res.json( {
             value: 1,
-            msg: 'La monta se ha actualizado.',
-            medicina: monta
+            msg: 'La monta se ha actualizado.'
         } );
         
     } catch ( error ) {
@@ -117,7 +116,7 @@ const eliminarMontaCaballo = async ( req, res ) => {
 
     try {
 
-        const tratamiento = await ProgramarMontaCaballo.findByIdAndDelete( idMonta );
+        const tratamiento = await MontaCaballo.findByIdAndDelete( idMonta );
 
         const caballo = await Caballo.findById( tratamiento.caballo );
 
