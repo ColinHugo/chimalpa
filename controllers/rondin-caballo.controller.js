@@ -92,15 +92,15 @@ const registrarRondin = async ( req, res ) => {
         req.body.caballo = caballo;
 
         if ( req.body.fotoAgua ) {
-            req.body.fotoAgua = await subirFoto( req.body.foto, undefined, 'rondines' );
+            req.body.fotoAgua = await subirFoto( req.body.fotoAgua, undefined, 'rondines' );
         }
 
         if ( req.body.fotoComida ) {
-            req.body.fotoComida = await subirFoto( req.body.foto, undefined, 'rondines' );
+            req.body.fotoComida = await subirFoto( req.body.fotoComida, undefined, 'rondines' );
         }
 
         if ( req.body.fotoHece ) {
-            req.body.fotoHece = await subirFoto( req.body.foto, undefined, 'rondines' );
+            req.body.fotoHece = await subirFoto( req.body.fotoHece, undefined, 'rondines' );
         }
 
         const rondin = await new RondinCaballo( req.body );
@@ -134,7 +134,8 @@ const actualizarRondinCaballo = async ( req, res ) => {
 
     try {
 
-        const rondin = await RondinCaballo.findById( idRondin );
+        const rondin = await RondinCaballo.findById( idRondin )
+            .populate( 'caballo', 'nombre' );
 
         if ( fotoAgua  ) {
             if ( rondin.fotoAgua ) {
@@ -171,7 +172,7 @@ const actualizarRondinCaballo = async ( req, res ) => {
 
         await rondin.updateOne( datos );
 
-        generarControl( nombre, apellidos, 'actualizado un rondín al caballo', rondin.caballo );
+        generarControl( nombre, apellidos, 'actualizado un rondín al caballo', rondin.caballo.nombre );
 
         return res.json( {
             value: 1,
@@ -189,9 +190,65 @@ const actualizarRondinCaballo = async ( req, res ) => {
     }
 }
 
+const eliminarRondinCaballo = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+
+    const { idRondin } = req.params;
+
+    try {
+
+        const rondin = await RondinCaballo.findById( idRondin )
+            .populate( 'caballo', 'nombre' );
+        
+        if ( rondin.fotoAgua ) {
+            const pathImagen = path.join( __dirname, '../uploads/rondines/', rondin.fotoAgua );
+
+            if ( fs.existsSync( pathImagen ) ) {
+                fs.unlinkSync( pathImagen );
+            }
+        }
+        
+        if ( rondin.fotoComida ) {
+            const pathImagen = path.join( __dirname, '../uploads/rondines/', rondin.fotoComida );
+
+            if ( fs.existsSync( pathImagen ) ) {
+                fs.unlinkSync( pathImagen );
+            }
+        }
+        
+        if ( rondin.fotoHece ) {
+            const pathImagen = path.join( __dirname, '../uploads/rondines/', rondin.fotoHece );
+
+            if ( fs.existsSync( pathImagen ) ) {
+                fs.unlinkSync( pathImagen );
+            }
+        }
+
+        await rondin.deleteOne();
+
+        generarControl( nombre, apellidos, 'eliminado un rondín al caballo', rondin.caballo.nombre );
+
+        return res.json( {
+            value: 1,
+            msg: 'El rondín se ha eliminado.'
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminado el rondín.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminado el rondín.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerRondinById,
     obtenerRondinByIdDate,
     registrarRondin,
-    actualizarRondinCaballo
+    actualizarRondinCaballo,
+    eliminarRondinCaballo
 }

@@ -5,7 +5,7 @@ const { existeCaballo, existeRondinCaballo } = require( '../helpers/db-validator
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
 const { obtenerRondinById, obtenerRondinByIdDate,
-         registrarRondin, actualizarRondinCaballo } = require( '../controllers/rondin-caballo.controller' );
+         registrarRondin, actualizarRondinCaballo, eliminarRondinCaballo } = require( '../controllers/rondin-caballo.controller' );
 
 router.get( '/:idCaballo', [
     check( 'idCaballo', 'No es un id válido' ).isMongoId(),
@@ -37,5 +37,12 @@ router.put( '/:idRondin', [
     check( 'idRondin' ).custom( existeRondinCaballo ),
     validarCampos
 ], actualizarRondinCaballo );
+
+router.delete( '/:idRondin', [
+    validarJWT,
+    check( 'idRondin', 'No es un id válido' ).isMongoId(),
+    check( 'idRondin' ).custom( existeRondinCaballo ),
+    validarCampos
+], eliminarRondinCaballo );
 
 module.exports = router;
