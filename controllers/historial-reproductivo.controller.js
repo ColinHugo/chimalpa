@@ -1,4 +1,4 @@
-const { HistorialReproductivo, Caballo } = require( '../models' );
+const { HistorialReproductivoCaballo } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -6,8 +6,10 @@ const obtenerHistorialReproductivoCaballos = async ( req, res ) => {
 
     try {
 
-        const historialReproductivo = await HistorialReproductivo.find()
-            .populate( 'caballo', 'nombre' );
+        const historialReproductivo = await HistorialReproductivoCaballo.find()
+            .populate( 'yegua', 'nombre' )
+            .populate( 'semental', 'nombre' )
+            .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
         if ( historialReproductivo.length === 0 ) {
             return res.json( {
@@ -34,12 +36,14 @@ const obtenerHistorialReproductivoCaballos = async ( req, res ) => {
 
 const obtenerHistorialReproductivoCaballoById = async ( req, res ) => {
 
-    const { idCaballo } = req.params;
+    const { idYegua } = req.params;
 
     try {
 
-        const historial = await HistorialReproductivo.where( { caballo: idCaballo } )
-            .populate( 'caballo', 'nombre' );
+        const historial = await HistorialReproductivoCaballo.where( { caballo: idYegua } )
+            .populate( 'yegua', 'nombre' )
+            .populate( 'semental', 'nombre' )
+            .populate( 'usuario', [ 'nombre', 'apellidos' ] );
 
         if ( historial.length === 0 ) {
             return res.json( {
@@ -67,20 +71,20 @@ const obtenerHistorialReproductivoCaballoById = async ( req, res ) => {
 const registrarHistorialReproductivoCaballo = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
-    const { idCaballo } = req.params;
+    const { idYegua, idSemental } = req.params;
 
     try {
 
-        const caballo = await Caballo.findById( idCaballo );
+        req.body.yegua = idYegua;
+        req.body.semental = idSemental;
 
-        req.body.caballo = caballo;
-
-        const historialReproductivoCaballo = await HistorialReproductivo( req.body )
-            .populate( 'caballo', 'nombre' );
+        const historialReproductivoCaballo = await HistorialReproductivoCaballo( req.body )
+            .populate( 'yegua', 'nombre' );
 
         await historialReproductivoCaballo.save();
 
-        generarControl( nombre, apellidos, 'registrado un historial reproductivo al caballo', caballo.nombre );
+        generarControl( nombre, apellidos, 'registrado un historial reproductivo a la yegua', 
+                        historialReproductivoCaballo.yegua.nombre );
 
         return res.json( {
             value: 1,
@@ -107,12 +111,10 @@ const actualizarHistorialReproductivoCaballo = async ( req, res ) => {
 
     try {
 
-        const historial = await HistorialReproductivo.findByIdAndUpdate( idHistorialReproductivo, datos, { new: true } )
-            .populate( 'caballo', 'nombre' );
+        const historial = await HistorialReproductivoCaballo.findByIdAndUpdate( idHistorialReproductivo, datos )
+            .populate( 'yegua', 'nombre' );
 
-        const caballo = await Caballo.findById( historial.caballo );
-
-        generarControl( nombre, apellidos, 'actualizado un historial reproductivo al caballo', caballo.nombre );
+        generarControl( nombre, apellidos, 'actualizado un historial reproductivo a la yegua', historial.yegua.nombre );
 
         return res.json( {
             value: 1,
@@ -130,9 +132,38 @@ const actualizarHistorialReproductivoCaballo = async ( req, res ) => {
     }
 }
 
+const eliminarHistorialReproductivoCaballo = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idHistorialReproductivo } = req.params;
+
+    try {
+
+        const historial = await HistorialReproductivoCaballo.findByIdAndDelete( idHistorialReproductivo )
+            .populate( 'yegua', 'nombre' );
+
+        generarControl( nombre, apellidos, 'eliminado un historial reproductivo a la yegua', historial.yegua.nombre );
+
+        return res.json( {
+            value: 1,
+            msg: 'El historial reproductivo del caballo se ha eliminado.',
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar el historial reproductivo del caballo.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar el historial reproductivo del caballo.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerHistorialReproductivoCaballos,
     obtenerHistorialReproductivoCaballoById,
     registrarHistorialReproductivoCaballo,
-    actualizarHistorialReproductivoCaballo
+    actualizarHistorialReproductivoCaballo,
+    eliminarHistorialReproductivoCaballo
 }

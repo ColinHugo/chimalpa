@@ -21,7 +21,7 @@ const DesteteCaballo = require( './destete' );
 const DietaCaballo = require( './dieta-caballo' );
 const DietaYegua = require( './dieta-yegua' );
 const HistoriaClinica = require( './historia-clinica' );
-const HistorialReproductivo = require( './historial-reproductivo' );
+const HistorialReproductivoCaballo = require( './historial-reproductivo-caballo' );
 const MedicinaPreventiva = require( './medicina-preventiva' );
 const Odontologia = require( './odontologia' );
 const MontaCaballo = require( './monta-caballo' );
@@ -84,7 +84,7 @@ module.exports = {
     DietaCaballo,
     DietaYegua,
     HistoriaClinica,
-    HistorialReproductivo,
+    HistorialReproductivoCaballo,
     MedicinaPreventiva,
     Odontologia,
     MontaCaballo,

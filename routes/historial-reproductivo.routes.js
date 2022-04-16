@@ -16,7 +16,8 @@ const { obtenerHistorialReproductivoBorregos, obtenerHistorialReproductivoBorreg
         registrarHistorialReproductivoBorrego, actualizarHistorialReproductivoBorrego } = require( '../controllers/historial-reproductivo-borrego.controller' );
 
 const { obtenerHistorialReproductivoCaballos, obtenerHistorialReproductivoCaballoById,
-        registrarHistorialReproductivoCaballo, actualizarHistorialReproductivoCaballo } = require( '../controllers/historial-reproductivo.controller' );
+        registrarHistorialReproductivoCaballo, actualizarHistorialReproductivoCaballo,
+        eliminarHistorialReproductivoCaballo } = require( '../controllers/historial-reproductivo.controller' );
 
 const { obtenerHistorialReproductivoConejos, obtenerHistorialReproductivoConejoById,
         registrarHistorialReproductivoConejo, actualizarHistorialReproductivoConejo } = require( '../controllers/historial-reproductivo-conejo.controller' );
@@ -92,18 +93,19 @@ router.put( '/borregos/:idHistorialReproductivo', [
 
 router.get( '/caballos', obtenerHistorialReproductivoCaballos );
 
-router.get( '/caballos/:idCaballo', [
-    check( 'idCaballo', 'No es un id válido' ).isMongoId(),
-    check( 'idCaballo' ).custom( existeCaballo ),
+router.get( '/caballos/:idYegua', [
+    check( 'idYegua', 'No es un id válido' ).isMongoId(),
+    check( 'idYegua' ).custom( existeCaballo ),
     validarCampos
 ], obtenerHistorialReproductivoCaballoById );
 
-router.post( '/caballos/:idCaballo', [
+router.post( '/caballos/:idYegua/:idSemental', [
     validarJWT,
-    check( 'idCaballo', 'No es un id válido' ).isMongoId(),
-    check( 'idCaballo' ).custom( existeCaballo ),
+    check( 'idYegua', 'No es un id válido' ).isMongoId(),
+    check( 'idYegua' ).custom( existeCaballo ),
+    check( 'idSemental', 'No es un id válido' ).isMongoId(),
+    check( 'idSemental' ).custom( existeCaballo ),
     check( 'inicioCelo', 'El inicio de celo es obligatorio' ).trim().notEmpty(),
-    check( 'semental', 'El semental es obligatorio' ).trim().notEmpty(),
     check( 'tipoMonta', 'El tipo de monta es obligatorio' ).trim().notEmpty(),
     validarCampos
 ], registrarHistorialReproductivoCaballo );
@@ -114,6 +116,13 @@ router.put( '/caballos/:idHistorialReproductivo', [
     check( 'idHistorialReproductivo' ).custom( existeHistorialReproductivoCaballo ),
     validarCampos
 ], actualizarHistorialReproductivoCaballo );
+
+router.delete( '/caballos/:idHistorialReproductivo', [
+    validarJWT,
+    check( 'idHistorialReproductivo', 'No es un id válido' ).isMongoId(),
+    check( 'idHistorialReproductivo' ).custom( existeHistorialReproductivoCaballo ),
+    validarCampos
+], eliminarHistorialReproductivoCaballo );
 
 // *************************************************************
 // - End points para historiales reproductivos de los conejos -

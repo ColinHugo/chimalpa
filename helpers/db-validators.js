@@ -5,7 +5,7 @@ const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, Historial
         HistorialReproductivoBorrego, PruebaLaboratorioBorrego, DietaBorrego, MedicinaBorrego, 
         HistoriaClinicaBorrego,
 
-        Caballo, DesteteCaballo, DietaCaballo, DietaYegua, HistoriaClinica, HistorialReproductivo,
+        Caballo, DesteteCaballo, DietaCaballo, DietaYegua, HistoriaClinica, HistorialReproductivoCaballo,
         MedicinaPreventiva, Odontologia, PruebasLaboratorio, MontaCaballo,
         RecorteCasco, RondinCaballo, TratamientoEventualCaballo, TratamientoPermanente,
         UltraSonidoCaballo,
@@ -306,7 +306,7 @@ const existeHistoriaClinicaCaballo = async ( id ) => {
 
 const existeHistorialReproductivoCaballo = async ( id ) => {
 
-    const historialReproductivoCaballo = await HistorialReproductivo.findById( id );
+    const historialReproductivoCaballo = await HistorialReproductivoCaballo.findById( id );
 
     if ( !historialReproductivoCaballo ) {
         throw new Error( `No existe registro de historial reproductivo de caballo con el id: ${ id }` )
