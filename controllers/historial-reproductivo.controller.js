@@ -40,7 +40,7 @@ const obtenerHistorialReproductivoCaballoById = async ( req, res ) => {
 
     try {
 
-        const historial = await HistorialReproductivoCaballo.where( { caballo: idYegua } )
+        const historial = await HistorialReproductivoCaballo.where( { yegua: idYegua } )
             .populate( 'yegua', 'nombre' )
             .populate( 'semental', 'nombre' )
             .populate( 'usuario', [ 'nombre', 'apellidos' ] );
@@ -88,17 +88,16 @@ const registrarHistorialReproductivoCaballo = async ( req, res ) => {
 
         return res.json( {
             value: 1,
-            msg: 'El historial reproductivo del caballo se ha registrado.',
-            historialReproductivoCaballo
+            msg: 'El historial reproductivo de la yegua se ha registrado.'
         } );
         
     } catch ( error ) {
 
-        console.error( 'Error al registrar el historial reproductivo del caballo.', error );
+        console.error( 'Error al registrar el historial reproductivo de la yegua.', error );
 
         return res.json( {
             value: 0,
-            msg: 'Error al registrar el historial reproductivo del caballo.'
+            msg: 'Error al registrar el historial reproductivo de la yegua.'
         } );
     }
 }
