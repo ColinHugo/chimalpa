@@ -72,20 +72,18 @@ const registrarTratamientoCaballo = async ( req, res ) => {
 
     try {
 
-        const caballo = await Caballo.findById( idCaballo );
+        req.body.caballo = idCaballo;
 
-        req.body.caballo = caballo;
-
-        const tratamiento = new TratamientoPermanente( req.body );
+        const tratamiento = await new TratamientoPermanente( req.body )
+            .populate( 'caballo', 'nombre' );
 
         await tratamiento.save();
 
-        generarControl( nombre, apellidos, 'registrado un tratamiento permanente al caballo', caballo.nombre );
+        generarControl( nombre, apellidos, 'registrado un tratamiento permanente al caballo', tratamiento.caballo.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'El tratamiento se ha registrado.',
-            tratamiento
+            msg: 'El tratamiento se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -108,16 +106,14 @@ const actualizarTratamientoCaballo = async ( req, res ) => {
 
     try {
 
-        const tratamiento = await TratamientoPermanente.findByIdAndUpdate( idTratamiento, datos, { new: true } );
+        const tratamiento = await TratamientoPermanente.findByIdAndUpdate( idTratamiento, datos )
+            .populate( 'caballo', 'nombre' );
 
-        const caballo = await Caballo.findById( tratamiento.caballo );
-
-        generarControl( nombre, apellidos, 'actualizado un tratamiento permanente al caballo', caballo.nombre );
+        generarControl( nombre, apellidos, 'actualizado un tratamiento permanente al caballo', tratamiento.caballo.nombre );
         
         return res.json( {
             value: 1,
-            msg: 'El tratamiento permanente se ha actualizado.',
-            tratamiento
+            msg: 'El tratamiento permanente se ha actualizado.'
         } );
 
     } catch ( error ) {
@@ -131,9 +127,39 @@ const actualizarTratamientoCaballo = async ( req, res ) => {
     }
 }
 
+const eliminarTratamientoCaballo = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+
+    const { idTratamiento } = req.params;
+
+    try {
+
+        const tratamiento = await TratamientoPermanente.findByIdAndDelete( idTratamiento )
+            .populate( 'caballo', 'nombre' );
+
+        generarControl( nombre, apellidos, 'eliminado un tratamiento permanente al caballo', tratamiento.caballo.nombre );
+        
+        return res.json( {
+            value: 1,
+            msg: 'El tratamiento permanente se ha eliminado.'
+        } );
+
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar el tratamiento permanente.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar el tratamiento permanente.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerTratamientosCaballos,
     obtenerTratamientoCaballoById,
     registrarTratamientoCaballo,
     actualizarTratamientoCaballo,
+    eliminarTratamientoCaballo
 }
