@@ -1,27 +1,56 @@
 const router = require( 'express' ).Router();
 const { check } = require( 'express-validator' );
 
-const { existeAve, existeHistoriaClinicaAve,
-        existeBorrego, existeHistoriaClinicaBorrego,
-        existeCaballo, existeHistoriaClinicaCaballo,
-        existeConejo, existeHistoriaClinicaConejo,
-        existeMascota, existeHistoriaClinicaMascota } = require( '../helpers/db-validators' );
+const { 
+    existeAve,
+    existeHistoriaClinicaAve,
+    existeBorrego,
+    existeHistoriaClinicaBorrego,
+    existeCaballo,
+    existeHistoriaClinicaCaballo,
+    existeConejo,
+    existeHistoriaClinicaConejo,
+    existeMascota,
+    existeHistoriaClinicaMascota
+} = require( '../helpers' );
+
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
-const { obtenerHistoriaClinicaAves, obtenerHistoriaClinicaAveById,
-        registrarHistoriaClinicaAve, actualizarHistoriaClinicaAve } = require( '../controllers/historia-clinica-aves.controller' );
+const {
+    obtenerHistoriaClinicaAves,
+    obtenerHistoriaClinicaAveById,
+    registrarHistoriaClinicaAve,
+    actualizarHistoriaClinicaAve
+} = require( '../controllers/historia-clinica-aves.controller' );
 
-const { obtenerHistoriaClinicaBorregos, obtenerHistoriaClinicaBorregoById,
-        registrarHistoriaClinicaBorrego, actualizarHistoriaClinicaBorrego } = require( '../controllers/historia-clinica-borregos.controller' );
+const {
+    obtenerHistoriaClinicaBorregos,
+    obtenerHistoriaClinicaBorregoById,
+    registrarHistoriaClinicaBorrego,
+    actualizarHistoriaClinicaBorrego,
+    eliminarHistoriaClinicaBorrego
+} = require( '../controllers/historia-clinica-borregos.controller' );
 
-const { obtenerHistoriaClinicaCaballos, obtenerHistoriaClinicaCaballoById,
-        registrarHistoriaClinicaCaballo, actualizarHistoriaClinicaCaballo } = require( '../controllers/historia-clinica.controller' );
+const {
+    obtenerHistoriaClinicaCaballos,
+    obtenerHistoriaClinicaCaballoById,
+    registrarHistoriaClinicaCaballo,
+    actualizarHistoriaClinicaCaballo
+} = require( '../controllers/historia-clinica.controller' );
 
-const { obtenerHistoriaClinicaConejos, obtenerHistoriaClinicaConejoById,
-        registrarHistoriaClinicaConejo, actualizarHistoriaClinicaConejo } = require( '../controllers/historia-clinica-conejos.controller' );
+const {
+    obtenerHistoriaClinicaConejos,
+    obtenerHistoriaClinicaConejoById,
+    registrarHistoriaClinicaConejo,
+    actualizarHistoriaClinicaConejo
+} = require( '../controllers/historia-clinica-conejos.controller' );
 
-const { obtenerHistoriaClinicaMascotas, obtenerHistoriaClinicaMascotaById,
-        registrarHistoriaClinicaMascota, actualizarHistoriaClinicaMascota } = require( '../controllers/historia-clinica-mascota.controller' );
+const {
+    obtenerHistoriaClinicaMascotas,
+    obtenerHistoriaClinicaMascotaById,
+    registrarHistoriaClinicaMascota,
+    actualizarHistoriaClinicaMascota
+} = require( '../controllers/historia-clinica-mascota.controller' );
 
 // **********************************************************
 // -   End points para las historias clínicas de las aves   -
@@ -120,6 +149,13 @@ router.put( '/borregos/:idHistorial', [
     check( 'idHistorial' ).custom( existeHistoriaClinicaBorrego ),
     validarCampos
 ], actualizarHistoriaClinicaBorrego );
+
+router.delete( '/borregos/:idHistorial', [
+    validarJWT,
+    check( 'idHistorial', 'No es un id válido' ).isMongoId(),
+    check( 'idHistorial' ).custom( existeHistoriaClinicaBorrego ),
+    validarCampos
+], eliminarHistoriaClinicaBorrego );
 
 // **********************************************************
 // - End points para las historias clínicas de los caballos -

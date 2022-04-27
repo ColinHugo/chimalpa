@@ -1,4 +1,4 @@
-const { HistoriaClinicaBorrego, Borrego } = require( '../models' );
+const { HistoriaClinicaBorrego } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -71,30 +71,28 @@ const registrarHistoriaClinicaBorrego = async ( req, res ) => {
 
     try {
 
-        const borrego = await Borrego.findById( idBorrego );
+        req.body.borrego = idBorrego;
 
-        req.body.borrego = borrego;
-
-        const historiaBorrego = await HistoriaClinicaBorrego( req.body )
+        const historiaBorrego = await new HistoriaClinicaBorrego( req.body )
             .populate( 'borrego', 'numeroBorrego' );
             
         await historiaBorrego.save();
 
-        generarControl( nombre, apellidos, 'registrado un historial clínico al borrego número', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'registrado un historial clínico al borrego número', 
+                        historiaBorrego.borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
-            msg: 'La historia del caballo se ha registrado.',
-            historiaBorrego
+            msg: 'El historial clínico del borrego se ha registrado.'
         } );
         
     } catch ( error ) {
 
-        console.error( 'Error al registrar la historia del caballo.', error );
+        console.error( 'Error al registrar el historial clínico del borrego.', error );
 
         return res.json( {
             value: 0,
-            msg: 'Error al registrar la historia del caballo.'
+            msg: 'Error al registrar el historial clínico del borrego.'
         } );
     }
 }
@@ -107,12 +105,11 @@ const actualizarHistoriaClinicaBorrego = async ( req, res ) => {
 
     try {
 
-        const historiaBorrego = await HistoriaClinicaBorrego.findByIdAndUpdate( idHistorial, datos, { new: true } )
+        const historiaBorrego = await HistoriaClinicaBorrego.findByIdAndUpdate( idHistorial, datos )
             .populate( 'borrego', 'numeroBorrego' );
 
-        const borrego = await Borrego.findById( historiaBorrego.borrego );
-
-        generarControl( nombre, apellidos, 'actualizado un historial clínico al borrego número', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'actualizado un historial clínico al borrego número', 
+                        historiaBorrego.borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
@@ -130,9 +127,39 @@ const actualizarHistoriaClinicaBorrego = async ( req, res ) => {
     }
 }
 
+const eliminarHistoriaClinicaBorrego = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idHistorial } = req.params;
+
+    try {
+
+        const historiaBorrego = await HistoriaClinicaBorrego.findByIdAndDelete( idHistorial )
+            .populate( 'borrego', 'numeroBorrego' );
+
+        generarControl( nombre, apellidos, 'eliminado un historial clínico al borrego número', 
+                        historiaBorrego.borrego.numeroBorrego );
+
+        return res.json( {
+            value: 1,
+            msg: 'El historial clínico del borrego se ha eliminado.',
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar el historial clínico del borrego.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar el historial clínico del borrego.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerHistoriaClinicaBorregos,
     obtenerHistoriaClinicaBorregoById,
     registrarHistoriaClinicaBorrego,
-    actualizarHistoriaClinicaBorrego
+    actualizarHistoriaClinicaBorrego,
+    eliminarHistoriaClinicaBorrego
 }
