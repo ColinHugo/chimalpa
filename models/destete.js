@@ -3,7 +3,7 @@ const { Schema, model } = require( 'mongoose' );
 const DesteteSchema = Schema( {
 
     fecha: {
-        type: String,
+        type: Date,
         required: [ true, 'La fecha del destete es obligatoria.' ]
     },
 

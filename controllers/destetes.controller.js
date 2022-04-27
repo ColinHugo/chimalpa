@@ -1,6 +1,6 @@
-const { DesteteCaballo, Caballo } = require( '../models' );
+const { DesteteCaballo } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl } = require( '../helpers' );
 
 const obtenerDestetesCaballos = async ( req, res ) => {
 
@@ -68,23 +68,21 @@ const registrarDesteteCaballo = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
     const { idCaballo } = req.params;
-    const { fecha, instrucciones } = req.body;
 
     try {
 
-        const caballo = await Caballo.findById( idCaballo );
+        req.body.caballo = idCaballo;
 
-        const desteteCaballo = await DesteteCaballo( { fecha, instrucciones, caballo } )
+        const desteteCaballo = await DesteteCaballo( req.body )
             .populate( 'caballo', 'nombre' );
 
         await desteteCaballo.save();
 
-        generarControl( nombre, apellidos, 'registrado un destete al caballo', caballo.nombre );
+        generarControl( nombre, apellidos, 'registrado un destete al caballo', desteteCaballo.caballo.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'El destete del caballo se ha registrado.',
-            desteteCaballo
+            msg: 'El destete del caballo se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -102,16 +100,13 @@ const actualizarDesteteCaballo = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
     const { idDestete } = req.params;
-    const { ...datos} = req.body;
 
     try {
 
-        const destete = await DesteteCaballo.findByIdAndUpdate( idDestete, datos, { new: true } )
+        const destete = await DesteteCaballo.findByIdAndUpdate( idDestete, req.body )
             .populate( 'caballo', 'nombre' );
 
-        const caballo = await Caballo.findById( destete.caballo );
-
-        generarControl( nombre, apellidos, 'actualizado un destete al caballo', caballo.nombre );
+        generarControl( nombre, apellidos, 'actualizado un destete al caballo', destete.caballo.nombre );
 
         return res.json( {
             value: 1,
