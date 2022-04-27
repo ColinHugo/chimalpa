@@ -1,4 +1,4 @@
-const { Caballo, RecorteCasco } = require( '../models' );
+const { RecorteCasco } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -71,21 +71,18 @@ const registrarRecorte = async ( req, res ) => {
 
     try {
 
-        const caballo = await Caballo.findById( idCaballo );
-
-        req.body.caballo = caballo;
+        req.body.caballo = idCaballo;
 
         const recorte = await RecorteCasco( req.body )
             .populate( 'caballo', 'nombre' );
 
         await recorte.save();
 
-        generarControl( nombre, apellidos, 'registrado un recorte de casco al caballo', caballo.nombre );
+        generarControl( nombre, apellidos, 'registrado un recorte de casco al caballo', recorte.caballo.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'El recorte de casco se ha registrado.',
-            recorte,
+            msg: 'El recorte de casco se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -107,17 +104,14 @@ const actualizarRecorte = async ( req, res ) => {
 
     try {
 
-        const recorte = await RecorteCasco.findByIdAndUpdate( idCasco, datos, { new: true } )
+        const recorte = await RecorteCasco.findByIdAndUpdate( idCasco, datos )
             .populate( 'caballo', 'nombre' );
 
-        const caballo = await Caballo.findById( recorte.caballo );
-
-        generarControl( nombre, apellidos, 'actualizado un recorte de casco al caballo', caballo.nombre );
+        generarControl( nombre, apellidos, 'actualizado un recorte de casco al caballo', recorte.caballo.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'El recorte de casco se ha actualizado.',
-            recorte
+            msg: 'El recorte de casco se ha actualizado.'
         } );
         
     } catch ( error ) {
@@ -131,9 +125,38 @@ const actualizarRecorte = async ( req, res ) => {
     }
 }
 
+const eliminarRecorte = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idCasco } = req.params;
+
+    try {
+
+        const recorte = await RecorteCasco.findByIdAndDelete( idCasco )
+            .populate( 'caballo', 'nombre' );
+
+        generarControl( nombre, apellidos, 'eliminado un recorte de casco al caballo', recorte.caballo.nombre );
+
+        return res.json( {
+            value: 1,
+            msg: 'El recorte de casco se ha eliminado.'
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar el recorte de casco.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar el recorte de casco.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerRecortes,
     obtenerRecorteById,
     registrarRecorte,
-    actualizarRecorte
+    actualizarRecorte,
+    eliminarRecorte
 }

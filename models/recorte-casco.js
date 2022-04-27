@@ -8,11 +8,13 @@ const RecorteCascoSchema = Schema( {
     },
 
     ultimaFecha: {
-        type: String
+        type: Date,
+        required: [ true, 'La última fecha del recorte de cascos es obligatoria.' ]
     },
 
     proximaFecha: {
-        type: String
+        type: Date,
+        required: [ true, 'La proxima fecha del recorte de cascos es obligatoria.' ]
     },
 
     caballo: {
