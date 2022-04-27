@@ -3,12 +3,14 @@ const { check } = require( 'express-validator' );
 
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
-const { existeCaballo, existeTratamientoEventual } = require( '../helpers/db-validators' );
+const { existeCaballo, existeTratamientoEventual } = require( '../helpers' );
 
-const { obtenerTratamientoEventualCaballoById,
-        registrarTratamientoEventualCaballo,
-        actualizarTratamientoEventualCaballo,
-        eliminarTratamientoEventualCaballo } = require( '../controllers/tratamientos-eventuales-caballos.controller' );
+const { 
+    obtenerTratamientoEventualCaballoById,
+    registrarTratamientoEventualCaballo,
+    actualizarTratamientoEventualCaballo,
+    eliminarTratamientoEventualCaballo
+} = require( '../controllers/tratamientos-eventuales-caballos.controller' );
 
 router.get( '/caballos/:idCaballo', [
     check( 'idCaballo', 'No es un id válido' ).isMongoId(),
@@ -22,8 +24,8 @@ router.post( '/caballos/:idCaballo', [
     check( 'idCaballo' ).custom( existeCaballo ),
     check( 'tratamiento', 'El tratamiento es obligatorio.' ).escape().trim().notEmpty(),
     check( 'descripcion', 'La descripción es obligatoria.' ).escape().trim().notEmpty(),
-    check( 'fechaInicio', 'fechaInicio para Romero.' ).escape().trim().notEmpty(),
-    check( 'fechaTermino', 'fechaTermino para Romero.' ).escape().trim().notEmpty(),
+    check( 'fechaInicio', 'Ingrese una fecha de inicio válido.' ).escape().trim().notEmpty().isDate(),
+    check( 'fechaTermino', 'Ingrese una fecha de termino válido.' ).escape().trim().notEmpty().isDate(),
     validarCampos
 ], registrarTratamientoEventualCaballo );
 
