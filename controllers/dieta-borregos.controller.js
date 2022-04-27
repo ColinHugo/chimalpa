@@ -1,4 +1,4 @@
-const { Borrego, DietaBorrego } = require( '../models' );
+const { DietaBorrego } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -72,21 +72,19 @@ const registrarDietaBorrego = async ( req, res ) => {
     const { idBorrego } = req.params;
 
     try {
-
-        const borrego = await Borrego.findById( idBorrego );
         
-        req.body.borrego = borrego;
+        req.body.borrego = idBorrego;
 
-        const dieta = new DietaBorrego( req.body );
+        const dieta = await new DietaBorrego( req.body )
+            .populate( 'borrego', 'numeroBorrego' );
 
         await dieta.save()
 
-        generarControl( nombre, apellidos, 'registrado una dieta al borrego número', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'registrado una dieta al borrego número', dieta.borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
-            msg: 'La dieta se ha registrado.',
-            dieta
+            msg: 'La dieta se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -108,12 +106,11 @@ const actualizarDietaBorrego = async ( req, res ) => {
 
     try {
 
-        const dietaBorrego = await DietaBorrego.findByIdAndUpdate( idDietaBorrego, datos, { new: true } )
-            .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+        const dietaBorrego = await DietaBorrego.findByIdAndUpdate( idDietaBorrego, datos )
+            .populate( 'borrego', 'numeroBorrego' );
 
-        const borrego = await Borrego.findById( dietaBorrego.borrego );
-
-        generarControl( nombre, apellidos, 'actualizado una dieta al borrego número', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'actualizado una dieta al borrego número', 
+                        dietaBorrego.borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
@@ -131,9 +128,39 @@ const actualizarDietaBorrego = async ( req, res ) => {
     }
 }
 
+const eliminarDietaBorrego = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idDietaBorrego } = req.params;
+
+    try {
+
+        const dietaBorrego = await DietaBorrego.findByIdAndDelete( idDietaBorrego )
+            .populate( 'borrego', 'numeroBorrego' );
+
+        generarControl( nombre, apellidos, 'eliminado una dieta al borrego número',
+                        dietaBorrego.borrego.numeroBorrego );
+
+        return res.json( {
+            value: 1,
+            msg: 'La dieta del borrego se ha eliminado.',
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar la dieta del caballo.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar la dieta del caballo.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerDietaBorregos,
     obtenerDietaBorregoById,
     registrarDietaBorrego,
-    actualizarDietaBorrego
+    actualizarDietaBorrego,
+    eliminarDietaBorrego
 }

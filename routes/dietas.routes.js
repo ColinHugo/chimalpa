@@ -2,29 +2,62 @@ const router = require( 'express' ).Router();
 
 const { check } = require( 'express-validator' );
 
-const { existeAve, existeDietaAve,
-        existeBorrego, existeDietaBorrego,
-        existeCaballo, existeDietaCaballo, existeDietaYegua, 
-        existeConejo, existeDietaConejo,
-        existeMascota, existeDietaMascota } = require( '../helpers/db-validators' );
+const {
+    existeAve,
+    existeDietaAve,
+    existeBorrego,
+    existeDietaBorrego,
+    existeCaballo,
+    existeDietaCaballo,
+    existeDietaYegua, 
+    existeConejo,
+    existeDietaConejo,
+    existeMascota,
+    existeDietaMascota
+} = require( '../helpers' );
 
-const { obtenerDietaAves, obtenerDietaAveById,
-        registrarDietaAve, actualizarDietaAve } = require( '../controllers/dieta-aves.controller' );
+const {
+    obtenerDietaAves,
+    obtenerDietaAveById,
+    registrarDietaAve,
+    actualizarDietaAve
+} = require( '../controllers/dieta-aves.controller' );
 
-const { obtenerDietaBorregos, obtenerDietaBorregoById,
-        registrarDietaBorrego, actualizarDietaBorrego } = require( '../controllers/dieta-borregos.controller' );
+const {
+    obtenerDietaBorregos,
+    obtenerDietaBorregoById,
+    registrarDietaBorrego,
+    actualizarDietaBorrego,
+    eliminarDietaBorrego
+} = require( '../controllers/dieta-borregos.controller' );
 
-const { obtenerDietaCaballos, obtenerDietaCaballoById, 
-        registrarDietaCaballo, actualizarDietaCaballo } = require( '../controllers/dieta-caballos.controller' );
+const {
+    obtenerDietaCaballos,
+    obtenerDietaCaballoById, 
+    registrarDietaCaballo,
+    actualizarDietaCaballo
+} = require( '../controllers/dieta-caballos.controller' );
 
-const { obtenerDietaConejos, obtenerDietaConejoById,
-        registrarDietaConejo, actualizarDietaConejo } = require('../controllers/dieta-conejos.controller');
+const {
+    obtenerDietaConejos,
+    obtenerDietaConejoById,
+    registrarDietaConejo,
+    actualizarDietaConejo
+} = require('../controllers/dieta-conejos.controller');
 
-const { obtenerDietaMascotas, obtenerDietaMascotaById,
-        registrarDietaMascota, actualizarDietaMascota } = require( '../controllers/dieta-mascotas.controller' );
+const {
+    obtenerDietaMascotas,
+    obtenerDietaMascotaById,
+    registrarDietaMascota,
+    actualizarDietaMascota
+} = require( '../controllers/dieta-mascotas.controller' );
 
-const { obtenerDietaYeguas, obtenerDietaYeguaById,
-        registrarDietaYegua, actualizarDietaYegua } = require( '../controllers/dieta-yeguas.controller' );
+const {
+    obtenerDietaYeguas,
+    obtenerDietaYeguaById,
+    registrarDietaYegua,
+    actualizarDietaYegua
+} = require( '../controllers/dieta-yeguas.controller' );
 
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
@@ -93,6 +126,13 @@ router.put( '/borregos/:idDietaBorrego', [
     check( 'idDietaBorrego' ).custom( existeDietaBorrego ),
     validarCampos
 ], actualizarDietaBorrego );
+
+router.delete( '/borregos/:idDietaBorrego', [
+    validarJWT,
+    check( 'idDietaBorrego', 'No es un id válido' ).isMongoId(),
+    check( 'idDietaBorrego' ).custom( existeDietaBorrego ),
+    validarCampos
+], eliminarDietaBorrego );
 
 // ****************************************************
 // -    End points para las dietas de los caballos    -
