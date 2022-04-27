@@ -13,11 +13,13 @@ const MedicinaPreventivaSchema = Schema( {
     },
 
     ultimaFecha: {
-        type: String
+        type: Date,
+        required: [ true, 'La última fecha de la medicina es obligatoria.' ]
     },
 
     proximaFecha: {
-        type: String
+        type: Date,
+        required: [ true, 'La proxima fecha de la medicina es obligatoria.' ]
     },
 
     caballo: {

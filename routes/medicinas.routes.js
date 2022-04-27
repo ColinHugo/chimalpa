@@ -2,26 +2,54 @@ const router = require( 'express' ).Router();
 const { check } = require( 'express-validator' );
 
 const { validarCampos, validarJWT } = require( '../middlewares' );
-const { existeAve, existeMedicinaAve,
-        existeBorrego, existeMedicinaBorrego,
-        existeCaballo, existeMedicinaPreventiva,
-        existeConejo, existeMedicinaConejo,
-        existeMascota, existeMedicinaMascota } = require( '../helpers/db-validators' );
+const {
+    existeAve,
+    existeMedicinaAve,
+    existeBorrego,
+    existeMedicinaBorrego,
+    existeCaballo,
+    existeMedicinaPreventiva,
+    existeConejo,
+    existeMedicinaConejo,
+    existeMascota,
+    existeMedicinaMascota
+} = require( '../helpers' );
 
-const { obtenerMedicinaAve, obtenerMedicinaAveById,
-        registrarMedicinaAve, actualizarMedicinaAve } = require( '../controllers/medicinas-aves.controller' );
+const {
+    obtenerMedicinaAve,
+    obtenerMedicinaAveById,
+    registrarMedicinaAve,
+    actualizarMedicinaAve
+} = require( '../controllers/medicinas-aves.controller' );
 
-const { obtenerMedicinaBorrego, obtenerMedicinaBorregoById,
-        registrarMedicinaBorrego, actualizarMedicinaBorrego } = require( '../controllers/medicinas-borregos.controller' );
+const {
+    obtenerMedicinaBorrego,
+    obtenerMedicinaBorregoById,
+    registrarMedicinaBorrego,
+    actualizarMedicinaBorrego
+} = require( '../controllers/medicinas-borregos.controller' );
 
-const { obtenerMedicinaPreventiva, obtenerMedicinaPreventivaById,
-        registrarMedicinaPreventiva, actualizarMedicinaPreventiva } = require( '../controllers/medicinas-preventivas.controller' );
+const {
+    obtenerMedicinaPreventiva,
+    obtenerMedicinaPreventivaById,
+    registrarMedicinaPreventiva,
+    actualizarMedicinaPreventiva,
+    eliminarMedicinaPreventiva
+} = require( '../controllers/medicinas-preventivas.controller' );
 
-const { obtenerMedicinaConejo, obtenerMedicinaConejoById,
-        registrarMedicinaConejo, actualizarMedicinaConejo } = require( '../controllers/medicinas-conejos.controller' );
+const {
+    obtenerMedicinaConejo,
+    obtenerMedicinaConejoById,
+    registrarMedicinaConejo,
+    actualizarMedicinaConejo
+} = require( '../controllers/medicinas-conejos.controller' );
 
-const { obtenerMedicinaMascota, obtenerMedicinaMascotaById,
-        registrarMedicinaMascota, actualizarMedicinaMascota } = require( '../controllers/medicinas-mascotas.controller' );
+const {
+    obtenerMedicinaMascota,
+    obtenerMedicinaMascotaById,
+    registrarMedicinaMascota,
+    actualizarMedicinaMascota
+} = require( '../controllers/medicinas-mascotas.controller' );
 
 // ****************************************************
 // -     End points para las medicinas de las aves    -
@@ -100,8 +128,10 @@ router.post( '/caballos/:idCaballo', [
     validarJWT,
     check( 'idCaballo', 'No es un id válido' ).isMongoId(),
     check( 'idCaballo' ).custom( existeCaballo ),
-    check( 'tipoMedicina', 'El tipo de medicina es obligatorio' ).escape().trim().notEmpty(),
-    check( 'descripcion', 'La descripción es obligatoria' ).escape().trim().notEmpty(),
+    check( 'tipoMedicina', 'El tipo de medicina es obligatorio.' ).escape().trim().notEmpty(),
+    check( 'descripcion', 'La descripción es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'ultimaFecha', 'Ingrese una última fecha válida.' ).escape().trim().notEmpty().isDate(),
+    check( 'proximaFecha', 'Ingrese una próxima fecha válida.' ).escape().trim().notEmpty().isDate(),
     validarCampos
 ], registrarMedicinaPreventiva );
 
@@ -109,8 +139,19 @@ router.put( '/caballos/:idMedicina', [
     validarJWT,
     check( 'idMedicina', 'No es un id válido' ).isMongoId(),
     check( 'idMedicina' ).custom( existeMedicinaPreventiva ),
+    check( 'tipoMedicina', 'El tipo de medicina es obligatorio.' ).escape().trim().notEmpty(),
+    check( 'descripcion', 'La descripción es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'ultimaFecha', 'Ingrese una última fecha válida.' ).escape().trim().notEmpty().isDate(),
+    check( 'proximaFecha', 'Ingrese una próxima fecha válida.' ).escape().trim().notEmpty().isDate(),
     validarCampos
 ], actualizarMedicinaPreventiva );
+
+router.delete( '/caballos/:idMedicina', [
+    validarJWT,
+    check( 'idMedicina', 'No es un id válido' ).isMongoId(),
+    check( 'idMedicina' ).custom( existeMedicinaPreventiva ),
+    validarCampos
+], eliminarMedicinaPreventiva );
 
 // ****************************************************
 // -   End points para las medicinas de los conejos  -

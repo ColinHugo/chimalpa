@@ -1,4 +1,4 @@
-const { Caballo, MedicinaPreventiva } = require( '../models' );
+const { MedicinaPreventiva } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -71,21 +71,18 @@ const registrarMedicinaPreventiva = async ( req, res ) => {
 
     try {
 
-        const caballo = await Caballo.findById( idCaballo );
-
-        req.body.caballo = caballo;
+        req.body.caballo = idCaballo;
 
         const medicina = await MedicinaPreventiva( req.body )
             .populate( 'caballo', 'nombre' );
 
         await medicina.save();
 
-        generarControl( nombre, apellidos, 'registrado una medicina preventiva al caballo', caballo.nombre );
+        generarControl( nombre, apellidos, 'registrado una medicina preventiva al caballo', medicina.caballo.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'La medicina preventiva se ha registrado.',
-            medicina,
+            msg: 'La medicina preventiva se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -108,17 +105,14 @@ const actualizarMedicinaPreventiva = async ( req, res ) => {
 
     try {
 
-        const medicina = await MedicinaPreventiva.findByIdAndUpdate( idMedicina, datos, { new: true } )
+        const medicina = await MedicinaPreventiva.findByIdAndUpdate( idMedicina, datos )
             .populate( 'caballo', 'nombre' );
 
-        const caballo = await Caballo.findById( medicina.caballo );
-
-        generarControl( nombre, apellidos, 'actualizado una medicina preventiva al caballo', caballo.nombre );
+        generarControl( nombre, apellidos, 'actualizado una medicina preventiva al caballo', medicina.caballo.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'La medicina preventiva se ha actualizado.',
-            medicina
+            msg: 'La medicina preventiva se ha actualizado.'
         } );
         
     } catch ( error ) {
@@ -132,9 +126,39 @@ const actualizarMedicinaPreventiva = async ( req, res ) => {
     }
 }
 
+const eliminarMedicinaPreventiva = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+
+    const { idMedicina } = req.params;
+
+    try {
+
+        const medicina = await MedicinaPreventiva.findByIdAndDelete( idMedicina )
+            .populate( 'caballo', 'nombre' );
+
+        generarControl( nombre, apellidos, 'eliminado una medicina preventiva al caballo', medicina.caballo.nombre );
+
+        return res.json( {
+            value: 1,
+            msg: 'La medicina preventiva se ha eliminado.'
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar la medicina preventiva.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar la medicina preventiva.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerMedicinaPreventiva,
     obtenerMedicinaPreventivaById,
     registrarMedicinaPreventiva,
-    actualizarMedicinaPreventiva
+    actualizarMedicinaPreventiva,
+    eliminarMedicinaPreventiva
 }
