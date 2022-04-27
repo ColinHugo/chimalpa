@@ -13,11 +13,11 @@ const OdontologiaSchema = Schema( {
     },
 
     ultimaFecha: {
-        type: String
+        type: Date
     },
 
     proximaFecha: {
-        type: String
+        type: Date
     },
 
     caballo: {

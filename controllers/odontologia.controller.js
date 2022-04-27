@@ -1,6 +1,6 @@
-const { Odontologia, Caballo } = require( '../models' );
+const { Odontologia } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl } = require( '../helpers' );
 
 const obtenerOdontologiaCaballos = async ( req, res ) => {
 
@@ -71,21 +71,18 @@ const registrarOdontologiaCaballo = async ( req, res ) => {
 
     try {
 
-        const caballo = await Caballo.findById( idCaballo );
-
-        req.body.caballo = caballo;
+        req.body.caballo = idCaballo;
 
         const odontologia = await Odontologia( req.body )
             .populate( 'caballo', 'nombre' );
 
         await odontologia.save();
 
-        generarControl( nombre, apellidos, 'registrado un registro odontológico al caballo', caballo.nombre );
+        generarControl( nombre, apellidos, 'registrado un registro odontológico al caballo', odontologia.caballo.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'Registro odontológico exitoso.',
-            odontologia
+            msg: 'Registro odontológico exitoso.'
         } );
         
     } catch ( error ) {
@@ -107,17 +104,14 @@ const actualizarOdontologiaCaballo = async ( req, res ) => {
 
     try {
 
-        const odontologia = await Odontologia.findByIdAndUpdate( idOdontologia, datos, { new: true } )
+        const odontologia = await Odontologia.findByIdAndUpdate( idOdontologia, datos )
             .populate( 'caballo', 'nombre' );
 
-        const caballo = await Caballo.findById( odontologia.caballo );
-
-        generarControl( nombre, apellidos, 'actualizado un registro odontológico al caballo', caballo.nombre );
+        generarControl( nombre, apellidos, 'actualizado un registro odontológico al caballo', odontologia.caballo.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'El registro odontológico se ha actualizado.',
-            odontologia
+            msg: 'El registro odontológico se ha actualizado.'
         } );
         
     } catch ( error ) {
@@ -131,9 +125,38 @@ const actualizarOdontologiaCaballo = async ( req, res ) => {
     }
 }
 
+const eliminarOdontologiaCaballo = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idOdontologia } = req.params;
+
+    try {
+
+        const odontologia = await Odontologia.findByIdAndDelete( idOdontologia )
+            .populate( 'caballo', 'nombre' );
+
+        generarControl( nombre, apellidos, 'eliminado un registro odontológico al caballo', odontologia.caballo.nombre );
+
+        return res.json( {
+            value: 1,
+            msg: 'El registro odontológico se ha eliminado.'
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar el registro odontológico del caballo.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al actualizar el registro odontológico del caballo.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerOdontologiaCaballos,
     obtenerOdontologiaCaballoById,
     registrarOdontologiaCaballo,
-    actualizarOdontologiaCaballo
+    actualizarOdontologiaCaballo,
+    eliminarOdontologiaCaballo
 }
