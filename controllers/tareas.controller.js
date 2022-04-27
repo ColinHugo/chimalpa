@@ -1,6 +1,6 @@
-const { Usuario, Tarea } = require( '../models' );
+const { Tarea } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl } = require( '../helpers' );
 
 const obtenerTareas = async ( req, res ) => {
 
@@ -75,30 +75,27 @@ const obtenerTareaById = async ( req, res ) => {
 }
 
 const registrarTarea = async ( req, res ) => {
-
-    // Estos datos son del encargado, es decir, quien asigna la tarea
+    
     const { nombre, apellidos } = req.body.usuario;
     const { idEmpleado } = req.params;
 
     try {
         
-        // El empleado es quien realizará la tarea aseignada por el encargado
-        const empleado = await Usuario.findById( idEmpleado );
-        req.body.empleado = empleado;
         req.body.encargado = req.body.usuario;
+        req.body.empleado = idEmpleado;
 
-        const tarea = new Tarea( req.body );
+        const tarea = await new Tarea( req.body )
+            .populate( 'empleado', [ 'nombre', 'apellidos' ] );
 
         await tarea.save();
 
-        const nombreCompleto = empleado.nombre + ' ' + empleado. apellidos;
+        const nombreCompleto = tarea.empleado.nombre + ' ' + tarea.empleado.apellidos;
 
         generarControl( nombre, apellidos, `registrado la tarea ${ tarea.nombre } al usuario`, nombreCompleto );
 
         return res.json( {
             value: 1,
-            msg: 'La tarea se ha registrado.',
-            tarea
+            msg: 'La tarea se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -120,13 +117,11 @@ const actualizarTarea = async ( req, res ) => {
 
     try {
 
-        const tarea = await Tarea.findByIdAndUpdate( idTarea, datos, { new: true } )
+        const tarea = await Tarea.findByIdAndUpdate( idTarea, datos )
             .populate( 'encargado', [ 'nombre', 'apellidos'] )
             .populate( 'empleado', [ 'nombre', 'apellidos'] );
 
-        const empleado = await Usuario.findById( tarea.empleado );
-
-        const nombreCompleto = empleado.nombre + ' ' + empleado. apellidos;
+        const nombreCompleto = tarea.empleado.nombre + ' ' + tarea.empleado. apellidos;
 
         generarControl( nombre, apellidos, `actualizado la tarea ${ tarea.nombre } al usuario`, nombreCompleto );
 
@@ -154,10 +149,9 @@ const eliminarTarea = async ( req, res ) => {
     try {
 
         const tarea = await Tarea.findByIdAndDelete( idTarea )
+            .populate( 'empleado', [ 'nombre', 'apellidos'] );
 
-        const empleado = await Usuario.findById( tarea.empleado );
-
-        const nombreCompleto = empleado.nombre + ' ' + empleado. apellidos;
+        const nombreCompleto = tarea.empleado.nombre + ' ' + tarea.empleado.apellidos;
 
         generarControl( nombre, apellidos, `eliminado la tarea ${ tarea.nombre } al usuario`, nombreCompleto );
 
