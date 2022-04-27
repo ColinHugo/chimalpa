@@ -1,6 +1,6 @@
 const { Capacitacion } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl } = require( '../helpers' );
 
 const obtenerCapacitaciones = async ( req, res ) => {
 
