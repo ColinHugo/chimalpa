@@ -1,23 +1,46 @@
 const router = require( 'express' ).Router();
 const { check } = require( 'express-validator' );
 
-const { existeAve, existePruebaLaboratorioAve,
-        existeBorrego, existePruebaLaboratorioBorrego,
-        existeCaballo, existePruebaLaboratorioCaballo,
-        existeMascota, existePruebaLaboratorioMascota } = require( '../helpers/db-validators' );
+const {
+    existeAve,
+    existePruebaLaboratorioAve,
+    existeBorrego,
+    existePruebaLaboratorioBorrego,
+    existeCaballo,
+    existePruebaLaboratorioCaballo,
+    existeMascota,
+    existePruebaLaboratorioMascota
+} = require( '../helpers' );
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
-const { obtenerPruebasLaboratorioAves, obtenerPruebaLaboratorioAveById,
-        registrarPruebaLaboratorioAve, actualizarPruebaLaboratorioAve } = require( '../controllers/prueba-laboratorio-ave.controller' );
+const {
+    obtenerPruebasLaboratorioAves,
+    obtenerPruebaLaboratorioAveById,
+    registrarPruebaLaboratorioAve,
+    actualizarPruebaLaboratorioAve
+} = require( '../controllers/prueba-laboratorio-ave.controller' );
 
-const { obtenerPruebasLaboratorioBorregos, obtenerPruebaLaboratorioBorregoById,
-        registrarPruebaLaboratorioBorrego, actualizarPruebaLaboratorioBorrego } = require( '../controllers/prueba-laboratorio-borrego.controller' );
+const {
+    obtenerPruebasLaboratorioBorregos,
+    obtenerPruebaLaboratorioBorregoById,
+    registrarPruebaLaboratorioBorrego,
+    actualizarPruebaLaboratorioBorrego
+} = require( '../controllers/prueba-laboratorio-borrego.controller' );
 
-const { obtenerPruebasLaboratoriosCaballos, obtenerPruebaLaboratorioCaballoById, 
-        registrarPruebaLaboratorioCaballo, actualizarPruebaLaboratorioCaballo } = require( '../controllers/prueba-laboratorio.controller' );
+const {
+    obtenerPruebasLaboratoriosCaballos,
+    obtenerPruebaLaboratorioCaballoById,
+    registrarPruebaLaboratorioCaballo,
+    actualizarPruebaLaboratorioCaballo,
+    eliminarPruebaLaboratorioCaballo
+} = require( '../controllers/prueba-laboratorio.controller' );
 
-const { obtenerPruebasLaboratorioMascotas, obtenerPruebaLaboratorioMascotaById,
-        registrarPruebaLaboratorioMascota, actualizarPruebaLaboratorioMascota } = require( '../controllers/prueba-laboratorio-mascota.controller' );
+const {
+    obtenerPruebasLaboratorioMascotas,
+    obtenerPruebaLaboratorioMascotaById,
+    registrarPruebaLaboratorioMascota,
+    actualizarPruebaLaboratorioMascota
+} = require( '../controllers/prueba-laboratorio-mascota.controller' );
 
 // **************************************************************
 // -   End points para las pruebas de laboratorio de las aves   -
@@ -97,8 +120,16 @@ router.put( '/caballos/:idPruebaLaboratorio', [
     validarJWT,
     check( 'idPruebaLaboratorio', 'No es un id válido' ).isMongoId(),
     check( 'idPruebaLaboratorio' ).custom( existePruebaLaboratorioCaballo ),
+    check( 'link', 'El link de la prueba de laboratorio es obligatorio' ).trim().notEmpty(),
     validarCampos
 ], actualizarPruebaLaboratorioCaballo );
+
+router.delete( '/caballos/:idPruebaLaboratorio', [
+    validarJWT,
+    check( 'idPruebaLaboratorio', 'No es un id válido' ).isMongoId(),
+    check( 'idPruebaLaboratorio' ).custom( existePruebaLaboratorioCaballo ),
+    validarCampos
+], eliminarPruebaLaboratorioCaballo );
 
 // **************************************************************
 // - End points para las pruebas de laboratorio de las mascotas -

@@ -1,4 +1,4 @@
-const { Caballo, PruebasLaboratorio } = require( '../models' );
+const { PruebasLaboratorio } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -71,21 +71,18 @@ const registrarPruebaLaboratorioCaballo = async ( req, res ) => {
 
     try {
 
-        const caballo = await Caballo.findById( idCaballo );
-
-        req.body.caballo = caballo;
+        req.body.caballo = idCaballo;
 
         const prueba = await PruebasLaboratorio( req.body )
             .populate( 'caballo', 'nombre' );
 
         await prueba.save();
 
-        generarControl( nombre, apellidos, 'registrado una prueba de laboratorio al caballo', caballo.nombre );
+        generarControl( nombre, apellidos, 'registrado una prueba de laboratorio al caballo', prueba.caballo.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'La prueba del caballo se ha registrado.',
-            prueba
+            msg: 'La prueba del caballo se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -108,12 +105,10 @@ const actualizarPruebaLaboratorioCaballo = async ( req, res ) => {
 
     try {
 
-        const prueba = await PruebasLaboratorio.findByIdAndUpdate( idPruebaLaboratorio, datos, { new: true } )
+        const prueba = await PruebasLaboratorio.findByIdAndUpdate( idPruebaLaboratorio, datos )
             .populate( 'caballo', 'nombre' );
 
-        const caballo = await Caballo.findById( prueba.caballo );
-
-        generarControl( nombre, apellidos, 'actualizado una prueba de laboratorio al caballo', caballo.nombre );
+        generarControl( nombre, apellidos, 'actualizado una prueba de laboratorio al caballo', prueba.caballo.nombre );
 
         return res.json( {
             value: 1,
@@ -131,9 +126,39 @@ const actualizarPruebaLaboratorioCaballo = async ( req, res ) => {
     }
 }
 
+const eliminarPruebaLaboratorioCaballo = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+
+    const { idPruebaLaboratorio } = req.params;
+
+    try {
+
+        const prueba = await PruebasLaboratorio.findByIdAndDelete( idPruebaLaboratorio )
+            .populate( 'caballo', 'nombre' );
+
+        generarControl( nombre, apellidos, 'eliminado una prueba de laboratorio al caballo', prueba.caballo.nombre );
+
+        return res.json( {
+            value: 1,
+            msg: 'La prueba de laboratorio se ha eliminado.',
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar la prueba de laboratorio.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar el la prueba de laboratorio.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerPruebasLaboratoriosCaballos,
     obtenerPruebaLaboratorioCaballoById,
     registrarPruebaLaboratorioCaballo,
-    actualizarPruebaLaboratorioCaballo
+    actualizarPruebaLaboratorioCaballo,
+    eliminarPruebaLaboratorioCaballo
 }
