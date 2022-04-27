@@ -1,7 +1,7 @@
 const fs = require( 'fs' );
 const path = require( 'path' );
 
-const { Alerta, Caballo } = require( '../models' );
+const { Alerta } = require( '../models' );
 
 const { generarControl, generarUrlFotos, subirFoto } = require( '../helpers' );
 
@@ -44,19 +44,19 @@ const registrarAlerta = async ( req, res ) => {
     const { idCaballo } = req.params;
 
     try {
-
-        const caballo = await Caballo.findById( idCaballo );
-        req.body.caballo = caballo;
+        
+        req.body.caballo = idCaballo;
 
         if ( req.body.foto ) {
             req.body.foto = await subirFoto( req.body.foto, undefined, 'caballos' );
         }
 
-        const alerta = new Alerta( req.body );
+        const alerta = await new Alerta( req.body )
+            .populate( 'caballo', 'nombre' );
 
         await alerta.save();
 
-        generarControl( nombre, apellidos, 'registrado la alerta', alerta.descripcion );
+        generarControl( nombre, apellidos, 'registrado la alerta para el caballo', alerta.caballo.nombre );
 
         return res.json( {
             value: 1,
@@ -103,8 +103,7 @@ const actualizarAlerta = async ( req, res ) => {
 
         return res.json( {
             value: 1,
-            msg: 'La alerta se ha actualizado.',
-            alerta
+            msg: 'La alerta se ha actualizado.'
         } );
         
     } catch ( error ) {
