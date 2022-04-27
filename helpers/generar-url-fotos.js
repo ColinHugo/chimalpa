@@ -55,7 +55,34 @@ const generarUrlFotosRondines = ( req, carpeta, documentos ) => {
     return documentos;
 }
 
+const generarUrlFotosUltrasonidos = ( req, carpeta, documentos ) => {
+
+    documentos.forEach( documento => {
+
+        if ( documento.fotoOvarioDerecho ) {
+            documento.fotoOvarioDerecho = `${ req.protocol }://${ req.headers.host }/${ carpeta }/${ documento.fotoOvarioDerecho }`;
+        } else {
+            documento.fotoOvarioDerecho = `${ req.protocol }://${ req.headers.host }/no-image.jpg`;
+        }
+
+        if ( documento.fotoOvarioIzquierdo ) {
+            documento.fotoOvarioIzquierdo = `${ req.protocol }://${ req.headers.host }/${ carpeta }/${ documento.fotoOvarioIzquierdo }`;
+        } else {
+            documento.fotoOvarioIzquierdo = `${ req.protocol }://${ req.headers.host }/no-image.jpg`;
+        }
+
+        if ( documento.fotoUltraSonido ) {
+            documento.fotoUltraSonido = `${ req.protocol }://${ req.headers.host }/${ carpeta }/${ documento.fotoUltraSonido }`;
+        } else {
+            documento.fotoUltraSonido = `${ req.protocol }://${ req.headers.host }/no-image.jpg`;
+        }
+    } );
+
+    return documentos;
+}
+
 module.exports = {
     generarUrlFotos,
-    generarUrlFotosRondines
+    generarUrlFotosRondines,
+    generarUrlFotosUltrasonidos
 }
