@@ -1,6 +1,6 @@
-const { Caballo, TratamientoPermanente } = require( '../models' );
+const { TratamientoPermanente } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl } = require( '../helpers' );
 
 const obtenerTratamientosCaballos = async ( req, res ) => {
 

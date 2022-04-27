@@ -3,21 +3,36 @@ const { check } = require( 'express-validator' );
 
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
-const { existeBorrego, existeTratamientoBorrego, 
-        existeCaballo, existeTratamiento, 
-        existeMascota, existeTratamientoMascota } = require( '../helpers/db-validators' );
+const { 
+    existeBorrego,
+    existeTratamientoBorrego,
+    existeCaballo,
+    existeTratamiento,
+    existeMascota,
+    existeTratamientoMascota
+} = require( '../helpers/db-validators' );
 
-const { obtenerTratamientosBorregos, obtenerTratamientoBorregoById,
-        registrarTratamientoBorrego, 
-        actualizarTratamientoBorrego } = require( '../controllers/tratamientos-permanentes-borregos.controller' );
+const {
+    obtenerTratamientosBorregos,
+    obtenerTratamientoBorregoById,
+    registrarTratamientoBorrego,
+    actualizarTratamientoBorrego
+} = require( '../controllers/tratamientos-permanentes-borregos.controller' );
 
-const { obtenerTratamientosCaballos, obtenerTratamientoCaballoById,
-        registrarTratamientoCaballo, 
-        actualizarTratamientoCaballo } = require( '../controllers/tratamientos-permanentes-caballos.controller' );
+const {
+    obtenerTratamientosCaballos,
+    obtenerTratamientoCaballoById,
+    registrarTratamientoCaballo,
+    actualizarTratamientoCaballo,
+    eliminarTratamientoCaballo 
+} = require( '../controllers/tratamientos-permanentes-caballos.controller' );
 
-const { obtenerTratamientosMascotas, obtenerTratamientoMascotaById,
-        registrarTratamientoMascota, 
-        actualizarTratamientoMascota } = require( '../controllers/tratamientos-permanentes-mascotas.controller' );
+const {
+    obtenerTratamientosMascotas,
+    obtenerTratamientoMascotaById,
+    registrarTratamientoMascota,
+    actualizarTratamientoMascota
+} = require( '../controllers/tratamientos-permanentes-mascotas.controller' );
 
 // ****************************************************
 // - End points para los tratamientos de los caballos -
@@ -37,6 +52,8 @@ router.post( '/caballos/:idCaballo', [
     check( 'idCaballo' ).custom( existeCaballo ),
     check( 'tratamiento', 'El tratamiento es obligatorio.' ).escape().trim().notEmpty(),
     check( 'descripcion', 'La descripción es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'ultimaFecha', 'Ingrese una última fecha válida.' ).escape().trim().notEmpty().isDate(),
+    check( 'proximaFecha', 'Ingrese una próxima fecha válida.' ).escape().trim().notEmpty().isDate(),
     validarCampos
 ], registrarTratamientoCaballo );
 
@@ -46,6 +63,13 @@ router.put( '/caballos/:idTratamiento', [
     check( 'idTratamiento' ).custom( existeTratamiento ),
     validarCampos
 ], actualizarTratamientoCaballo );
+
+router.delete( '/caballos/:idTratamiento', [
+    validarJWT,
+    check( 'idTratamiento', 'No es un id válido' ).isMongoId(),
+    check( 'idTratamiento' ).custom( existeTratamiento ),
+    validarCampos
+], eliminarTratamientoCaballo );
 
 // ****************************************************
 // - End points para los tratamientos de los borregos -

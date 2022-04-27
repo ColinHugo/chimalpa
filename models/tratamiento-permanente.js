@@ -13,11 +13,13 @@ const TratamientoPermanenteSchema = Schema( {
     },
 
     ultimaFecha: {
-        type: String
+        type: Date,
+        required: [ true, 'La última fecha es obligatoria.' ]
     },
 
     proximaFecha: {
-        type: String
+        type: Date,
+        required: [ true, 'La próxima fecha es obligatoria.' ]
     },
 
     video: {
