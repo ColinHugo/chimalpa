@@ -1,4 +1,4 @@
-const { Borrego, TrasquilacionBorrego } = require( '../models' );
+const { TrasquilacionBorrego } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -72,21 +72,20 @@ const registrarTrasquilacionBorrego = async ( req, res ) => {
     const { idBorrego } = req.params;
 
     try {
-
-        const borrego = await Borrego.findById( idBorrego );
         
-        req.body.borrego = borrego;
+        req.body.borrego = idBorrego;
 
-        const trasquilacion = new TrasquilacionBorrego( req.body );
+        const trasquilacion = await new TrasquilacionBorrego( req.body )
+            .populate( 'borrego', 'numeroBorrego' );
 
         await trasquilacion.save()
 
-        generarControl( nombre, apellidos, 'registrado una trasquilacion al borrego número', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'registrado una trasquilacion al borrego número', 
+                        trasquilacion.borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
-            msg: 'La trasquilacion se ha registrado.',
-            trasquilacion
+            msg: 'La trasquilacion se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -108,12 +107,11 @@ const actualizarTrasquilacionBorrego = async ( req, res ) => {
 
     try {
 
-        const trasquilacionBorrego = await TrasquilacionBorrego.findByIdAndUpdate( idTrasquilacionBorrego, datos, { new: true } )
-            .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+        const trasquilacionBorrego = await TrasquilacionBorrego.findByIdAndUpdate( idTrasquilacionBorrego, datos )
+            .populate( 'borrego', 'numeroBorrego' );
 
-        const borrego = await Borrego.findById( trasquilacionBorrego.borrego );
-
-        generarControl( nombre, apellidos, 'actualizado una trasquilacion al borrego número', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'actualizado una trasquilacion al borrego número',
+                        trasquilacionBorrego.borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
@@ -122,11 +120,40 @@ const actualizarTrasquilacionBorrego = async ( req, res ) => {
         
     } catch ( error ) {
 
-        console.error( 'Error al actualizar la trasquilacion del caballo.', error );
+        console.error( 'Error al actualizar la trasquilacion del borrego.', error );
 
         return res.json( {
             value: 0,
-            msg: 'Error al actualizar la trasquilacion del caballo.'
+            msg: 'Error al actualizar la trasquilacion del borrego.'
+        } );
+    }
+}
+
+const eliminarTrasquilacionBorrego = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idTrasquilacionBorrego } = req.params;
+
+    try {
+
+        const trasquilacionBorrego = await TrasquilacionBorrego.findByIdAndDelete( idTrasquilacionBorrego )
+            .populate( 'borrego', 'numeroBorrego' );
+
+        generarControl( nombre, apellidos, 'eliminado una trasquilacion al borrego número',
+                        trasquilacionBorrego.borrego.numeroBorrego );
+
+        return res.json( {
+            value: 1,
+            msg: 'La trasquilacion del borrego se ha eliminado.',
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar la trasquilacion del borrego.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar la trasquilacion del borrego.'
         } );
     }
 }
@@ -135,5 +162,6 @@ module.exports = {
     obtenerTrasquilacionBorregos,
     obtenerTrasquilacionBorregoById,
     registrarTrasquilacionBorrego,
-    actualizarTrasquilacionBorrego
+    actualizarTrasquilacionBorrego,
+    eliminarTrasquilacionBorrego
 }

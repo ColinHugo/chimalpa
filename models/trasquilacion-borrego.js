@@ -2,14 +2,19 @@ const { Schema, model } = require( 'mongoose' );
 
 const TrasquilacionBorregoSchema = Schema( {
 
-    fecha: {
-        type: String,
-        required: [ true, 'La fecha de la trasquilación del borrego es obligatoria.' ]
-    },
-
     descripcion: {
         type: String,
         required: [ true, 'La descripción de la trasquilación del borrego es obligatoria.' ]
+    },
+
+    ultimaFecha: {
+        type: Date,
+        required: [ true, 'La última fecha de la trasquilación es obligatoria.' ]
+    },
+
+    proximaFecha: {
+        type: Date,
+        required: [ true, 'La proxima fecha de la trasquilación es obligatoria.' ]
     },
 
     borrego: {
