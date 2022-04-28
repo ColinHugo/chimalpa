@@ -1,6 +1,6 @@
-const { Borrego, MedicinaBorrego } = require( '../models' );
+const { MedicinaBorrego } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl } = require( '../helpers' );
 
 const obtenerMedicinaBorrego = async ( req, res ) => {
 
@@ -68,23 +68,21 @@ const registrarMedicinaBorrego = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
     const { idBorrego } = req.params;
-    const { tipo, descripcion, fecha } = req.body;
 
     try {
 
-        const borrego = await Borrego.findById( idBorrego );
+        req.body.borrego = idBorrego;
 
-        const medicina = await MedicinaBorrego( { tipo, descripcion, fecha, borrego } )
+        const medicina = await MedicinaBorrego( req.body )
             .populate( 'borrego', 'numeroBorrego' );
 
         await medicina.save();
 
-        generarControl( nombre, apellidos, 'registrado una medicina al borrego número', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'registrado una medicina al borrego número', medicina.borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
-            msg: 'La medicina del borrego se ha registrado.',
-            medicina,
+            msg: 'La medicina del borrego se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -101,23 +99,20 @@ const registrarMedicinaBorrego = async ( req, res ) => {
 const actualizarMedicinaBorrego = async ( req, res ) => {
     
     const { nombre, apellidos } = req.body.usuario;
-
     const { idMedicina } = req.params;
     const { ...datos } = req.body;
 
     try {
 
-        const medicina = await MedicinaBorrego.findByIdAndUpdate( idMedicina, datos, { new: true } )
+        const medicina = await MedicinaBorrego.findByIdAndUpdate( idMedicina, datos )
             .populate( 'borrego', 'numeroBorrego' );
 
-        const borrego = await Borrego.findById( medicina.borrego );
-
-        generarControl( nombre, apellidos, 'actualizado una medicina al borrego número', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'actualizado una medicina al borrego número', 
+                        medicina.borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
-            msg: 'La medicina del borrego se ha actualizado.',
-            medicina
+            msg: 'La medicina del borrego se ha actualizado.'
         } );
         
     } catch ( error ) {
@@ -131,9 +126,39 @@ const actualizarMedicinaBorrego = async ( req, res ) => {
     }
 }
 
+const eliminarMedicinaBorrego = async ( req, res ) => {
+    
+    const { nombre, apellidos } = req.body.usuario;
+    const { idMedicina } = req.params;
+
+    try {
+
+        const medicina = await MedicinaBorrego.findByIdAndDelete( idMedicina )
+            .populate( 'borrego', 'numeroBorrego' );
+
+        generarControl( nombre, apellidos, 'eliminado una medicina al borrego número',
+                        medicina.borrego.numeroBorrego );
+
+        return res.json( {
+            value: 1,
+            msg: 'La medicina del borrego se ha eliminado.'
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar la medicina del borrego.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar la medicina del borrego.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerMedicinaBorrego,
     obtenerMedicinaBorregoById,
     registrarMedicinaBorrego,
-    actualizarMedicinaBorrego
+    actualizarMedicinaBorrego,
+    eliminarMedicinaBorrego
 }

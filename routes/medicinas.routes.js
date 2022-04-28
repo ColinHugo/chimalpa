@@ -26,7 +26,8 @@ const {
     obtenerMedicinaBorrego,
     obtenerMedicinaBorregoById,
     registrarMedicinaBorrego,
-    actualizarMedicinaBorrego
+    actualizarMedicinaBorrego,
+    eliminarMedicinaBorrego
 } = require( '../controllers/medicinas-borregos.controller' );
 
 const {
@@ -100,7 +101,8 @@ router.post( '/borregos/:idBorrego', [
     check( 'idBorrego' ).custom( existeBorrego ),
     check( 'tipo', 'El tipo de medicina es obligatorio' ).escape().trim().notEmpty(),
     check( 'descripcion', 'La descripción es obligatoria' ).escape().trim().notEmpty(),
-    check( 'fecha', 'La fecha es obligatoria' ).trim().notEmpty(),
+    check( 'ultimaFecha', 'Ingrese una última fecha válida.' ).trim().escape().isDate(),
+    check( 'proximaFecha', 'Ingrese una próxima fecha válida.' ).trim().escape().isDate(),
     validarCampos
 ], registrarMedicinaBorrego );
 
@@ -108,8 +110,19 @@ router.put( '/borregos/:idMedicina', [
     validarJWT,
     check( 'idMedicina', 'No es un id válido' ).isMongoId(),
     check( 'idMedicina' ).custom( existeMedicinaBorrego ),
+    check( 'tipo', 'El tipo de medicina es obligatorio' ).escape().trim().notEmpty(),
+    check( 'descripcion', 'La descripción es obligatoria' ).escape().trim().notEmpty(),
+    check( 'ultimaFecha', 'Ingrese una última fecha válida.' ).trim().escape().isDate(),
+    check( 'proximaFecha', 'Ingrese una próxima fecha válida.' ).trim().escape().isDate(),
     validarCampos
 ], actualizarMedicinaBorrego );
+
+router.delete( '/borregos/:idMedicina', [
+    validarJWT,
+    check( 'idMedicina', 'No es un id válido' ).isMongoId(),
+    check( 'idMedicina' ).custom( existeMedicinaBorrego ),
+    validarCampos
+], eliminarMedicinaBorrego );
 
 // ****************************************************
 // -   End points para las medicinas de los caballos  -

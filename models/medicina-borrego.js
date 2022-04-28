@@ -12,9 +12,14 @@ const MedicinaBorregoSchema = Schema( {
         required: [ true, 'La descripcion es obligatoria.' ]
     },
 
-    fecha: {
-        type: String,
-        required: [ true, 'La fecha es obligatoria.' ]
+    ultimaFecha: {
+        type: Date,
+        required: [ true, 'La última fecha de la medicina es obligatoria.' ]
+    },
+
+    proximaFecha: {
+        type: Date,
+        required: [ true, 'La proxima fecha de la medicina es obligatoria.' ]
     },
 
     borrego: {
