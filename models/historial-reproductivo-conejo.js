@@ -2,27 +2,17 @@ const { Schema, model } = require( 'mongoose' );
 
 const HistorialReproductivoConejoSchema = Schema( {
 
-    montaAnterior: {
-        type: String,
-        required: [ true, 'La monta anterior es obligatoria.' ]
-    },
-
     fechaMonta1: {
-        type: String,
+        type: Date,
         required: [ true, 'La fecha de la primera monta es obligatoria.' ]
     },
 
-    semental: {
-        type: String,
-        required: [ true, 'El semental es obligatorio.' ]
+    fechaMonta2: {
+        type: Date,
+        required: [ true, 'La segunda monta es obligatoria.' ]
     },
 
-    opcionSemental: {
-        type: String,
-        required: [ true, 'La opción del semental es obligatoria.' ]
-    },
-
-    observacionesSemental: {
+    observacionesConejo: {
         type: String,
         required: [ true, 'Las observaciones del semental son obligatorias.' ]
     },
@@ -37,23 +27,18 @@ const HistorialReproductivoConejoSchema = Schema( {
         required: [ true, 'El nido del conejo es obligatorio.' ]
     },
 
-    monta2: {
-        type: String,
-        required: [ true, 'La segunda monta es obligatoria.' ]
-    },
-
-    destete: {
-        type: String,
+    fechaDestete: {
+        type: Date,
         required: [ true, 'El destete es obligatorio.' ]
     },
 
     gazaposVivos: {
-        type: String,
+        type: Number,
         required: [ true, 'Los gazapos vivos son obligatorios.' ]
     },
 
     gazaposMuertos: {
-        type: String,
+        type: Number,
         required: [ true, 'Los gazapos muertos son obligatorios.' ]
     },
 
@@ -62,10 +47,15 @@ const HistorialReproductivoConejoSchema = Schema( {
         required: [ true, 'La causa de muerte de los gazapos vivos son obligatorios.' ]
     },
 
+    coneja: {
+        type: Schema.Types.ObjectId,
+        ref: 'Conejo'
+    },
+
     conejo: {
         type: Schema.Types.ObjectId,
         ref: 'Conejo'
-    }
+    },
 
 }, {
     versionKey: false,
