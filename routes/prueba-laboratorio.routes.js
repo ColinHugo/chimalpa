@@ -24,7 +24,8 @@ const {
     obtenerPruebasLaboratorioBorregos,
     obtenerPruebaLaboratorioBorregoById,
     registrarPruebaLaboratorioBorrego,
-    actualizarPruebaLaboratorioBorrego
+    actualizarPruebaLaboratorioBorrego,
+    eliminarPruebaLaboratorioBorrego
 } = require( '../controllers/prueba-laboratorio-borrego.controller' );
 
 const {
@@ -84,7 +85,7 @@ router.get( '/borregos/:idBorrego', [
 
 router.post( '/borregos/:idBorrego', [
     validarJWT,
-    check( 'link', 'El link de la prueba de laboratorio es obligatorio' ).trim().notEmpty(),
+    check( 'link', 'Ingrese una URL válida.' ).trim().isURL(),
     check( 'idBorrego' ).custom( existeBorrego ),
     validarCampos
 ], registrarPruebaLaboratorioBorrego );
@@ -93,8 +94,16 @@ router.put( '/borregos/:idPruebaLaboratorio', [
     validarJWT,
     check( 'idPruebaLaboratorio', 'No es un id válido' ).isMongoId(),
     check( 'idPruebaLaboratorio' ).custom( existePruebaLaboratorioBorrego ),
+    check( 'link', 'Ingrese una URL válida.' ).trim().isURL(),
     validarCampos
 ], actualizarPruebaLaboratorioBorrego );
+
+router.delete( '/borregos/:idPruebaLaboratorio', [
+    validarJWT,
+    check( 'idPruebaLaboratorio', 'No es un id válido' ).isMongoId(),
+    check( 'idPruebaLaboratorio' ).custom( existePruebaLaboratorioBorrego ),
+    validarCampos
+], eliminarPruebaLaboratorioBorrego );
 
 // **************************************************************
 // - End points para las pruebas de laboratorio de los caballos -

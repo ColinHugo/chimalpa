@@ -1,4 +1,4 @@
-const { Borrego, PruebaLaboratorioBorrego } = require( '../models' );
+const { PruebaLaboratorioBorrego } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -71,21 +71,19 @@ const registrarPruebaLaboratorioBorrego = async ( req, res ) => {
 
     try {
 
-        const borrego = await Borrego.findById( idBorrego );
-
-        req.body.borrego = borrego;
+        req.body.borrego = idBorrego;
 
         const prueba = await PruebaLaboratorioBorrego( req.body )
             .populate( 'borrego', 'numeroBorrego' );
 
         await prueba.save();
 
-        generarControl( nombre, apellidos, 'registrado una prueba de laboratorio al borrego número', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'registrado una prueba de laboratorio al borrego número', 
+                        prueba.borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
-            msg: 'La prueba del borrego se ha registrado.',
-            prueba
+            msg: 'La prueba del borrego se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -102,18 +100,45 @@ const registrarPruebaLaboratorioBorrego = async ( req, res ) => {
 const actualizarPruebaLaboratorioBorrego = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
-
     const { idPruebaLaboratorio } = req.params;
     const { ...datos } = req.body;
 
     try {
 
-        const prueba = await PruebaLaboratorioBorrego.findByIdAndUpdate( idPruebaLaboratorio, datos, { new: true } )
+        const prueba = await PruebaLaboratorioBorrego.findByIdAndUpdate( idPruebaLaboratorio, datos )
             .populate( 'borrego', 'numeroBorrego' );
 
-        const borrego = await Borrego.findById( prueba.borrego );
+        generarControl( nombre, apellidos, 'actualizado una prueba de laboratorio al borrego número', 
+                        prueba.borrego.numeroBorrego );
 
-        generarControl( nombre, apellidos, 'actualizado una prueba de laboratorio al borrego número', borrego.numeroBorrego );
+        return res.json( {
+            value: 1,
+            msg: 'La prueba de laboratorio se ha actualizado.',
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al actualizar la prueba de laboratorio.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al actualizar el la prueba de laboratorio.'
+        } );
+    }
+}
+
+const eliminarPruebaLaboratorioBorrego = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idPruebaLaboratorio } = req.params;
+
+    try {
+
+        const prueba = await PruebaLaboratorioBorrego.findByIdAndDelete( idPruebaLaboratorio )
+            .populate( 'borrego', 'numeroBorrego' );
+
+        generarControl( nombre, apellidos, 'eliminado una prueba de laboratorio al borrego número', 
+                        prueba.borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
@@ -135,5 +160,6 @@ module.exports = {
     obtenerPruebasLaboratorioBorregos,
     obtenerPruebaLaboratorioBorregoById,
     registrarPruebaLaboratorioBorrego,
-    actualizarPruebaLaboratorioBorrego
+    actualizarPruebaLaboratorioBorrego,
+    eliminarPruebaLaboratorioBorrego
 }
