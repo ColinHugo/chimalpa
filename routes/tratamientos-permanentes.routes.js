@@ -16,7 +16,8 @@ const {
     obtenerTratamientosBorregos,
     obtenerTratamientoBorregoById,
     registrarTratamientoBorrego,
-    actualizarTratamientoBorrego
+    actualizarTratamientoBorrego,
+    eliminarTratamientoBorrego
 } = require( '../controllers/tratamientos-permanentes-borregos.controller' );
 
 const {
@@ -89,7 +90,9 @@ router.post( '/borregos/:idBorrego', [
     check( 'idBorrego' ).custom( existeBorrego ),
     check( 'tipo', 'El tipo de tratamiento es obligatorio.' ).escape().trim().notEmpty(),
     check( 'descripcion', 'La descripción del tratamiento es obligatoria.' ).escape().trim().notEmpty(),
-    check( 'video', 'El link del video es obligatorio.' ).escape().trim().notEmpty(),
+    check( 'video', 'Ingrese una URL válida.' ).trim().notEmpty().isURL(),
+    check( 'ultimaFecha', 'Ingrese una última fecha válida.' ).escape().trim().isDate(),
+    check( 'proximaFecha', 'Ingrese una próxima fecha válida.' ).escape().trim().isDate(),
     validarCampos
 ], registrarTratamientoBorrego );
 
@@ -97,8 +100,20 @@ router.put( '/borregos/:idTratamiento', [
     validarJWT,
     check( 'idTratamiento', 'No es un id válido' ).isMongoId(),
     check( 'idTratamiento' ).custom( existeTratamientoBorrego ),
+    check( 'tipo', 'El tipo de tratamiento es obligatorio.' ).escape().trim().notEmpty(),
+    check( 'descripcion', 'La descripción del tratamiento es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'video', 'Ingrese una URL válida.' ).trim().notEmpty().isURL(),
+    check( 'ultimaFecha', 'Ingrese una última fecha válida.' ).escape().trim().isDate(),
+    check( 'proximaFecha', 'Ingrese una próxima fecha válida.' ).escape().trim().isDate(),
     validarCampos
 ], actualizarTratamientoBorrego );
+
+router.delete( '/borregos/:idTratamiento', [
+    validarJWT,
+    check( 'idTratamiento', 'No es un id válido' ).isMongoId(),
+    check( 'idTratamiento' ).custom( existeTratamientoBorrego ),
+    validarCampos
+], eliminarTratamientoBorrego );
 
 // ****************************************************
 // - End points para los tratamientos de las mascotas -

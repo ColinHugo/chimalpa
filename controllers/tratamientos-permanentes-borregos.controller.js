@@ -1,4 +1,4 @@
-const { Borrego, TratamientoPermanenteBorrego } = require( '../models' );
+const { TratamientoPermanenteBorrego } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -62,7 +62,6 @@ const obtenerTratamientoBorregoById = async ( req, res ) => {
             msg: 'Error al obtener el tratamiento del borrego.'
         } );
     }
-
 }
 
 const registrarTratamientoBorrego = async ( req, res ) => {
@@ -72,20 +71,19 @@ const registrarTratamientoBorrego = async ( req, res ) => {
 
     try {
 
-        const borrego = await Borrego.findById( idBorrego );
+        req.body.borrego = idBorrego;
 
-        req.body.borrego = borrego;
-
-        const tratamiento = new TratamientoPermanenteBorrego( req.body );
+        const tratamiento = await new TratamientoPermanenteBorrego( req.body )
+            .populate( 'borrego', 'numeroBorrego' );
 
         await tratamiento.save();
 
-        generarControl( nombre, apellidos, 'registrado un tratamiento permanente al borrego número', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'registrado un tratamiento permanente al borrego número',
+                        tratamiento.borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
-            msg: 'El tratamiento se ha registrado.',
-            tratamiento
+            msg: 'El tratamiento se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -102,22 +100,20 @@ const registrarTratamientoBorrego = async ( req, res ) => {
 const actualizarTratamientoBorrego = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
-
     const { idTratamiento } = req.params;
     const { ...datos } = req.body;
 
     try {
 
-        const tratamiento = await TratamientoPermanenteBorrego.findByIdAndUpdate( idTratamiento, datos, { new: true } );
+        const tratamiento = await TratamientoPermanenteBorrego.findByIdAndUpdate( idTratamiento, datos )
+            .populate( 'borrego', 'numeroBorrego' );
 
-        const borrego = await Borrego.findById( tratamiento.borrego );
-
-        generarControl( nombre, apellidos, 'actualizado un tratamiento permanente al borrego número', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'actualizado un tratamiento permanente al borrego número', 
+                        tratamiento.borrego.numeroBorrego );
         
         return res.json( {
             value: 1,
-            msg: 'El tratamiento permanente se ha actualizado.',
-            tratamiento
+            msg: 'El tratamiento permanente se ha actualizado.'
         } );
 
     } catch ( error ) {
@@ -131,9 +127,39 @@ const actualizarTratamientoBorrego = async ( req, res ) => {
     }
 }
 
+const eliminarTratamientoBorrego = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idTratamiento } = req.params;
+
+    try {
+
+        const tratamiento = await TratamientoPermanenteBorrego.findByIdAndDelete( idTratamiento )
+            .populate( 'borrego', 'numeroBorrego' );
+
+        generarControl( nombre, apellidos, 'eliminado un tratamiento permanente al borrego número', 
+                        tratamiento.borrego.numeroBorrego );
+        
+        return res.json( {
+            value: 1,
+            msg: 'El tratamiento permanente se ha eliminado.'
+        } );
+
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar el tratamiento permanente.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar el tratamiento permanente.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerTratamientosBorregos,
     obtenerTratamientoBorregoById,
     registrarTratamientoBorrego,
-    actualizarTratamientoBorrego
+    actualizarTratamientoBorrego,
+    eliminarTratamientoBorrego
 }
