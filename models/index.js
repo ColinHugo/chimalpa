@@ -37,6 +37,7 @@ const DietaConejo = require( './dieta-conejo' );
 const HistoriaClinicaConejo = require( './historia-clinica-conejo');
 const HistorialReproductivoConejo = require( './historial-reproductivo-conejo' );
 const MedicinaConejo = require( './medicina-conejo' );
+const PruebaLaboratorioConejo = require( './prueba-laboratorio-conejo' );
 
 const Mascota = require( './mascota' );
 const DietaMascota = require( './dieta-mascota' );
@@ -78,6 +79,7 @@ module.exports = {
     HistoriaClinicaConejo,
     HistorialReproductivoConejo,
     MedicinaConejo,
+    PruebaLaboratorioConejo,
 
     Caballo,
     DesteteCaballo,
