@@ -32,6 +32,19 @@ const ConejoSchema = Schema( {
         required: [ true, 'El sexo del conejo es obligatorio' ]
     },
 
+    camada: {
+        type: String
+    },
+
+    fechaNacimiento: {
+        type: Date,
+        required: [ true, 'La fecha de nacimiento del conejo es obligatoria' ]
+    },
+
+    malaMadre: {
+        type: String
+    },
+
     qr: {
         type: String
     },
