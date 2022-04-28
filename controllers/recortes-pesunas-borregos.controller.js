@@ -1,4 +1,4 @@
-const { Borrego, RecortePesunaBorrego } = require( '../models' );
+const { RecortePesunaBorrego } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -67,24 +67,23 @@ const obtenerRecortePesunaBorregoById = async ( req, res ) => {
 const registrarRecortePesunaBorrego = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
-    const { fecha, descripcion } = req.body;
     const { idBorrego } = req.params;
 
     try {
 
-        const borrego = await Borrego.findById( idBorrego );
+        req.body.borrego = idBorrego;
 
-        const recorte = await RecortePesunaBorrego( { fecha, descripcion, borrego } )
+        const recorte = await RecortePesunaBorrego( req.body )
             .populate( 'borrego', 'numeroBorrego' );
 
         await recorte.save();
 
-        generarControl( nombre, apellidos, 'registrado un recorte de pesuña al borrego número', borrego.numeroBorrego );
+        generarControl( nombre, apellidos, 'registrado un recorte de pesuña al borrego número', 
+                        recorte.borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
-            msg: 'El recorte de pesuña se ha registrado.',
-            recorte,
+            msg: 'El recorte de pesuña se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -106,17 +105,15 @@ const actualizarRecortePesunaBorrego = async ( req, res ) => {
 
     try {
 
-        const recorte = await RecortePesunaBorrego.findByIdAndUpdate( idPesunaBorrego, datos, { new: true } )
+        const recorte = await RecortePesunaBorrego.findByIdAndUpdate( idPesunaBorrego, datos )
             .populate( 'borrego', 'numeroBorrego' );
 
-        const borrego = await Borrego.findById( recorte.borrego );
-
-        generarControl( nombre, apellidos, 'actualizado un recorte de pesuña al borrego número', borrego.nombre );
+        generarControl( nombre, apellidos, 'actualizado un recorte de pesuña al borrego número', 
+                        recorte.borrego.numeroBorrego );
 
         return res.json( {
             value: 1,
-            msg: 'El recorte de pesuña se ha actualizado.',
-            recorte
+            msg: 'El recorte de pesuña se ha actualizado.'
         } );
         
     } catch ( error ) {
@@ -130,9 +127,39 @@ const actualizarRecortePesunaBorrego = async ( req, res ) => {
     }
 }
 
+const eliminarRecortePesunaBorrego = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idPesunaBorrego } = req.params;
+
+    try {
+
+        const recorte = await RecortePesunaBorrego.findByIdAndDelete( idPesunaBorrego )
+            .populate( 'borrego', 'numeroBorrego' );
+
+        generarControl( nombre, apellidos, 'eliminado un recorte de pesuña al borrego número', 
+                        recorte.borrego.numeroBorrego );
+
+        return res.json( {
+            value: 1,
+            msg: 'El recorte de pesuña se ha eliminado.'
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar el recorte de pesuña.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar el recorte de pesuña.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerRecortesPesunasBorregos,
     obtenerRecortePesunaBorregoById,
     registrarRecortePesunaBorrego,
-    actualizarRecortePesunaBorrego
+    actualizarRecortePesunaBorrego,
+    eliminarRecortePesunaBorrego
 }

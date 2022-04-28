@@ -2,14 +2,19 @@ const { Schema, model } = require( 'mongoose' );
 
 const RecortePesunaBorregoSchema = Schema( {
 
-    fecha: {
-        type: String,
-        required: [ true, 'La fecha del recorte de pesuñas es obligatoria.' ]
-    },
-
     descripcion: {
         type: String,
         required: [ true, 'La descripción del recorte de pesuñas es obligatoria.' ]
+    },
+
+    ultimaFecha: {
+        type: Date,
+        required: [ true, 'La última fecha del recorte de pesunas es obligatoria.' ]
+    },
+
+    proximaFecha: {
+        type: Date,
+        required: [ true, 'La proxima fecha del recorte de pesunas es obligatoria.' ]
     },
 
     borrego: {
