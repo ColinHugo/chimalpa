@@ -42,7 +42,8 @@ const {
     obtenerMedicinaConejo,
     obtenerMedicinaConejoById,
     registrarMedicinaConejo,
-    actualizarMedicinaConejo
+    actualizarMedicinaConejo,
+    eliminarMedicinaConejo
 } = require( '../controllers/medicinas-conejos.controller' );
 
 const {
@@ -183,9 +184,10 @@ router.post( '/conejos/:idConejo', [
     validarJWT,
     check( 'idConejo', 'No es un id válido' ).isMongoId(),
     check( 'idConejo' ).custom( existeConejo ),
-    check( 'tipo', 'El tipo de medicina es obligatorio' ).escape().trim().notEmpty(),
-    check( 'descripcion', 'La descripción es obligatoria' ).escape().trim().notEmpty(),
-    check( 'fecha', 'La fecha es obligatoria' ).trim().notEmpty(),
+    check( 'tipo', 'El tipo de medicina es obligatorio.' ).escape().trim().notEmpty(),
+    check( 'descripcion', 'La descripción es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'ultimaFecha', 'Ingrese una última fecha fecha válida.' ).trim().escape().isDate(),
+    check( 'proximaFecha', 'Ingrese una próxima fecha fecha válida.' ).trim().escape().isDate(),
     validarCampos
 ], registrarMedicinaConejo );
 
@@ -193,8 +195,19 @@ router.put( '/conejos/:idMedicina', [
     validarJWT,
     check( 'idMedicina', 'No es un id válido' ).isMongoId(),
     check( 'idMedicina' ).custom( existeMedicinaConejo ),
+    check( 'tipo', 'El tipo de medicina es obligatorio.' ).escape().trim().notEmpty(),
+    check( 'descripcion', 'La descripción es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'ultimaFecha', 'Ingrese una última fecha fecha válida.' ).trim().escape().isDate(),
+    check( 'proximaFecha', 'Ingrese una próxima fecha fecha válida.' ).trim().escape().isDate(),
     validarCampos
 ], actualizarMedicinaConejo );
+
+router.delete( '/conejos/:idMedicina', [
+    validarJWT,
+    check( 'idMedicina', 'No es un id válido' ).isMongoId(),
+    check( 'idMedicina' ).custom( existeMedicinaConejo ),
+    validarCampos
+], eliminarMedicinaConejo );
 
 // ****************************************************
 // -   End points para las medicinas de las mascotas  -

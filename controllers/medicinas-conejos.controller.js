@@ -1,4 +1,4 @@
-const { Conejo, MedicinaConejo } = require( '../models' );
+const { MedicinaConejo } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -68,23 +68,21 @@ const registrarMedicinaConejo = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
     const { idConejo } = req.params;
-    const { tipo, descripcion, fecha } = req.body;
 
     try {
 
-        const conejo = await Conejo.findById( idConejo );
+        req.body.conejo = idConejo;
 
-        const medicina = await MedicinaConejo( { tipo, descripcion, fecha, conejo } )
+        const medicina = await MedicinaConejo( req.body )
             .populate( 'conejo', 'numeroConejo' );
 
         await medicina.save();
 
-        generarControl( nombre, apellidos, 'registrado una medicina al conejo número', conejo.numeroConejo );
+        generarControl( nombre, apellidos, 'registrado una medicina al conejo número', medicina.conejo.numeroConejo );
 
         return res.json( {
             value: 1,
-            msg: 'La medicina del conejo se ha registrado.',
-            medicina,
+            msg: 'La medicina del conejo se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -107,17 +105,14 @@ const actualizarMedicinaConejo = async ( req, res ) => {
 
     try {
 
-        const medicina = await MedicinaConejo.findByIdAndUpdate( idMedicina, datos, { new: true } )
+        const medicina = await MedicinaConejo.findByIdAndUpdate( idMedicina, datos )
             .populate( 'conejo', 'numeroConejo' );
 
-        const conejo = await Conejo.findById( medicina.conejo );
-
-        generarControl( nombre, apellidos, 'actualizado una medicina al conejo número', conejo.numeroConejo );
+        generarControl( nombre, apellidos, 'actualizado una medicina al conejo número', medicina.conejo.numeroConejo );
 
         return res.json( {
             value: 1,
-            msg: 'La medicina del conejo se ha actualizado.',
-            medicina
+            msg: 'La medicina del conejo se ha actualizado.'
         } );
         
     } catch ( error ) {
@@ -131,9 +126,38 @@ const actualizarMedicinaConejo = async ( req, res ) => {
     }
 }
 
+const eliminarMedicinaConejo = async ( req, res ) => {
+    
+    const { nombre, apellidos } = req.body.usuario;
+    const { idMedicina } = req.params;
+
+    try {
+
+        const medicina = await MedicinaConejo.findByIdAndDelete( idMedicina )
+            .populate( 'conejo', 'numeroConejo' );
+
+        generarControl( nombre, apellidos, 'eliminado una medicina al conejo número', medicina.conejo.numeroConejo );
+
+        return res.json( {
+            value: 1,
+            msg: 'La medicina del conejo se ha eliminado.'
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar la medicina del conejo.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar la medicina del conejo.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerMedicinaConejo,
     obtenerMedicinaConejoById,
     registrarMedicinaConejo,
-    actualizarMedicinaConejo
+    actualizarMedicinaConejo,
+    eliminarMedicinaConejo
 }
