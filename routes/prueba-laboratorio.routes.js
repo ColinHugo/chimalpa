@@ -6,11 +6,14 @@ const {
     existePruebaLaboratorioAve,
     existeBorrego,
     existePruebaLaboratorioBorrego,
+    existeConejo,
+    existePruebaLaboratorioConejo,
     existeCaballo,
     existePruebaLaboratorioCaballo,
     existeMascota,
     existePruebaLaboratorioMascota
 } = require( '../helpers' );
+
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
 const {
@@ -27,6 +30,14 @@ const {
     actualizarPruebaLaboratorioBorrego,
     eliminarPruebaLaboratorioBorrego
 } = require( '../controllers/prueba-laboratorio-borrego.controller' );
+
+const {
+    obtenerPruebasLaboratorioConejos,
+    obtenerPruebaLaboratorioConejoById,
+    registrarPruebaLaboratorioConejo,
+    actualizarPruebaLaboratorioConejo,
+    eliminarPruebaLaboratorioConejo
+} = require( '../controllers/prueba-laboratorio-conejo.controller' );
 
 const {
     obtenerPruebasLaboratoriosCaballos,
@@ -139,6 +150,41 @@ router.delete( '/caballos/:idPruebaLaboratorio', [
     check( 'idPruebaLaboratorio' ).custom( existePruebaLaboratorioCaballo ),
     validarCampos
 ], eliminarPruebaLaboratorioCaballo );
+
+// **************************************************************
+// - End points para las pruebas de laboratorio de los conejos -
+// **************************************************************
+// * * * * * * * * * * * * C O N E J O S * * * * * * * * * * * * *
+
+router.get( '/conejos', obtenerPruebasLaboratorioConejos );
+
+router.get( '/conejos/:idConejo', [
+    check( 'idConejo', 'No es un id válido' ).isMongoId(),
+    check( 'idConejo' ).custom( existeConejo ),
+    validarCampos
+], obtenerPruebaLaboratorioConejoById );
+
+router.post( '/conejos/:idConejo', [
+    validarJWT,
+    check( 'link', 'Ingrese una URL válida.' ).trim().isURL(),
+    check( 'idConejo' ).custom( existeConejo ),
+    validarCampos
+], registrarPruebaLaboratorioConejo );
+
+router.put( '/conejos/:idPruebaLaboratorio', [
+    validarJWT,
+    check( 'idPruebaLaboratorio', 'No es un id válido' ).isMongoId(),
+    check( 'idPruebaLaboratorio' ).custom( existePruebaLaboratorioConejo ),
+    check( 'link', 'Ingrese una URL válida.' ).trim().isURL(),
+    validarCampos
+], actualizarPruebaLaboratorioConejo );
+
+router.delete( '/conejos/:idPruebaLaboratorio', [
+    validarJWT,
+    check( 'idPruebaLaboratorio', 'No es un id válido' ).isMongoId(),
+    check( 'idPruebaLaboratorio' ).custom( existePruebaLaboratorioConejo ),
+    validarCampos
+], eliminarPruebaLaboratorioConejo );
 
 // **************************************************************
 // - End points para las pruebas de laboratorio de las mascotas -
