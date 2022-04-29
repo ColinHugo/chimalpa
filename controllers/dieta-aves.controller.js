@@ -1,4 +1,4 @@
-const { Ave, DietaAve } = require( '../models' );
+const { DietaAve } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -72,21 +72,19 @@ const registrarDietaAve = async ( req, res ) => {
     const { idAve } = req.params;
 
     try {
-
-        const ave = await Ave.findById( idAve );
         
-        req.body.ave = ave;
+        req.body.ave = idAve;
 
-        const dieta = new DietaAve( req.body );
+        const dieta = await new DietaAve( req.body )
+            .populate( 'ave', 'numeroAve' );
 
         await dieta.save()
 
-        generarControl( nombre, apellidos, 'registrado una dieta al ave número', ave.numeroAve );
+        generarControl( nombre, apellidos, 'registrado una dieta al ave número', dieta.ave.numeroAve );
 
         return res.json( {
             value: 1,
-            msg: 'La dieta se ha registrado.',
-            dieta
+            msg: 'La dieta se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -108,12 +106,10 @@ const actualizarDietaAve = async ( req, res ) => {
 
     try {
 
-        const dietaAve = await DietaAve.findByIdAndUpdate( idDietaAve, datos, { new: true } )
-            .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+        const dietaAve = await DietaAve.findByIdAndUpdate( idDietaAve, datos )
+            .populate( 'ave', 'numeroAve' );
 
-        const ave = await Ave.findById( dietaAve.ave );
-
-        generarControl( nombre, apellidos, 'actualizado una dieta al ave número', ave.numeroAve );
+        generarControl( nombre, apellidos, 'actualizado una dieta al ave número', dietaAve.ave.numeroAve );
 
         return res.json( {
             value: 1,
@@ -131,9 +127,38 @@ const actualizarDietaAve = async ( req, res ) => {
     }
 }
 
+const eliminarDietaAve = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idDietaAve } = req.params;
+
+    try {
+
+        const dietaAve = await DietaAve.findByIdAndDelete( idDietaAve )
+            .populate( 'ave', 'numeroAve' );
+
+        generarControl( nombre, apellidos, 'eliminado una dieta al ave número', dietaAve.ave.numeroAve );
+
+        return res.json( {
+            value: 1,
+            msg: 'La dieta del ave se ha eliminado.',
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar la dieta del ave.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar la dieta del ave.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerDietaAves,
     obtenerDietaAveById,
     registrarDietaAve,
-    actualizarDietaAve
+    actualizarDietaAve,
+    eliminarDietaAve
 }

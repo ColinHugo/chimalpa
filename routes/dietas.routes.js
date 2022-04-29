@@ -20,7 +20,8 @@ const {
     obtenerDietaAves,
     obtenerDietaAveById,
     registrarDietaAve,
-    actualizarDietaAve
+    actualizarDietaAve,
+    eliminarDietaAve
 } = require( '../controllers/dieta-aves.controller' );
 
 const {
@@ -91,8 +92,21 @@ router.put( '/aves/:idDietaAve', [
     validarJWT,
     check( 'idDietaAve', 'No es un id válido' ).isMongoId(),
     check( 'idDietaAve' ).custom( existeDietaAve ),
+    check( 'avena_cantidad_manana', 'La cantidad de la avena por la mañana es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'avena_cantidad_tarde', 'La cantidad de la avena por la tarde es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'alfalfa_cantidad_manana', 'La cantidad de la alfalfa por la mañana es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'alfalfa_cantidad_tarde', 'La cantidad de la alfalfa por la tarde es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'grano_cantidad_manana', 'La cantidad del grano por la mañana es obligatorio.' ).escape().trim().notEmpty(),
+    check( 'grano_cantidad_tarde', 'La cantidad del grano por la tarde es obligatorio.' ).escape().trim().notEmpty(),
     validarCampos
 ], actualizarDietaAve );
+
+router.delete( '/aves/:idDietaAve', [
+    validarJWT,
+    check( 'idDietaAve', 'No es un id válido' ).isMongoId(),
+    check( 'idDietaAve' ).custom( existeDietaAve ),
+    validarCampos
+], eliminarDietaAve );
 
 // ****************************************************
 // -    End points para las dietas de los borregos    -
