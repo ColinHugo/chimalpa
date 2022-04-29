@@ -20,7 +20,8 @@ const {
     obtenerHistoriaClinicaAves,
     obtenerHistoriaClinicaAveById,
     registrarHistoriaClinicaAve,
-    actualizarHistoriaClinicaAve
+    actualizarHistoriaClinicaAve,
+    eliminarHistoriaClinicaAve
 } = require( '../controllers/historia-clinica-aves.controller' );
 
 const {
@@ -98,8 +99,37 @@ router.put( '/aves/:idHistorial', [
     validarJWT,
     check( 'idHistorial', 'No es un id válido' ).isMongoId(),
     check( 'idHistorial' ).custom( existeHistoriaClinicaAve ),
+    check( 'inspeccion', 'La inspección es obligatoria' ).escape().trim().notEmpty(),
+    check( 'mucosa', 'El estado de la mucosa es obligatoria' ).escape().trim().notEmpty(),
+    check( 'capilar', 'El llenado capilar es obligatorio' ).escape().trim().notEmpty(),
+    check( 'linfonodos', 'La exploración de los linfónodos superficiales es obligatoria' ).escape().trim().notEmpty(),
+    check( 'cardiaca', 'El pulso y frecuencia cardiaca son obligatorias' ).escape().trim().notEmpty(),
+    check( 'respiratoria', 'Tipo y frecuencia respiratoria son sobligatorios' ).escape().trim().notEmpty(),
+    check( 'pulmonares', 'Los campos pulmonares son obligatorios' ).escape().trim().notEmpty(),
+    check( 'hidratacion', 'El estado de hidratación es obligatorio' ).escape().trim().notEmpty(),
+    check( 'temperatura', 'La temperatura es obligatoria' ).escape().trim().notEmpty(),
+    check( 'intestinales', 'Los sonidos intestinales son obligatorios' ).escape().trim().notEmpty(),
+    check( 'heces', 'El estado de la hece es obligatoria' ).escape().trim().notEmpty(),
+    check( 'aparatoRespiratorio', 'El aparato respiratorio es obligatorio' ).escape().trim().notEmpty(),
+    check( 'aparatoCardiovascular', 'El aparato cardiovascular es obligatorio' ).escape().trim().notEmpty(),
+    check( 'examenDermatologico', 'El examen dermatologico es obligatorio' ).escape().trim().notEmpty(),
+    check( 'aparatoDigestivo', 'El aparato digestivo es obligatorio' ).escape().trim().notEmpty(),
+    check( 'aparatoUrinario', 'El aparato urinario es obligatorio' ).escape().trim().notEmpty(),
+    check( 'aparatoReproductor', 'El aparato reproductor es obligatorio' ).escape().trim().notEmpty(),
+    check( 'examenOftalmologico', 'El examen oftamologico es obligatorio' ).escape().trim().notEmpty(),
+    check( 'aparatoLocomotor', 'El aparato locomotor es obligatorio' ).escape().trim().notEmpty(),
+    check( 'examenNeurologico', 'El examen neurológico es obligatorio' ).escape().trim().notEmpty(),
+    check( 'tratamiento', 'El tratamiento es obligatorio' ).escape().trim().notEmpty(),
+    check( 'pronostico', 'El pronóstico es obligatorio' ).escape().trim().notEmpty(),
     validarCampos
 ], actualizarHistoriaClinicaAve );
+
+router.delete( '/aves/:idHistorial', [
+    validarJWT,
+    check( 'idHistorial', 'No es un id válido' ).isMongoId(),
+    check( 'idHistorial' ).custom( existeHistoriaClinicaAve ),
+    validarCampos
+], eliminarHistoriaClinicaAve );
 
 // **********************************************************
 // - End points para las historias clínicas de los borregos -

@@ -71,21 +71,18 @@ const registrarHistoriaClinicaAve = async ( req, res ) => {
 
     try {
 
-        const ave = await Ave.findById( idAve );
-
-        req.body.ave = ave;
+        req.body.ave = idAve;
 
         const historiaAve = await HistoriaClinicaAve( req.body )
             .populate( 'ave', 'numeroAve' );
             
         await historiaAve.save();
 
-        generarControl( nombre, apellidos, 'registrado un historial clínico al ave', ave.numeroAve );
+        generarControl( nombre, apellidos, 'registrado un historial clínico al ave', historiaAve.ave.numeroAve );
 
         return res.json( {
             value: 1,
-            msg: 'La historia del ave se ha registrado.',
-            historiaAve
+            msg: 'La historia del ave se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -103,11 +100,11 @@ const actualizarHistoriaClinicaAve = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
     const { idHistorial } = req.params;
-    const { usuario, ...datos} = req.body;
+    const { ...datos} = req.body;
 
     try {
 
-        const historiaAve = await HistoriaClinicaAve.findByIdAndUpdate( idHistorial, datos, { new: true } )
+        const historiaAve = await HistoriaClinicaAve.findByIdAndUpdate( idHistorial, datos )
             .populate( 'ave', 'numeroAve' );
 
         const ave = await Ave.findById( historiaAve.ave );
@@ -130,9 +127,38 @@ const actualizarHistoriaClinicaAve = async ( req, res ) => {
     }
 }
 
+const eliminarHistoriaClinicaAve = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idHistorial } = req.params;
+
+    try {
+
+        const historiaAve = await HistoriaClinicaAve.findByIdAndDelete( idHistorial )
+            .populate( 'ave', 'numeroAve' );
+
+        generarControl( nombre, apellidos, 'eliminado un historial clínico al ave', historiaAve.ave.numeroAve );
+
+        return res.json( {
+            value: 1,
+            msg: 'El historial del ave se ha eliminado.',
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar el historial del ave.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar el historial del ave.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerHistoriaClinicaAves,
     obtenerHistoriaClinicaAveById,
     registrarHistoriaClinicaAve,
-    actualizarHistoriaClinicaAve
+    actualizarHistoriaClinicaAve,
+    eliminarHistoriaClinicaAve
 }
