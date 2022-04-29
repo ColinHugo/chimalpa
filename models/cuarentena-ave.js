@@ -3,12 +3,12 @@ const { Schema, model } = require( 'mongoose' );
 const CuarentenaAveSchema = Schema( {
 
     fechaInicio: {
-        type: String,                
+        type: Date,                
         required: [ true, 'La fecha de inicio de la cuarentena es obligatoria.' ]
     },
 
     fechaTermino: {
-        type: String,                
+        type: Date,                
         required: [ true, 'La fecha de término de la cuarentena es obligatoria.' ]
     },
 

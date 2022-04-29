@@ -1,6 +1,6 @@
-const { Ave, CuarentenaAve } = require( '../models' );
+const { CuarentenaAve } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl } = require( '../helpers' );
 
 const obtenerCuarentenaAves = async ( req, res ) => {
 
@@ -73,20 +73,18 @@ const registrarCuarentenaAve = async ( req, res ) => {
 
     try {
 
-        const ave = await Ave.findById( idAve );
+        req.body.ave = idAve;
 
-        req.body.ave = ave;
+        const cuarentena = await new CuarentenaAve( req.body )
+            .populate( 'ave', 'numeroAve' );
 
-        const cuarentena = new CuarentenaAve( req.body );
+        await cuarentena.save();
 
-        await cuarentena.save()
-
-        generarControl( nombre, apellidos, 'registrado una cuarentena al ave número', ave.numeroAve );
+        generarControl( nombre, apellidos, 'registrado una cuarentena al ave número', cuarentena.ave.numeroAve );
 
         return res.json( {
             value: 1,
-            msg: 'La cuarentena se ha registrado.',
-            cuarentena
+            msg: 'La cuarentena se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -108,12 +106,10 @@ const actualizarCuarentenaAve = async ( req, res ) => {
 
     try {
 
-        const cuarentenaAve = await CuarentenaAve.findByIdAndUpdate( idCuarentena, datos, { new: true } )
-            .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+        const cuarentenaAve = await CuarentenaAve.findByIdAndUpdate( idCuarentena, datos )
+            .populate( 'ave', 'numeroAve' );
 
-        const ave = await Ave.findById( cuarentenaAve.ave );
-
-        generarControl( nombre, apellidos, 'actualizado una cuarentena al ave número', ave.numeroAve );
+        generarControl( nombre, apellidos, 'actualizado una cuarentena al ave número', cuarentenaAve.ave.numeroAve );
 
         return res.json( {
             value: 1,
@@ -131,9 +127,38 @@ const actualizarCuarentenaAve = async ( req, res ) => {
     }
 }
 
+const eliminarCuarentenaAve = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idCuarentena } = req.params;
+
+    try {
+
+        const cuarentenaAve = await CuarentenaAve.findByIdAndDelete( idCuarentena )
+            .populate( 'ave', 'numeroAve' );
+
+        generarControl( nombre, apellidos, 'eliminado una cuarentena al ave número', cuarentenaAve.ave.numeroAve );
+
+        return res.json( {
+            value: 1,
+            msg: 'La cuarentena del ave se ha eliminado.',
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar la cuarentena del ave.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar la cuarentena del ave.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerCuarentenaAves,
     obtenerCuarentenaAveById,
     registrarCuarentenaAve,
-    actualizarCuarentenaAve
+    actualizarCuarentenaAve,
+    eliminarCuarentenaAve
 }
