@@ -20,7 +20,8 @@ const {
     obtenerHistorialReproductivoAves,
     obtenerHistorialReproductivoAveById,
     registrarHistorialReproductivoAve,
-    actualizarHistorialReproductivoAve
+    actualizarHistorialReproductivoAve,
+    eliminarHistorialReproductivoAve
 } = require( '../controllers/historial-reproductivo-ave.controller' );
 
 const {
@@ -66,12 +67,14 @@ router.get( '/aves/:idAve', [
     validarCampos
 ], obtenerHistorialReproductivoAveById );
 
-router.post( '/aves/:idAve', [
+router.post( '/aves/:idAveHembra/:idAveMacho', [
     validarJWT,
-    check( 'idAve', 'No es un id válido' ).isMongoId(),
-    check( 'idAve' ).custom( existeAve ),
-    check( 'fechaInicio', 'El inicio de celo es obligatorio.' ).trim().notEmpty(),
-    check( 'fechaTermino', 'El inicio de celo es obligatorio.' ).trim().notEmpty(),
+    check( 'idAveHembra', 'No es un id válido' ).isMongoId(),
+    check( 'idAveHembra' ).custom( existeAve ),
+    check( 'idAveMacho', 'No es un id válido' ).isMongoId(),
+    check( 'idAveMacho' ).custom( existeAve ),
+    check( 'fechaInicio', 'El inicio de celo es obligatorio.' ).trim().escape().isDate(),
+    check( 'fechaTermino', 'El inicio de celo es obligatorio.' ).trim().escape().isDate(),
     check( 'instrucciones', 'El semental es obligatorio.' ).trim().notEmpty(),
     validarCampos
 ], registrarHistorialReproductivoAve );
@@ -80,8 +83,17 @@ router.put( '/aves/:idHistorialReproductivo', [
     validarJWT,
     check( 'idHistorialReproductivo', 'No es un id válido' ).isMongoId(),
     check( 'idHistorialReproductivo' ).custom( existeHistorialReproductivoAve ),
+    check( 'fechaInicio', 'El inicio de celo es obligatorio.' ).trim().escape().isDate(),
+    check( 'fechaTermino', 'El inicio de celo es obligatorio.' ).trim().escape().isDate(),
     validarCampos
 ], actualizarHistorialReproductivoAve );
+
+router.delete( '/aves/:idHistorialReproductivo', [
+    validarJWT,
+    check( 'idHistorialReproductivo', 'No es un id válido' ).isMongoId(),
+    check( 'idHistorialReproductivo' ).custom( existeHistorialReproductivoAve ),
+    validarCampos
+], eliminarHistorialReproductivoAve );
 
 // *************************************************************
 // - End points para historiales reproductivos de los borregos -
