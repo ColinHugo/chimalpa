@@ -1,6 +1,6 @@
-const { Mascota, PruebaLaboratorioMascota } = require( '../models' );
+const { PruebaLaboratorioMascota } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl } = require( '../helpers' );
 
 const obtenerPruebasLaboratorioMascotas = async ( req, res ) => {
 
@@ -71,21 +71,18 @@ const registrarPruebaLaboratorioMascota = async ( req, res ) => {
 
     try {
 
-        const mascota = await Mascota.findById( idMascota );
-
-        req.body.mascota = mascota;
+        req.body.mascota = idMascota;
 
         const prueba = await PruebaLaboratorioMascota( req.body )
             .populate( 'mascota', 'nombre' );
 
         await prueba.save();
 
-        generarControl( nombre, apellidos, 'registrado una prueba de laboratorio a al mascota', mascota.nombre );
+        generarControl( nombre, apellidos, 'registrado una prueba de laboratorio a al mascota', prueba.mascota.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'La prueba de la mascota se ha registrado.',
-            prueba
+            msg: 'La prueba de la mascota se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -102,18 +99,15 @@ const registrarPruebaLaboratorioMascota = async ( req, res ) => {
 const actualizarPruebaLaboratorioMascota = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
-
     const { idPruebaLaboratorio } = req.params;
     const { ...datos } = req.body;
 
     try {
 
-        const prueba = await PruebaLaboratorioMascota.findByIdAndUpdate( idPruebaLaboratorio, datos, { new: true } )
+        const prueba = await PruebaLaboratorioMascota.findByIdAndUpdate( idPruebaLaboratorio, datos )
             .populate( 'mascota', 'nombre' );
 
-        const mascota = await Mascota.findById( prueba.mascota );
-
-        generarControl( nombre, apellidos, 'actualizado una prueba de laboratorio a la mascota', mascota.nombre );
+        generarControl( nombre, apellidos, 'actualizado una prueba de laboratorio a la mascota', prueba.mascota.nombre );
 
         return res.json( {
             value: 1,
@@ -131,9 +125,38 @@ const actualizarPruebaLaboratorioMascota = async ( req, res ) => {
     }
 }
 
+const eliminarPruebaLaboratorioMascota = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idPruebaLaboratorio } = req.params;
+
+    try {
+
+        const prueba = await PruebaLaboratorioMascota.findByIdAndDelete( idPruebaLaboratorio )
+            .populate( 'mascota', 'nombre' );
+
+        generarControl( nombre, apellidos, 'eliminado una prueba de laboratorio a la mascota', prueba.mascota.nombre );
+
+        return res.json( {
+            value: 1,
+            msg: 'La prueba de laboratorio se ha eliminado.',
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar la prueba de laboratorio.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar el la prueba de laboratorio.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerPruebasLaboratorioMascotas,
     obtenerPruebaLaboratorioMascotaById,
     registrarPruebaLaboratorioMascota,
-    actualizarPruebaLaboratorioMascota
+    actualizarPruebaLaboratorioMascota,
+    eliminarPruebaLaboratorioMascota
 }

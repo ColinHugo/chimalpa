@@ -52,7 +52,8 @@ const {
     obtenerPruebasLaboratorioMascotas,
     obtenerPruebaLaboratorioMascotaById,
     registrarPruebaLaboratorioMascota,
-    actualizarPruebaLaboratorioMascota
+    actualizarPruebaLaboratorioMascota,
+    eliminarPruebaLaboratorioMascota,
 } = require( '../controllers/prueba-laboratorio-mascota.controller' );
 
 // **************************************************************
@@ -210,8 +211,9 @@ router.get( '/mascotas/:idMascota', [
 
 router.post( '/mascotas/:idMascota', [
     validarJWT,
-    check( 'link', 'El link de la prueba de laboratorio es obligatorio' ).trim().notEmpty(),
+    check( 'idMascota', 'No es un id válido' ).isMongoId(),
     check( 'idMascota' ).custom( existeMascota ),
+    check( 'link', 'Ingrese una dirección váñida' ).trim().isURL(),
     validarCampos
 ], registrarPruebaLaboratorioMascota );
 
@@ -219,7 +221,15 @@ router.put( '/mascotas/:idPruebaLaboratorio', [
     validarJWT,
     check( 'idPruebaLaboratorio', 'No es un id válido' ).isMongoId(),
     check( 'idPruebaLaboratorio' ).custom( existePruebaLaboratorioMascota ),
+    check( 'link', 'Ingrese una dirección váñida' ).trim().isURL(),
     validarCampos
 ], actualizarPruebaLaboratorioMascota );
+
+router.delete( '/mascotas/:idPruebaLaboratorio', [
+    validarJWT,
+    check( 'idPruebaLaboratorio', 'No es un id válido' ).isMongoId(),
+    check( 'idPruebaLaboratorio' ).custom( existePruebaLaboratorioMascota ),
+    validarCampos
+], eliminarPruebaLaboratorioMascota );
 
 module.exports = router;
