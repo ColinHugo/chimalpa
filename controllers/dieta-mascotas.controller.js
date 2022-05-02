@@ -1,4 +1,4 @@
-const { Mascota, DietaMascota } = require( '../models' );
+const { DietaMascota } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -72,21 +72,19 @@ const registrarDietaMascota = async ( req, res ) => {
     const { idMascota } = req.params;
 
     try {
-
-        const mascota = await Mascota.findById( idMascota );
         
-        req.body.mascota = mascota;
+        req.body.mascota = idMascota;
 
-        const dieta = new DietaMascota( req.body );
+        const dieta = new DietaMascota( req.body )
+            .populate( 'mascota', 'nombre' );
 
         await dieta.save()
 
-        generarControl( nombre, apellidos, 'registrado una dieta a la mascota', mascota.nombre );
+        generarControl( nombre, apellidos, 'registrado una dieta a la mascota', dieta.mascota.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'La dieta se ha registrado.',
-            dieta
+            msg: 'La dieta se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -108,12 +106,10 @@ const actualizarDietaMascota = async ( req, res ) => {
 
     try {
 
-        const dietaMascota = await DietaMascota.findByIdAndUpdate( idDietaMascota, datos, { new: true } )
-            .populate( 'usuario', [ 'nombre', 'apellidos' ] );
+        const dietaMascota = await DietaMascota.findByIdAndUpdate( idDietaMascota, datos )
+            .populate( 'mascota', 'nombre' );
 
-        const mascota = await Mascota.findById( dietaMascota.mascota );
-
-        generarControl( nombre, apellidos, 'actualizado una dieta a la mascota', mascota.nombre );
+        generarControl( nombre, apellidos, 'actualizado una dieta a la mascota', dietaMascota.mascota.nombre );
 
         return res.json( {
             value: 1,
@@ -131,9 +127,38 @@ const actualizarDietaMascota = async ( req, res ) => {
     }
 }
 
+const eliminarDietaMascota = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idDietaMascota } = req.params;
+
+    try {
+
+        const dietaMascota = await DietaMascota.findByIdAndDelete( idDietaMascota )
+            .populate( 'mascota', 'nombre' );
+
+        generarControl( nombre, apellidos, 'eliminado una dieta a la mascota', dietaMascota.mascota.nombre );
+
+        return res.json( {
+            value: 1,
+            msg: 'La dieta de la mascota se ha eliminado.',
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar la dieta de la mascota.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar la dieta de la mascota.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerDietaMascotas,
     obtenerDietaMascotaById,
     registrarDietaMascota,
-    actualizarDietaMascota
+    actualizarDietaMascota,
+    eliminarDietaMascota
 }
