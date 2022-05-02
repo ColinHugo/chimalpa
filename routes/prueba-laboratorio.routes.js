@@ -20,7 +20,8 @@ const {
     obtenerPruebasLaboratorioAves,
     obtenerPruebaLaboratorioAveById,
     registrarPruebaLaboratorioAve,
-    actualizarPruebaLaboratorioAve
+    actualizarPruebaLaboratorioAve,
+    eliminarPruebaLaboratorioAve
 } = require( '../controllers/prueba-laboratorio-ave.controller' );
 
 const {
@@ -69,7 +70,7 @@ router.get( '/aves/:idAve', [
 
 router.post( '/aves/:idAve', [
     validarJWT,
-    check( 'link', 'El link de la prueba de laboratorio es obligatorio' ).trim().notEmpty(),
+    check( 'link', 'El link de la prueba de laboratorio es obligatorio' ).trim().isURL(),
     check( 'idAve' ).custom( existeAve ),
     validarCampos
 ], registrarPruebaLaboratorioAve );
@@ -78,8 +79,16 @@ router.put( '/aves/:idPruebaLaboratorio', [
     validarJWT,
     check( 'idPruebaLaboratorio', 'No es un id válido' ).isMongoId(),
     check( 'idPruebaLaboratorio' ).custom( existePruebaLaboratorioAve ),
+    check( 'link', 'El link de la prueba de laboratorio es obligatorio' ).trim().isURL(),
     validarCampos
 ], actualizarPruebaLaboratorioAve );
+
+router.delete( '/aves/:idPruebaLaboratorio', [
+    validarJWT,
+    check( 'idPruebaLaboratorio', 'No es un id válido' ).isMongoId(),
+    check( 'idPruebaLaboratorio' ).custom( existePruebaLaboratorioAve ),
+    validarCampos
+], eliminarPruebaLaboratorioAve );
 
 // **************************************************************
 // - End points para las pruebas de laboratorio de los borregos -

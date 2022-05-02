@@ -1,6 +1,6 @@
-const { Ave, PruebaLaboratorioAve } = require( '../models' );
+const { PruebaLaboratorioAve } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl } = require( '../helpers' );
 
 const obtenerPruebasLaboratorioAves = async ( req, res ) => {
 
@@ -71,21 +71,18 @@ const registrarPruebaLaboratorioAve = async ( req, res ) => {
 
     try {
 
-        const ave = await Ave.findById( idAve );
-
-        req.body.ave = ave;
+        req.body.ave = idAve;
 
         const prueba = await PruebaLaboratorioAve( req.body )
             .populate( 'ave', 'numeroAve' );
 
         await prueba.save();
 
-        generarControl( nombre, apellidos, 'registrado una prueba de laboratorio al ave número', ave.numeroAve );
+        generarControl( nombre, apellidos, 'registrado una prueba de laboratorio al ave número', prueba.ave.numeroAve );
 
         return res.json( {
             value: 1,
-            msg: 'La prueba del ave se ha registrado.',
-            prueba
+            msg: 'La prueba del ave se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -108,12 +105,39 @@ const actualizarPruebaLaboratorioAve = async ( req, res ) => {
 
     try {
 
-        const prueba = await PruebaLaboratorioAve.findByIdAndUpdate( idPruebaLaboratorio, datos, { new: true } )
+        const prueba = await PruebaLaboratorioAve.findByIdAndUpdate( idPruebaLaboratorio, datos )
             .populate( 'ave', 'numeroAve' );
 
-        const ave = await Ave.findById( prueba.ave );
+        generarControl( nombre, apellidos, 'actualizado una prueba de laboratorio al ave número', prueba.ave.numeroAve );
 
-        generarControl( nombre, apellidos, 'actualizado una prueba de laboratorio al ave número', ave.numeroAve );
+        return res.json( {
+            value: 1,
+            msg: 'La prueba de laboratorio se ha actualizado.',
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al actualizar la prueba de laboratorio.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al actualizar el la prueba de laboratorio.'
+        } );
+    }
+}
+
+const eliminarPruebaLaboratorioAve = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+
+    const { idPruebaLaboratorio } = req.params;
+
+    try {
+
+        const prueba = await PruebaLaboratorioAve.findByIdAndDelete( idPruebaLaboratorio )
+            .populate( 'ave', 'numeroAve' );
+
+        generarControl( nombre, apellidos, 'actualizado una prueba de laboratorio al ave número', prueba.ave.numeroAve );
 
         return res.json( {
             value: 1,
@@ -135,5 +159,6 @@ module.exports = {
     obtenerPruebasLaboratorioAves,
     obtenerPruebaLaboratorioAveById,
     registrarPruebaLaboratorioAve,
-    actualizarPruebaLaboratorioAve
+    actualizarPruebaLaboratorioAve,
+    eliminarPruebaLaboratorioAve
 }
