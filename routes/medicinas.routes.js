@@ -19,7 +19,8 @@ const {
     obtenerMedicinaAve,
     obtenerMedicinaAveById,
     registrarMedicinaAve,
-    actualizarMedicinaAve
+    actualizarMedicinaAve,
+    eliminarMedicinaAve
 } = require( '../controllers/medicinas-aves.controller' );
 
 const {
@@ -72,7 +73,8 @@ router.post( '/aves/:idAve', [
     check( 'idAve' ).custom( existeAve ),
     check( 'tipo', 'El tipo de medicina es obligatorio' ).escape().trim().notEmpty(),
     check( 'descripcion', 'La descripción es obligatoria' ).escape().trim().notEmpty(),
-    check( 'fecha', 'La fecha es obligatoria' ).trim().notEmpty(),
+    check( 'ultimaFecha', 'Ingrese una última fecha válida' ).escape().trim().isDate(),
+    check( 'proximaFecha', 'Ingrese una próxima fecha válida' ).escape().trim().isDate(),
     validarCampos
 ], registrarMedicinaAve );
 
@@ -80,8 +82,19 @@ router.put( '/aves/:idMedicina', [
     validarJWT,
     check( 'idMedicina', 'No es un id válido' ).isMongoId(),
     check( 'idMedicina' ).custom( existeMedicinaAve ),
+    check( 'tipo', 'El tipo de medicina es obligatorio' ).escape().trim().notEmpty(),
+    check( 'descripcion', 'La descripción es obligatoria' ).escape().trim().notEmpty(),
+    check( 'ultimaFecha', 'Ingrese una última fecha válida' ).escape().trim().isDate(),
+    check( 'proximaFecha', 'Ingrese una próxima fecha válida' ).escape().trim().isDate(),
     validarCampos
 ], actualizarMedicinaAve );
+
+router.delete( '/aves/:idMedicina', [
+    validarJWT,
+    check( 'idMedicina', 'No es un id válido' ).isMongoId(),
+    check( 'idMedicina' ).custom( existeMedicinaAve ),
+    validarCampos
+], eliminarMedicinaAve );
 
 // ****************************************************
 // -   End points para las medicinas de los borregos  -

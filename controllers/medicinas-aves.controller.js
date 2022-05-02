@@ -1,4 +1,4 @@
-const { Ave, MedicinaAve } = require( '../models' );
+const { MedicinaAve } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -68,23 +68,21 @@ const registrarMedicinaAve = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
     const { idAve } = req.params;
-    const { tipo, descripcion, fecha } = req.body;
 
     try {
 
-        const ave = await Ave.findById( idAve );
+        req.body.ave = idAve;
 
-        const medicina = await MedicinaAve( { tipo, descripcion, fecha, ave } )
+        const medicina = await MedicinaAve( req.body )
             .populate( 'ave', 'numeroAve' );
 
         await medicina.save();
 
-        generarControl( nombre, apellidos, 'registrado una medicina al ave número', ave.numeroAve );
+        generarControl( nombre, apellidos, 'registrado una medicina al ave número', medicina.ave.numeroAve );
 
         return res.json( {
             value: 1,
-            msg: 'La medicina del ave se ha registrado.',
-            medicina,
+            msg: 'La medicina del ave se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -107,17 +105,14 @@ const actualizarMedicinaAve = async ( req, res ) => {
 
     try {
 
-        const medicina = await MedicinaAve.findByIdAndUpdate( idMedicina, datos, { new: true } )
+        const medicina = await MedicinaAve.findByIdAndUpdate( idMedicina, datos )
             .populate( 'ave', 'numeroAve' );
 
-        const ave = await Ave.findById( medicina.ave );
-
-        generarControl( nombre, apellidos, 'actualizado una medicina al ave número', ave.numeroAve );
+        generarControl( nombre, apellidos, 'actualizado una medicina al ave número', medicina.ave.numeroAve );
 
         return res.json( {
             value: 1,
-            msg: 'La medicina del ave se ha actualizado.',
-            medicina
+            msg: 'La medicina del ave se ha actualizado.'
         } );
         
     } catch ( error ) {
@@ -131,9 +126,38 @@ const actualizarMedicinaAve = async ( req, res ) => {
     }
 }
 
+const eliminarMedicinaAve = async ( req, res ) => {
+    
+    const { nombre, apellidos } = req.body.usuario;
+    const { idMedicina } = req.params;
+
+    try {
+
+        const medicina = await MedicinaAve.findByIdAndDelete( idMedicina )
+            .populate( 'ave', 'numeroAve' );
+
+        generarControl( nombre, apellidos, 'eliminado una medicina al ave número', medicina.ave.numeroAve );
+
+        return res.json( {
+            value: 1,
+            msg: 'La medicina del ave se ha eliminado.'
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar la medicina del ave.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar la medicina del ave.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerMedicinaAve,
     obtenerMedicinaAveById,
     registrarMedicinaAve,
-    actualizarMedicinaAve
+    actualizarMedicinaAve,
+    eliminarMedicinaAve
 }
