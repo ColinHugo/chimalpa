@@ -1,4 +1,4 @@
-const { HistoriaClinicaMascota, Mascota } = require( '../models' );
+const { HistoriaClinicaMascota } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -71,21 +71,18 @@ const registrarHistoriaClinicaMascota = async ( req, res ) => {
 
     try {
 
-        const mascota = await Mascota.findById( idMascota );
-
-        req.body.mascota = mascota;
+        req.body.mascota = idMascota;
 
         const historiaMascota = await HistoriaClinicaMascota( req.body )
             .populate( 'mascota', 'nombre' );
             
         await historiaMascota.save();
 
-        generarControl( nombre, apellidos, 'registrado un historial clínico a la mascota', mascota.nombre );
+        generarControl( nombre, apellidos, 'registrado un historial clínico a la mascota', historiaMascota.mascota.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'La historia de la mascota se ha registrado.',
-            historiaMascota
+            msg: 'La historia de la mascota se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -103,16 +100,14 @@ const actualizarHistoriaClinicaMascota = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
     const { idHistorial } = req.params;
-    const { usuario, ...datos} = req.body;
+    const { ...datos} = req.body;
 
     try {
 
-        const historiaMascota = await HistoriaClinicaMascota.findByIdAndUpdate( idHistorial, datos, { new: true } )
+        const historiaMascota = await HistoriaClinicaMascota.findByIdAndUpdate( idHistorial, datos )
             .populate( 'mascota', 'nombre' );
 
-        const mascota = await Mascota.findById( historiaMascota.mascota );
-
-        generarControl( nombre, apellidos, 'actualizado un historial clínico a la mascota', mascota.nombre );
+        generarControl( nombre, apellidos, 'actualizado un historial clínico a la mascota', historiaMascota.mascota.nombre );
 
         return res.json( {
             value: 1,
@@ -130,9 +125,38 @@ const actualizarHistoriaClinicaMascota = async ( req, res ) => {
     }
 }
 
+const eliminarHistoriaClinicaMascota = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idHistorial } = req.params;
+
+    try {
+
+        const historiaMascota = await HistoriaClinicaMascota.findByIdAndDelete( idHistorial )
+            .populate( 'mascota', 'nombre' );
+
+        generarControl( nombre, apellidos, 'eliminado un historial clínico a la mascota', historiaMascota.mascota.nombre );
+
+        return res.json( {
+            value: 1,
+            msg: 'El historial de la mascota se ha eliminado.',
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar el historial de la mascota.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar el historial de la mascota.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerHistoriaClinicaMascotas,
     obtenerHistoriaClinicaMascotaById,
     registrarHistoriaClinicaMascota,
-    actualizarHistoriaClinicaMascota
+    actualizarHistoriaClinicaMascota,
+    eliminarHistoriaClinicaMascota
 }
