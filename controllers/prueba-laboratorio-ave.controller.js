@@ -137,20 +137,20 @@ const eliminarPruebaLaboratorioAve = async ( req, res ) => {
         const prueba = await PruebaLaboratorioAve.findByIdAndDelete( idPruebaLaboratorio )
             .populate( 'ave', 'numeroAve' );
 
-        generarControl( nombre, apellidos, 'actualizado una prueba de laboratorio al ave número', prueba.ave.numeroAve );
+        generarControl( nombre, apellidos, 'eliminado una prueba de laboratorio al ave número', prueba.ave.numeroAve );
 
         return res.json( {
             value: 1,
-            msg: 'La prueba de laboratorio se ha actualizado.',
+            msg: 'La prueba de laboratorio se ha eliminado.',
         } );
         
     } catch ( error ) {
 
-        console.error( 'Error al actualizar la prueba de laboratorio.', error );
+        console.error( 'Error al eliminar la prueba de laboratorio.', error );
 
         return res.json( {
             value: 0,
-            msg: 'Error al actualizar el la prueba de laboratorio.'
+            msg: 'Error al eliminar el la prueba de laboratorio.'
         } );
     }
 }
