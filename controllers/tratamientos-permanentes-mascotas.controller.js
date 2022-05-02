@@ -1,4 +1,4 @@
-const { PerroGato, TratamientoPermanenteMascota, Mascota } = require( '../models' );
+const { TratamientoPermanenteMascota } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -72,20 +72,18 @@ const registrarTratamientoMascota = async ( req, res ) => {
 
     try {
 
-        const mascota = await Mascota.findById( idMascota );
+        req.body.mascota = idMascota;
 
-        req.body.mascota = mascota;
-
-        const tratamiento = new TratamientoPermanenteMascota( req.body );
+        const tratamiento = await new TratamientoPermanenteMascota( req.body )
+            .populate( 'mascota', 'nombre' );
 
         await tratamiento.save();
 
-        generarControl( nombre, apellidos, 'registrado un tratamiento permanente a la mascota', mascota.nombre );
+        generarControl( nombre, apellidos, 'registrado un tratamiento permanente a la mascota', tratamiento.mascota.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'El tratamiento se ha registrado.',
-            tratamiento
+            msg: 'El tratamiento se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -108,16 +106,14 @@ const actualizarTratamientoMascota = async ( req, res ) => {
 
     try {
 
-        const tratamiento = await TratamientoPermanenteMascota.findByIdAndUpdate( idTratamiento, datos, { new: true } );
+        const tratamiento = await TratamientoPermanenteMascota.findByIdAndUpdate( idTratamiento, datos )
+            .populate( 'mascota', 'nombre' );
 
-        const mascota = await Mascota.findById( tratamiento.mascota );
-
-        generarControl( nombre, apellidos, 'actualizado un tratamiento permanente a la mascota', mascota.nombre );
+        generarControl( nombre, apellidos, 'actualizado un tratamiento permanente a la mascota', tratamiento.mascota.nombre );
         
         return res.json( {
             value: 1,
-            msg: 'El tratamiento permanente se ha actualizado.',
-            tratamiento
+            msg: 'El tratamiento permanente se ha actualizado.'
         } );
 
     } catch ( error ) {
@@ -131,9 +127,38 @@ const actualizarTratamientoMascota = async ( req, res ) => {
     }
 }
 
+const eliminarTratamientoMascota = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idTratamiento } = req.params;
+
+    try {
+
+        const tratamiento = await TratamientoPermanenteMascota.findByIdAndDelete( idTratamiento )
+            .populate( 'mascota', 'nombre' );
+
+        generarControl( nombre, apellidos, 'eliminado un tratamiento permanente a la mascota', tratamiento.mascota.nombre );
+        
+        return res.json( {
+            value: 1,
+            msg: 'El tratamiento permanente se ha eliminado.'
+        } );
+
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar el tratamiento permanente.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar el tratamiento permanente.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerTratamientosMascotas,
     obtenerTratamientoMascotaById,
     registrarTratamientoMascota,
-    actualizarTratamientoMascota
+    actualizarTratamientoMascota,
+    eliminarTratamientoMascota
 }

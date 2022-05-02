@@ -10,7 +10,7 @@ const {
     existeTratamiento,
     existeMascota,
     existeTratamientoMascota
-} = require( '../helpers/db-validators' );
+} = require( '../helpers' );
 
 const {
     obtenerTratamientosBorregos,
@@ -32,7 +32,8 @@ const {
     obtenerTratamientosMascotas,
     obtenerTratamientoMascotaById,
     registrarTratamientoMascota,
-    actualizarTratamientoMascota
+    actualizarTratamientoMascota,
+    eliminarTratamientoMascota
 } = require( '../controllers/tratamientos-permanentes-mascotas.controller' );
 
 // ****************************************************
@@ -132,8 +133,10 @@ router.post( '/mascotas/:idMascota', [
     check( 'idMascota', 'No es un id válido' ).isMongoId(),
     check( 'idMascota' ).custom( existeMascota ),
     check( 'tipo', 'El tipo de tratamiento es obligatorio.' ).escape().trim().notEmpty(),
+    check( 'ultimaFecha', 'Ingrese una última fecha válida.' ).escape().trim().isDate(),
+    check( 'proximaFecha', 'Ingrese una próxima fecha válida.' ).escape().trim().isDate(),
     check( 'descripcion', 'La descripción del tratamiento es obligatoria.' ).escape().trim().notEmpty(),
-    check( 'video', 'El link del video es obligatorio.' ).escape().trim().notEmpty(),
+    check( 'video', 'El link del video es obligatorio.' ).trim().isURL(),
     validarCampos
 ], registrarTratamientoMascota );
 
@@ -141,7 +144,19 @@ router.put( '/mascotas/:idTratamiento', [
     validarJWT,
     check( 'idTratamiento', 'No es un id válido' ).isMongoId(),
     check( 'idTratamiento' ).custom( existeTratamientoMascota ),
+    check( 'tipo', 'El tipo de tratamiento es obligatorio.' ).escape().trim().notEmpty(),
+    check( 'ultimaFecha', 'Ingrese una última fecha válida.' ).escape().trim().isDate(),
+    check( 'proximaFecha', 'Ingrese una próxima fecha válida.' ).escape().trim().isDate(),
+    check( 'descripcion', 'La descripción del tratamiento es obligatoria.' ).escape().trim().notEmpty(),
+    check( 'video', 'El link del video es obligatorio.' ).trim().isURL(),
     validarCampos
 ], actualizarTratamientoMascota );
+
+router.delete( '/mascotas/:idTratamiento', [
+    validarJWT,
+    check( 'idTratamiento', 'No es un id válido' ).isMongoId(),
+    check( 'idTratamiento' ).custom( existeTratamientoMascota ),
+    validarCampos
+], eliminarTratamientoMascota );
 
 module.exports = router;

@@ -7,6 +7,16 @@ const TratamientoPermanenteMascotaSchema = Schema( {
         required: [ true, 'El tipo de tratamiento para la mascota es obligatorio.' ]
     },
 
+    ultimaFecha: {
+        type: Date,
+        required: [ true, 'La última fecha del tratamiento es obligatoria.' ]
+    },
+
+    proximaFecha: {
+        type: Date,
+        required: [ true, 'La proxima fecha del tratamiento es obligatoria.' ]
+    },
+
     descripcion: {
         type: String,
         required: [ true, 'La descripción del tratamiento para la mascota es obligatoria.' ]
