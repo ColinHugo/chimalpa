@@ -1,6 +1,6 @@
-const { HistoriaClinica, Caballo } = require( '../models' );
+const { HistoriaClinica } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl } = require( '../helpers' );
 
 const obtenerHistoriaClinicaCaballos = async ( req, res ) => {
 
@@ -71,21 +71,18 @@ const registrarHistoriaClinicaCaballo = async ( req, res ) => {
 
     try {
 
-        const caballo = await Caballo.findById( idCaballo );
-
-        req.body.caballo = caballo;
+        req.body.caballo = idCaballo;
 
         const historiaCaballo = await HistoriaClinica( req.body )
             .populate( 'caballo', 'nombre' );
             
         await historiaCaballo.save();
 
-        generarControl( nombre, apellidos, 'registrado un historial clínico al caballo', caballo.nombre );
+        generarControl( nombre, apellidos, 'registrado un historial clínico al caballo', historiaCaballo.caballo.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'La historia del caballo se ha registrado.',
-            historiaCaballo
+            msg: 'La historia del caballo se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -103,16 +100,15 @@ const actualizarHistoriaClinicaCaballo = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
     const { idHistorial } = req.params;
-    const { usuario, ...datos} = req.body;
+    const { ...datos} = req.body;
 
     try {
 
-        const historiaCaballo = await HistoriaClinica.findByIdAndUpdate( idHistorial, datos, { new: true } )
+        const historiaCaballo = await HistoriaClinica.findByIdAndUpdate( idHistorial, datos )
             .populate( 'caballo', 'nombre' );
 
-        const caballo = await Caballo.findById( historiaCaballo.caballo );
-
-        generarControl( nombre, apellidos, 'actualizado un historial clínico al caballo', caballo.nombre );
+        generarControl( nombre, apellidos, 'actualizado un historial clínico al caballo', 
+                        historiaCaballo.caballo.nombre );
 
         return res.json( {
             value: 1,
@@ -130,9 +126,38 @@ const actualizarHistoriaClinicaCaballo = async ( req, res ) => {
     }
 }
 
+const eliminarHistoriaClinicaCaballo = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idHistorial } = req.params;
+
+    try {
+
+        const historiaCaballo = await HistoriaClinica.findByIdAndDelete( idHistorial )
+            .populate( 'caballo', 'nombre' );
+
+        generarControl( nombre, apellidos, 'eliminado un historial clínico al caballo', historiaCaballo.caballo.nombre );
+
+        return res.json( {
+            value: 1,
+            msg: 'El historial del caballo se ha eliminado.',
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar el historial del caballo.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar el historial del caballo.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerHistoriaClinicaCaballos,
     obtenerHistoriaClinicaCaballoById,
     registrarHistoriaClinicaCaballo,
-    actualizarHistoriaClinicaCaballo
+    actualizarHistoriaClinicaCaballo,
+    eliminarHistoriaClinicaCaballo
 }
