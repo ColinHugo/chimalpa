@@ -1,4 +1,4 @@
-const { Conejo, HistoriaClinicaConejo } = require( '../models' );
+const { HistoriaClinicaConejo } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -71,21 +71,19 @@ const registrarHistoriaClinicaConejo = async ( req, res ) => {
 
     try {
 
-        const conejo = await Conejo.findById( idConejo );
-
-        req.body.conejo = conejo;
+        req.body.conejo = idConejo;
 
         const historiaConejo = await HistoriaClinicaConejo( req.body )
             .populate( 'conejo', 'numeroConejo' );
             
         await historiaConejo.save();
 
-        generarControl( nombre, apellidos, 'registrado un historial clínico al conejo número', conejo.numeroConejo );
+        generarControl( nombre, apellidos, 'registrado un historial clínico al conejo número',
+                        historiaConejo.conejo.numeroConejo );
 
         return res.json( {
             value: 1,
-            msg: 'La historia del conejo se ha registrado.',
-            historiaConejo
+            msg: 'La historia del conejo se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -103,16 +101,15 @@ const actualizarHistoriaClinicaConejo = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
     const { idHistorial } = req.params;
-    const { usuario, ...datos} = req.body;
+    const { ...datos} = req.body;
 
     try {
 
-        const historiaConejo = await HistoriaClinicaConejo.findByIdAndUpdate( idHistorial, datos, { new: true } )
+        const historiaConejo = await HistoriaClinicaConejo.findByIdAndUpdate( idHistorial, datos )
             .populate( 'conejo', 'numeroConejo' );
 
-        const conejo = await Conejo.findById( historiaConejo.conejo );
-
-        generarControl( nombre, apellidos, 'actualizado un historial clínico al conejo número', conejo.numeroConejo );
+        generarControl( nombre, apellidos, 'actualizado un historial clínico al conejo número',
+                        historiaConejo.conejo.numeroConejo );
 
         return res.json( {
             value: 1,
@@ -130,9 +127,39 @@ const actualizarHistoriaClinicaConejo = async ( req, res ) => {
     }
 }
 
+const eliminarHistoriaClinicaConejo = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idHistorial } = req.params;
+
+    try {
+
+        const historiaConejo = await HistoriaClinicaConejo.findByIdAndDelete( idHistorial )
+            .populate( 'conejo', 'numeroConejo' );
+
+        generarControl( nombre, apellidos, 'eliminado un historial clínico al conejo número',
+                        historiaConejo.conejo.numeroConejo );
+
+        return res.json( {
+            value: 1,
+            msg: 'El historial clínico del conejo se ha eliminado.',
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar el historial clínico del conejo.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar el historial clínico del conejo.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerHistoriaClinicaConejos,
     obtenerHistoriaClinicaConejoById,
     registrarHistoriaClinicaConejo,
-    actualizarHistoriaClinicaConejo
+    actualizarHistoriaClinicaConejo,
+    eliminarHistoriaClinicaConejo
 }
