@@ -51,7 +51,8 @@ const {
     obtenerHistorialReproductivoMascotas,
     obtenerHistorialReproductivoMascotaById,
     registrarHistorialReproductivoMascota,
-    actualizarHistorialReproductivoMascota
+    actualizarHistorialReproductivoMascota,
+    eliminarHistorialReproductivoMascota
 } = require( '../controllers/historial-reproductivo-mascota.controller' );
 
 // *************************************************************
@@ -236,7 +237,7 @@ router.post( '/mascotas/:idMascota', [
     check( 'idMascota', 'No es un id válido' ).isMongoId(),
     check( 'idMascota' ).custom( existeMascota ),
     check( 'numeroExpediente', 'El número de expediente es obligatorio' ).trim().notEmpty(), 
-    check( 'fechaCreacion', 'La fecha de creación es obligatoria' ).trim().notEmpty(),
+    check( 'fechaCreacion', 'La fecha de creación es obligatoria' ).escape().trim().isDate(),
     check( 'inicioCelo', 'El inicio de celo es obligatorio' ).trim().notEmpty(),
     check( 'tipo', 'El tipo de reproducción es obligatorio' ).trim().notEmpty(),    
     validarCampos
@@ -246,7 +247,18 @@ router.put( '/mascotas/:idHistorialReproductivo', [
     validarJWT,
     check( 'idHistorialReproductivo', 'No es un id válido' ).isMongoId(),
     check( 'idHistorialReproductivo' ).custom( existeHistorialReproductivoMascota ),
+    check( 'numeroExpediente', 'El número de expediente es obligatorio' ).trim().notEmpty(), 
+    check( 'fechaCreacion', 'La fecha de creación es obligatoria' ).escape().trim().isDate(),
+    check( 'inicioCelo', 'El inicio de celo es obligatorio' ).trim().notEmpty(),
+    check( 'tipo', 'El tipo de reproducción es obligatorio' ).trim().notEmpty(), 
     validarCampos
 ], actualizarHistorialReproductivoMascota );
+
+router.delete( '/mascotas/:idHistorialReproductivo', [
+    validarJWT,
+    check( 'idHistorialReproductivo', 'No es un id válido' ).isMongoId(),
+    check( 'idHistorialReproductivo' ).custom( existeHistorialReproductivoMascota ),
+    validarCampos
+], eliminarHistorialReproductivoMascota );
 
 module.exports = router;

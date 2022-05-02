@@ -8,7 +8,7 @@ const HistorialReproductivoMascotaSchema = Schema( {
     },
 
     fechaCreacion: {
-        type: String,
+        type: Date,
         required: [ true, 'La fecha de creación es obligatoria.' ]
     },
 

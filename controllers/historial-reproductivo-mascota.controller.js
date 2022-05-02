@@ -1,4 +1,4 @@
-const { Mascota, HistorialReproductivoMascota } = require( '../models' );
+const { HistorialReproductivoMascota } = require( '../models' );
 
 const { generarControl } = require( '../helpers/generar-control' );
 
@@ -71,21 +71,18 @@ const registrarHistorialReproductivoMascota = async ( req, res ) => {
 
     try {
 
-        const mascota = await Mascota.findById( idMascota );
+        req.body.mascota = idMascota;
 
-        req.body.mascota = mascota;
-
-        const historialReproductivoMascota = await HistorialReproductivoMascota( req.body )
+        const historial = await HistorialReproductivoMascota( req.body )
             .populate( 'mascota', 'nombre' );
 
-        await historialReproductivoMascota.save();
+        await historial.save();
 
-        generarControl( nombre, apellidos, 'registrado un historial reproductivo a la mascota', mascota.nombre );
+        generarControl( nombre, apellidos, 'registrado un historial reproductivo a la mascota', historial.mascota.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'El historial reproductivo de la mascota se ha registrado.',
-            historialReproductivoMascota
+            msg: 'El historial reproductivo de la mascota se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -107,12 +104,10 @@ const actualizarHistorialReproductivoMascota = async ( req, res ) => {
 
     try {
 
-        const historial = await HistorialReproductivoMascota.findByIdAndUpdate( idHistorialReproductivo, datos, { new: true } )
+        const historial = await HistorialReproductivoMascota.findByIdAndUpdate( idHistorialReproductivo, datos )
             .populate( 'mascota', 'nombre' );
 
-        const mascota = await Mascota.findById( historial.mascota );
-
-        generarControl( nombre, apellidos, 'actualizado un historial reproductivo a la mascota', mascota.nombre );
+        generarControl( nombre, apellidos, 'actualizado un historial reproductivo a la mascota', historial.mascota.nombre );
 
         return res.json( {
             value: 1,
@@ -130,9 +125,38 @@ const actualizarHistorialReproductivoMascota = async ( req, res ) => {
     }
 }
 
+const eliminarHistorialReproductivoMascota = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idHistorialReproductivo } = req.params;
+
+    try {
+
+        const historial = await HistorialReproductivoMascota.findByIdAndDelete( idHistorialReproductivo )
+            .populate( 'mascota', 'nombre' );
+
+        generarControl( nombre, apellidos, 'eliminado un historial reproductivo a la mascota', historial.mascota.nombre );
+
+        return res.json( {
+            value: 1,
+            msg: 'El historial reproductivo de la mascota se ha eliminado.',
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar el historial reproductivo de la mascota.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar el historial reproductivo de la mascota.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerHistorialReproductivoMascotas,
     obtenerHistorialReproductivoMascotaById,
     registrarHistorialReproductivoMascota,
-    actualizarHistorialReproductivoMascota
+    actualizarHistorialReproductivoMascota,
+    eliminarHistorialReproductivoMascota
 }
