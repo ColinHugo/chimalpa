@@ -18,7 +18,8 @@ const BorregoSchema = Schema( {
     },
 
     fechaNacimiento: {
-        type: String
+        type: Date,
+        required: [ true, 'La fecha de nacimiento es obligatoria' ]
     },
 
     padre: {
@@ -32,12 +33,12 @@ const BorregoSchema = Schema( {
     },
 
     peso:{
-        type: String,
+        type: Number,
         required: [ true, 'El peso del borrego es obligatorio' ]
     },
 
     kilo:{
-        type: String,
+        type: Number,
         required: [ true, 'El kilo del borrego es obligatorio' ]
     },
 

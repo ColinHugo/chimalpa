@@ -22,13 +22,18 @@ const MascotaSchema = Schema( {
         required: [ true, 'El sexo de la mascota es obligatorio' ]
     },
 
+    fechaNacimiento: {
+        type: Date,
+        required: [ true, 'La fecha de nacimiento es obligatoria' ]
+    },
+
     uso: {
         type: String,
         required: [ true, 'El precio de la mascota es obligatorio' ]
     },
 
     precio: {
-        type: String,
+        type: Number,
         required: [ true, 'El precio de la mascota es obligatorio' ]
     },
 
