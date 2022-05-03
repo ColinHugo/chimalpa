@@ -3,26 +3,32 @@ const { check } = require( 'express-validator' );
 
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
-const { existeCaballo, existeHistorialReproductivoCaballo,
-        existeMonta } = require( '../helpers/db-validators' );
+const {
+    existeHistorialReproductivoCaballo,
+    existeMonta,
+    existeUsuario
+} = require( '../helpers' );
 
-const { obtenerMontaCaballoById, registrarMontaCaballo, actualizarMontaCaballo,
-        eliminarMontaCaballo } = require( '../controllers/montas-caballos.controller' );
+const {
+    obtenerMontaCaballoById,
+    registrarMontaCaballo,
+    actualizarMontaCaballo,
+    eliminarMontaCaballo
+} = require( '../controllers/montas-caballos.controller' );
 
-router.get( '/caballos/:idCaballo/:idHistorialReproductivo', [
-    check( 'idCaballo', 'No es un id válido' ).isMongoId(),
-    check( 'idCaballo' ).custom( existeCaballo ),
+router.get( '/caballos/:idHistorialReproductivo', [
     check( 'idHistorialReproductivo', 'No es un id válido' ).isMongoId(),
     check( 'idHistorialReproductivo' ).custom( existeHistorialReproductivoCaballo ),
     validarCampos
 ], obtenerMontaCaballoById );
 
-router.post( '/caballos/:idCaballo/:idHistorialReproductivo', [
+router.post( '/caballos/:idHistorialReproductivo/:idEncargado', [
     validarJWT,
-    check( 'idCaballo', 'No es un id válido' ).isMongoId(),
-    check( 'idCaballo' ).custom( existeCaballo ),
     check( 'idHistorialReproductivo', 'No es un id válido' ).isMongoId(),
     check( 'idHistorialReproductivo' ).custom( existeHistorialReproductivoCaballo ),
+    check( 'idEncargado', 'No es un id válido' ).isMongoId(),
+    check( 'idEncargado' ).custom( existeUsuario ),
+    check( 'fechaMonta', 'Ingrese una fecha para la monta válida.' ).escape().trim().notEmpty().isDate(),
     validarCampos
 ], registrarMontaCaballo );
 

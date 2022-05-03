@@ -3,7 +3,7 @@ const { Schema, model } = require( 'mongoose' );
 const MontaCaballoSchema = Schema( {
 
     fechaMonta: {
-        type: String
+        type: Date
     },
 
     estado: {
@@ -11,19 +11,24 @@ const MontaCaballoSchema = Schema( {
         default: false
     },
 
-    usuario: {
-        type: Schema.Types.ObjectId,
-        ref: 'Usuario'
-    },
-
-    caballo: {
+    yegua: {
         type: Schema.Types.ObjectId,
         ref: 'Caballo'
     },
 
-    historialReproductivo: {
+    semental: {
         type: Schema.Types.ObjectId,
-        ref: 'historial_reproductivo'
+        ref: 'Caballo'
+    },
+
+    encargado: {
+        type: Schema.Types.ObjectId,
+        ref: 'Usuario'
+    },
+
+    historialReproductivoCaballo: {
+        type: Schema.Types.ObjectId,
+        ref: 'historial_reproductivo_caballo'
     }
 
 }, {

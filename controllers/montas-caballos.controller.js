@@ -1,19 +1,17 @@
-const { Caballo, MontaCaballo, HistorialReproductivo } = require( '../models' );
+const { MontaCaballo, HistorialReproductivoCaballo } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl } = require( '../helpers' );
 
 const obtenerMontaCaballoById = async ( req, res ) => {
 
-    const { idCaballo, idHistorialReproductivo } = req.params;
+    const { idHistorialReproductivo } = req.params;
 
     try {
 
-        const monta = await MontaCaballo.where( {
-            caballo: idCaballo,
-            historialReproductivo: idHistorialReproductivo
-        } )
-            .populate( 'usuario', [ 'nombre', 'apellidos'] )
-            .populate( 'caballo', 'nombre' );
+        const monta = await MontaCaballo.where( { historialReproductivoCaballo: idHistorialReproductivo } )
+            .populate( 'yegua', 'nombre' )
+            .populate( 'semental', 'nombre' )
+            .populate( 'encargado', [ 'nombre', 'apellidos'] );
 
         if ( monta.length === 0 ) {
             return res.json( {
@@ -41,28 +39,31 @@ const obtenerMontaCaballoById = async ( req, res ) => {
 const registrarMontaCaballo = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
-    const { idCaballo, idHistorialReproductivo } = req.params;
+    
+    const { idHistorialReproductivo, idEncargado } = req.params;
 
     try {
 
-        const [ caballo, historialReproductivo ] = await Promise.all( [
-            Caballo.findById( idCaballo ),
-            HistorialReproductivo.findById( idHistorialReproductivo )
-        ] );
+        const historialReproductivo = await HistorialReproductivoCaballo.findById( idHistorialReproductivo )
+            .populate( 'yegua', 'nombre' )
+            .populate( 'semental', 'nombre' );
 
-        req.body.caballo = caballo;
-        req.body.historialReproductivo = historialReproductivo;
+        const { yegua, semental } = historialReproductivo;
 
+        req.body.yegua = yegua;
+        req.body.semental = semental;
+        req.body.encargado = idEncargado;
+        req.body.historialReproductivoCaballo = idHistorialReproductivo;
+            
         const monta = new MontaCaballo( req.body );
 
         await monta.save();
 
-        generarControl( nombre, apellidos, 'registrado una monta a la yegua', caballo.nombre );
+        generarControl( nombre, apellidos, 'registrado una monta a la yegua', historialReproductivo.yegua.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'La monta se ha registrado.',
-            tratamiento: monta
+            msg: 'La monta se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -86,11 +87,9 @@ const actualizarMontaCaballo = async ( req, res ) => {
     try {
 
         const monta = await MontaCaballo.findByIdAndUpdate( idMonta, datos )
-            .populate( 'caballo', 'nombre' );
+            .populate( 'yegua', 'nombre' );
 
-        const caballo = await Caballo.findById( monta.caballo );
-
-        generarControl( nombre, apellidos, 'actualizado una monta a la yegua', caballo.nombre );
+        generarControl( nombre, apellidos, 'actualizado una monta a la yegua', monta.yegua.nombre );
 
         return res.json( {
             value: 1,
@@ -116,11 +115,10 @@ const eliminarMontaCaballo = async ( req, res ) => {
 
     try {
 
-        const tratamiento = await MontaCaballo.findByIdAndDelete( idMonta );
+        const tratamiento = await MontaCaballo.findByIdAndDelete( idMonta )
+            .populate( 'yegua', 'nombre' );
 
-        const caballo = await Caballo.findById( tratamiento.caballo );
-
-        generarControl( nombre, apellidos, 'eliminado una monta a la yegus', caballo.nombre );
+        generarControl( nombre, apellidos, 'eliminado una monta a la yegua', tratamiento.yegua.nombre );
         
         return res.json( {
             value: 1,

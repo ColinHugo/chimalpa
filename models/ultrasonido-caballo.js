@@ -23,6 +23,11 @@ const UltrasonidoSchema = Schema( {
         required: [ true, 'El ultrasonido de la yegua es obligatorio.' ]
     },
 
+    yegua: {
+        type: Schema.Types.ObjectId,
+        ref: 'Caballo'
+    },
+
     monta: {
         type: Schema.Types.ObjectId,
         ref: 'monta_caballo'
