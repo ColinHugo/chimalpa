@@ -22,6 +22,7 @@ router.post( '/', [
     check( 'raza', 'La raza del conejo es obligatoria' ).escape().trim().notEmpty(),
     check( 'color', 'El color del conejo es obligatorio' ).escape().trim().notEmpty(),
     check( 'sexo', 'El sexo del conejo es obligatorio' ).escape().trim().notEmpty(),
+    check( 'fechaNacimiento', 'Ingrese una fecha de nacimiento válida' ).escape().trim().isDate(),
     validarCampos
 ], registrarConejo );
 
