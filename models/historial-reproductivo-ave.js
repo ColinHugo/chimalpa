@@ -3,12 +3,12 @@ const { Schema, model } = require( 'mongoose' );
 const HistorialReproductivoAveSchema = Schema( {
 
     fechaInicio: {
-        type: String,
+        type: Date,
         required: [ true, 'El inicio de celo es obligatorio.' ]
     },
 
     fechaTermino: {
-        type: String,
+        type: Date,
         required: [ true, 'El inicio de celo es obligatorio.' ]
     },    
 
@@ -17,7 +17,12 @@ const HistorialReproductivoAveSchema = Schema( {
         required: [ true, 'El semental es obligatorio.' ]
     },
 
-    ave: {
+    aveHembra: {
+        type: Schema.Types.ObjectId,
+        ref: 'Ave'
+    },
+
+    aveMacho: {
         type: Schema.Types.ObjectId,
         ref: 'Ave'
     }
