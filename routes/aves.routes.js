@@ -4,8 +4,13 @@ const { check } = require( 'express-validator' );
 const { existeAve } = require( '../helpers' );
 const { validarCampos, validarJWT } = require( '../middlewares' );
 
-const { obtenerAves, obtenerAveById, registrarAve, 
-        actualizarAve, eliminarAve } = require( '../controllers/aves.controller' );
+const {
+    obtenerAves,
+    obtenerAveById,
+    registrarAve,
+    actualizarAve,
+    eliminarAve
+} = require( '../controllers/aves.controller' );
 
 router.get( '/', obtenerAves );
 
@@ -19,7 +24,9 @@ router.post( '/', [
     validarJWT,
     check( 'numeroAve', 'El número de ave es obligatorio' ).escape().trim().notEmpty(),
     check( 'tipo', 'El tipo de ave es obligatorio' ).escape().trim().notEmpty(),
-    check( 'precio', 'El precio del ave es obligatorio' ).escape().trim().notEmpty(),
+    check( 'precio', 'El precio del ave es obligatorio' ).escape().trim().isNumeric(),
+    check( 'sexo', 'El sexo del ave es obligatorio' ).escape().trim().notEmpty(),
+    check( 'fechaNacimiento', 'Ingrese una fecha de nacimiento válida' ).escape().trim().isDate(),
     validarCampos
 ], registrarAve );
 

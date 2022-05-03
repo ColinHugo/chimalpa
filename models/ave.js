@@ -17,8 +17,18 @@ const AveSchema = Schema( {
         required: [ true, 'El tipo de ave es obligatorio' ]
     },
 
-    precio: {
+    sexo: {
         type: String,
+        required: [ true, 'El sexo del ave es obligatorio' ]
+    },
+
+    fechaNacimiento: {
+        type: Date,
+        required: [ true, 'La fecha de nacimiento es obligatoria' ]
+    },
+
+    precio: {
+        type: Number,
         required: [ true, 'El precio del ave es obligatorio' ]
     },    
 
