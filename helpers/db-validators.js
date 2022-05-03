@@ -11,6 +11,7 @@ const { Ave, HistoriaClinicaAve, MedicinaAve, DietaAve, CuarentenaAve, Historial
         UltraSonidoCaballo,
 
         Conejo, DietaConejo, MedicinaConejo, HistoriaClinicaConejo, HistorialReproductivoConejo,
+        PruebaLaboratorioConejo,
 
         Mascota, TratamientoPermanenteMascota, DietaMascota, MedicinaMascota, HistoriaClinicaMascota,
         HistorialReproductivoMascota, PruebaLaboratorioMascota,
@@ -331,6 +332,20 @@ const existeRondinCaballo = async ( id ) => {
     }
 }
 
+// Estos métodos se encargan de checar las existencias de los conejos y sus movimientos
+// ****************************************************
+// -                 C O N E J O S                    -
+// ****************************************************
+
+const existePruebaLaboratorioConejo = async ( id ) => {
+
+    const pruebaLaboratorioConejo = await PruebaLaboratorioConejo.findById( id );
+
+    if ( !pruebaLaboratorioConejo ) {
+        throw new Error( `No existe registro de la prueba de laboratorio de conejo con el id: ${ id }` )
+    }
+}
+
 // Estos métodos se encargan de checar las existencias de las capacitaciones y sus movimientos
 // ****************************************************
 // -          C A P A C I T A C I O N E S             -
@@ -552,6 +567,7 @@ module.exports = {
     existeMedicinaConejo,
     existeHistoriaClinicaConejo,
     existeHistorialReproductivoConejo,
+    existePruebaLaboratorioConejo,
 
     // VALIDACIONES PARA MASCOTAS
     existeMascota,
