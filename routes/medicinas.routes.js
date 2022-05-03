@@ -51,7 +51,8 @@ const {
     obtenerMedicinaMascota,
     obtenerMedicinaMascotaById,
     registrarMedicinaMascota,
-    actualizarMedicinaMascota
+    actualizarMedicinaMascota,
+    eliminarMedicinaMascota
 } = require( '../controllers/medicinas-mascotas.controller' );
 
 // ****************************************************
@@ -241,7 +242,8 @@ router.post( '/mascotas/:idMascota', [
     check( 'idMascota' ).custom( existeMascota ),
     check( 'tipo', 'El tipo de medicina es obligatorio' ).escape().trim().notEmpty(),
     check( 'descripcion', 'La descripción es obligatoria' ).escape().trim().notEmpty(),
-    check( 'fecha', 'La fecha es obligatoria' ).trim().notEmpty(),
+    check( 'ultimaFecha', 'Ingrese una última fecha válida' ).escape().trim().isDate(),
+    check( 'proximaFecha', 'Ingrese una próxima fecha válida' ).escape().trim().isDate(),
     validarCampos
 ], registrarMedicinaMascota );
 
@@ -249,7 +251,18 @@ router.put( '/mascotas/:idMedicina', [
     validarJWT,
     check( 'idMedicina', 'No es un id válido' ).isMongoId(),
     check( 'idMedicina' ).custom( existeMedicinaMascota ),
+    check( 'tipo', 'El tipo de medicina es obligatorio' ).escape().trim().notEmpty(),
+    check( 'descripcion', 'La descripción es obligatoria' ).escape().trim().notEmpty(),
+    check( 'ultimaFecha', 'Ingrese una última fecha válida' ).escape().trim().isDate(),
+    check( 'proximaFecha', 'Ingrese una próxima fecha válida' ).escape().trim().isDate(),
     validarCampos
 ], actualizarMedicinaMascota );
+
+router.delete( '/mascotas/:idMedicina', [
+    validarJWT,
+    check( 'idMedicina', 'No es un id válido' ).isMongoId(),
+    check( 'idMedicina' ).custom( existeMedicinaMascota ),
+    validarCampos
+], eliminarMedicinaMascota );
 
 module.exports = router;

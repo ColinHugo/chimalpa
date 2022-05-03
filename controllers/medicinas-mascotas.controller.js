@@ -1,6 +1,6 @@
-const { Mascota, MedicinaMascota } = require( '../models' );
+const { MedicinaMascota } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl } = require( '../helpers' );
 
 const obtenerMedicinaMascota = async ( req, res ) => {
 
@@ -68,23 +68,21 @@ const registrarMedicinaMascota = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
     const { idMascota } = req.params;
-    const { tipo, descripcion, fecha } = req.body;
 
     try {
 
-        const mascota = await Mascota.findById( idMascota );
+        req.body.mascota = idMascota;
 
-        const medicina = await MedicinaMascota( { tipo, descripcion, fecha, mascota } )
+        const medicina = await MedicinaMascota( req.body )
             .populate( 'mascota', 'nombre' );
 
         await medicina.save();
 
-        generarControl( nombre, apellidos, 'registrado una medicina a la mascota', mascota.nombre );
+        generarControl( nombre, apellidos, 'registrado una medicina a la mascota', medicina.mascota.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'La medicina de la mascota se ha registrado.',
-            medicina,
+            msg: 'La medicina de la mascota se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -101,23 +99,19 @@ const registrarMedicinaMascota = async ( req, res ) => {
 const actualizarMedicinaMascota = async ( req, res ) => {
     
     const { nombre, apellidos } = req.body.usuario;
-
     const { idMedicina } = req.params;
     const { ...datos } = req.body;
 
     try {
 
-        const medicina = await MedicinaMascota.findByIdAndUpdate( idMedicina, datos, { new: true } )
+        const medicina = await MedicinaMascota.findByIdAndUpdate( idMedicina, datos )
             .populate( 'mascota', 'nombre' );
 
-        const mascota = await Mascota.findById( medicina.mascota );
-
-        generarControl( nombre, apellidos, 'actualizado una medicina a la mascota', mascota.nombre );
+        generarControl( nombre, apellidos, 'actualizado una medicina a la mascota', medicina.mascota.nombre );
 
         return res.json( {
             value: 1,
-            msg: 'La medicina de la mascota se ha actualizado.',
-            medicina
+            msg: 'La medicina de la mascota se ha actualizado.'
         } );
         
     } catch ( error ) {
@@ -131,9 +125,38 @@ const actualizarMedicinaMascota = async ( req, res ) => {
     }
 }
 
+const eliminarMedicinaMascota = async ( req, res ) => {
+    
+    const { nombre, apellidos } = req.body.usuario;
+    const { idMedicina } = req.params;
+
+    try {
+
+        const medicina = await MedicinaMascota.findByIdAndDelete( idMedicina )
+            .populate( 'mascota', 'nombre' );
+
+        generarControl( nombre, apellidos, 'eliminado una medicina a la mascota', medicina.mascota.nombre );
+
+        return res.json( {
+            value: 1,
+            msg: 'La medicina de la mascota se ha eliminado.'
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar la medicina de la mascota.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar la medicina de la mascota.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerMedicinaMascota,
     obtenerMedicinaMascotaById,
     registrarMedicinaMascota,
-    actualizarMedicinaMascota
+    actualizarMedicinaMascota,
+    eliminarMedicinaMascota
 }
