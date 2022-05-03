@@ -1,13 +1,14 @@
-const { HistorialReproductivoAve, Ave } = require( '../models' );
+const { HistorialReproductivoAve } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl } = require( '../helpers' );
 
 const obtenerHistorialReproductivoAves = async ( req, res ) => {
 
     try {
 
         const historialReproductivo = await HistorialReproductivoAve.find()
-            .populate( 'ave', 'numeroAve' );
+            .populate( 'aveHembra', 'numeroAve' )
+            .populate( 'aveMacho', 'numeroAve' );
 
         if ( historialReproductivo.length === 0 ) {
             return res.json( {
@@ -38,8 +39,9 @@ const obtenerHistorialReproductivoAveById = async ( req, res ) => {
 
     try {
 
-        const historial = await HistorialReproductivoAve.where( { ave: idAve } )
-            .populate( 'ave', 'numeroAve' );
+        const historial = await HistorialReproductivoAve.where( { aveHembra: idAve } )
+            .populate( 'aveHembra', 'numeroAve' )
+            .populate( 'aveMacho', 'numeroAve' );
 
         if ( historial.length === 0 ) {
             return res.json( {
@@ -67,25 +69,24 @@ const obtenerHistorialReproductivoAveById = async ( req, res ) => {
 const registrarHistorialReproductivoAve = async ( req, res ) => {
 
     const { nombre, apellidos } = req.body.usuario;
-    const { idAve } = req.params;
+    const { idAveHembra, idAveMacho } = req.params;
 
     try {
 
-        const ave = await Ave.findById( idAve );
-
-        req.body.ave = ave;
+        req.body.aveHembra = idAveHembra;
+        req.body.aveMacho = idAveMacho;
 
         const historialReproductivoAve = await HistorialReproductivoAve( req.body )
-            .populate( 'ave', 'numeroAve' );
+            .populate( 'aveHembra', 'numeroAve' );
 
         await historialReproductivoAve.save();
 
-        generarControl( nombre, apellidos, 'registrado un historial reproductivo al ave número', ave.numeroAve );
+        generarControl( nombre, apellidos, 'registrado un historial reproductivo al ave número', 
+                        historialReproductivoAve.aveHembra.numeroAve );
 
         return res.json( {
             value: 1,
-            msg: 'El historial reproductivo del ave se ha registrado.',
-            historialReproductivoAve
+            msg: 'El historial reproductivo del ave se ha registrado.'
         } );
         
     } catch ( error ) {
@@ -107,12 +108,11 @@ const actualizarHistorialReproductivoAve = async ( req, res ) => {
 
     try {
 
-        const historial = await HistorialReproductivoAve.findByIdAndUpdate( idHistorialReproductivo, datos, { new: true } )
-            .populate( 'ave', 'numeroAve' );
+        const historial = await HistorialReproductivoAve.findByIdAndUpdate( idHistorialReproductivo, datos )
+            .populate( 'aveHembra', 'numeroAve' );
 
-        const ave = await Ave.findById( historial.ave );
-
-        generarControl( nombre, apellidos, 'actualizado un historial reproductivo al ave número', ave.numeroAve );
+        generarControl( nombre, apellidos, 'actualizado un historial reproductivo al ave número', 
+                        historial.aveHembra.numeroAve );
 
         return res.json( {
             value: 1,
@@ -130,9 +130,39 @@ const actualizarHistorialReproductivoAve = async ( req, res ) => {
     }
 }
 
+const eliminarHistorialReproductivoAve = async ( req, res ) => {
+
+    const { nombre, apellidos } = req.body.usuario;
+    const { idHistorialReproductivo } = req.params;
+
+    try {
+
+        const historial = await HistorialReproductivoAve.findByIdAndDelete( idHistorialReproductivo )
+            .populate( 'aveHembra', 'numeroAve' );
+
+        generarControl( nombre, apellidos, 'eliminado un historial reproductivo al ave número', 
+                        historial.aveHembra.numeroAve );
+
+        return res.json( {
+            value: 1,
+            msg: 'El historial reproductivo del ave se ha eliminado.',
+        } );
+        
+    } catch ( error ) {
+
+        console.error( 'Error al eliminar el historial reproductivo del ave.', error );
+
+        return res.json( {
+            value: 0,
+            msg: 'Error al eliminar el historial reproductivo del ave.'
+        } );
+    }
+}
+
 module.exports = {
     obtenerHistorialReproductivoAves,
     obtenerHistorialReproductivoAveById,
     registrarHistorialReproductivoAve,
-    actualizarHistorialReproductivoAve
+    actualizarHistorialReproductivoAve,
+    eliminarHistorialReproductivoAve
 }
