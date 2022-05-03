@@ -1,6 +1,6 @@
 const { HistorialReproductivoCaballo } = require( '../models' );
 
-const { generarControl } = require( '../helpers/generar-control' );
+const { generarControl } = require( '../helpers' );
 
 const obtenerHistorialReproductivoCaballos = async ( req, res ) => {
 
@@ -78,7 +78,7 @@ const registrarHistorialReproductivoCaballo = async ( req, res ) => {
         req.body.yegua = idYegua;
         req.body.semental = idSemental;
 
-        const historialReproductivoCaballo = await HistorialReproductivoCaballo( req.body )
+        const historialReproductivoCaballo = await new HistorialReproductivoCaballo( req.body )
             .populate( 'yegua', 'nombre' );
 
         await historialReproductivoCaballo.save();
