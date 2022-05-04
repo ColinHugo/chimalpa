@@ -17,9 +17,7 @@
     "express-mongo-sanitize": "^2.1.0",
     "express-validator": "^6.13.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.0.12"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.15"
+    "mongoose": "^6.0.12",
+    "uuid": "^8.3.2"
   }
 }
