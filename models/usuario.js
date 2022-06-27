@@ -30,8 +30,7 @@ const UsuarioSchema = Schema( {
 
     rol: {
         type: Number,
-        default: 3,
-        enum: [ 1, 2, 3 ]
+        default: 3
     },
 
     descanso: {
